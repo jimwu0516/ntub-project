@@ -1,0 +1,408 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  padding-top: 100px;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+}
+
+/* Navigation ---------------------------------------------------------------------*/
+.header {
+  border-bottom: solid 0.1px #c5c1c1;
+  height: 100px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: #fff;
+}
+
+.logout-nav,
+.login-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 50px;
+}
+
+
+
+
+
+.navbar-logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: rgb(222, 37, 37);
+  align-items: center;
+}
+
+.login {
+  background-color: #30878A;
+  padding: 15px;
+  border-radius: 5px;
+  color: #FFFFFF;
+}
+
+.login:hover {
+  background-color: #02a9f7;
+}
+
+.login-nav {
+  color: white;
+}
+
+.navbar-left {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.menu-item {
+  margin-left: 10px;
+  padding: 10px;
+  border-radius: 10px;
+
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+}
+
+.menu-item:hover {
+  background-color: #02a9f7;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+}
+
+.dropbtn {
+  color: #30879A;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+
+.dropbtn:hover {
+  color: #02a9f7;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #ffffff;
+  min-width: 160px;
+  z-index: 1;
+  box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
+  padding-top: 2px;
+  top: 20px;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 8px;
+  text-decoration: none;
+  display: block;
+  line-height: 40px;
+}
+
+.dropdown-content a:hover {
+  background-color: #02a9f7;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.connect-wallet-btn {
+  margin-right: 20px;
+}
+
+.disconnectSelect {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #999999;
+  padding: 5px;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  outline: none;
+}
+
+.disconnectSelect option {
+  background-color: #ffffff;
+  color: #000000;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+/* Home --------------------------------------------------------------------- */
+.container {
+  max-width: 1200px;
+  margin: auto;
+}
+
+.home-page {
+  text-align: center;
+  padding: 20px;
+}
+
+.home-card-container {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+.home-card {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 30%;
+  text-align: center;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+}
+
+.home-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+
+
+.home-card h3 {
+  color: #333;
+}
+
+.home-card p {
+  color: #666;
+}
+
+
+
+.text-image-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: antiquewhite;
+}
+
+.image-container {
+  margin-right: 20px;
+}
+
+.text-container {
+  text-align: left;
+  margin-left: 200px;
+}
+
+.text-image-container h3 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.text-image-container p {
+  font-size: 16px;
+  color: #555;
+}
+
+.borrow-flow-chart {
+  padding: 40px;
+}
+
+.home-page-startbtn{
+  background-color: #30878A; 
+  padding: 20px 80px; 
+  border-radius: 10px; 
+  color:white;
+}
+
+.home-page-startbtn:hover{
+  background-color: #02a9f7;
+}
+
+/*account card --------------------------------------------------------------------- */
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+}
+
+
+.card {
+  width: 400px;
+  margin: 30px auto;
+  padding: 20px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+h2.text-center {
+  color: #30878A;
+  font-size: 24px;
+  text-align: center;
+}
+
+h1.text-center {
+  color: #30878A;
+  font-size: 36px;
+  text-align: center;
+}
+
+.card input[type='text'],
+.card input[type='password'],
+.card input[type='email'],
+.card input[type='tel'],
+.card input[type='airdrop_wallet_address'],
+.card input[type='number'],
+.card select,
+.card input[type='submit'] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.card input[type='file'] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.card label {
+  text-align: left;
+  align-self: flex-start;
+}
+
+
+
+
+.card-image-preview {
+  margin-top: 10px;
+  border: 1px solid #ccc;
+  display: block;
+  max-height: 200px;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+
+
+
+.card-primary-btn {
+  background-color: #30878A;
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: block;
+  font-size: 16px;
+}
+
+.card-primary-btn:hover {
+  background-color: #02a9f7;
+}
+
+.card-outline-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #30878A;
+  color: #30878A;
+  text-align: center;
+  text-decoration: none;
+  font-size: 16px;
+  border-radius: 4px;
+  background-color: white;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.card-outline-btn:hover {
+  border: 1px solid #02a9f7;
+  color: #02a9f7;
+
+}
+
+.card p.text-center {
+  text-align: center;
+  font-size: 14px;
+}
+
+.card p.subtitle {
+  text-align: center;
+  font-size: 18px;
+}
+
+
+.card a {
+  color: #30878A;
+}
+
+.text-center a:hover {
+  text-decoration: underline;
+}
+
+
+
+/* alert---------------------------------------------------------------------------*/
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.alert-error {
+  background-color: #f2dede;
+  border-color: #eed3d7;
+  color: #b94a48;
+}
+
+.alert-warning {
+  background-color: #fcf8e3;
+  border-color: #fbeed5;
+  color: #c09853;
+}
+
+.alert-info {
+  background-color: #d9edf7;
+  border-color: #bce8f1;
+  color: #3a87ad;
+}
+
+.alert-success {
+  background-color: #dff0d8;
+  border-color: #d6e9c6;
+  color: #468847;
+}

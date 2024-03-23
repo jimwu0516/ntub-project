@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>user orders</title>
+{% endblock %}
+
+{% block content %}
+  <h1>User Orders</h1>
+
+  <a href="{% url 'borrower_history_orders' %}" style="color: red;">History</a>
+
+  {% if user_orders %}
+    <ul>
+      {% for order in user_orders %}
+        <li>Order ID: {{ order.order_id }}</li>
+        <li>Borrower: {{ order.borrower }}</li>
+        <li>Item: {{ order.item.item_name }}</li>
+        <li>Start Time: {{ order.start_time }}</li>
+        <li>End Time: {{ order.end_time }}</li>
+        <li>Request Time: {{ order.request_time }}</li>
+        <li>Status: {{ order.status }}</li>
+        <form action="{% url 'cancel_order' order.order_id %}" method="post">
+          {% csrf_token %}
+          <input type="submit" value="Cancel Order" />
+        </form>
+        <hr />
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No orders found !!!!!</p>
+  {% endif %}
+{% endblock %}

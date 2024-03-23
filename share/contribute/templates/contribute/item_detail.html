@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>item name : {{ item.item_name }}</h2>
+  <h2>item description: {{ item.item_description }}</h2>
+  <h2>item_address: {{ item.item_address }}</h2>
+  <h2>item_deposit_require: {{ item.item_deposit_require }}</h2>
+  <h2>item_available: {{ item.item_available }}</h2>
+
+  {% if item.item_image %}
+    <img src="{{ item.item_image.url }}" alt="Item Image" style="max-width: 200px; max-height: 200px; object-fit: cover;" />
+  {% endif %}
+{% endblock %}

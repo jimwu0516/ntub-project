@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>{{ item.item_name }} Detail</title>
+{% endblock %}
+
+{% block content %}
+  <style>
+    .borrow-request-container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      height: 100vh;
+      padding: 10px;
+      margin-top: 100px;
+    }
+    
+    .borrow-request-card {
+      border: 1px solid #ddd;
+      padding: 40px;
+      display: flex;
+      font-size: 1.2rem;
+      align-items: center;
+    }
+    
+    .borrow-request-card img {
+      width: 400px;
+      height: auto;
+      margin-right: 40px;
+    }
+    
+    .details {
+      max-width: 450px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      align-items: left;
+    }
+    
+    .details h2 {
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    
+    .details p {
+      margin: 10px 0;
+      color: #666;
+      font-size: 1.5rem;
+      display: inline-block;
+      margin-right: 10px;
+    }
+    
+    .details input[type='datetime-local'] {
+      font-size: 1.2rem;
+      padding: 10px;
+      margin-bottom: 20px;
+      width: 180px;
+      height: 10px;
+    }
+    
+    .details button {
+      background-color: #30878a;
+      border-radius: 10px;
+      padding: 15px 30px;
+      font-size: 1.5rem;
+      color: white;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+    
+    .request-submit-btn {
+      text-align: center;
+      align-items: center;
+    }
+    
+    .details button:hover {
+      background-color: #02a9f7;
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('borrowForm').addEventListener('submit', function (event) {
+        var start_time = new Date(document.getElementsByName('start_time')[0].value)
+        var end_time = new Date(document.getElementsByName('end_time')[0].value)
+        var currentTime = new Date()
+        var oneDayAhead = new Date(currentTime)
+        oneDayAhead.setDate(currentTime.getDate() + 1)
+    
+        if (start_time <= oneDayAhead) {
+          alert('借用開始時間必須要在未來一天之後開始')
+          event.preventDefault()
+          return false
+        }
+    
+        if (end_time <= start_time) {
+          alert('物品歸還時間必須在開始時間之後')
+          event.preventDefault()
+          return false
+        }
+    
+        var fourteenDaysLater = new Date(start_time)
+        fourteenDaysLater.setDate(start_time.getDate() + 14)
+        if (end_time > fourteenDaysLater) {
+          alert('歸還時間必須在借用開始時間14天以內')
+          event.preventDefault()
+          return false
+        }
+      })
+    })
+  </script>
+
+  <div class="borrow-request-container">
+    <div class="borrow-request-card">
+      <img src="{{ item.item_image.url }}" alt="{{ item.item_name }}" />
+      <div class="details">
+        <h2>Request Detail</h2>
+
+        <p>Deposit Required: {{ item.item_deposit_require }}</p>
+        <p>Item Address: {{ item.item_address }}</p>
+
+        <form id="borrowForm" action="{% url 'borrow_item' item.pk %}" method="post">
+          {% csrf_token %}
+          <p>start time :</p>
+          <input type="datetime-local" name="start_time" required />
+          <br />
+          <p>end time :</p>
+          <input type="datetime-local" name="end_time" required />
+          <br />
+          <div class="request-submit-btn">
+            <button type="submit">借用</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+{% endblock %}

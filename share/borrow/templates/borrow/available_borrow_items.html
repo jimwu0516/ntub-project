@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>available_borrow_items</title>
+{% endblock %}
+
+{% block content %}
+  <style>
+    .item-category-bar {
+      padding: 10px 0;
+      margin-top: 15px;
+    }
+    
+    .item-category-links {
+      display: flex;
+      justify-content: space-between;
+      list-style: none;
+      padding: 0;
+      margin: 0 20px;
+    }
+    
+    .item-category-links li {
+      display: inline;
+      padding: 10px 0;
+      border-bottom: 2px solid transparent;
+    }
+    
+    .item-category-links a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      padding: 10px;
+    }
+    
+    .item-category-links a:hover {
+      color: #02a9f7;
+    }
+    
+    .available-item-grid {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      padding: 2em;
+    }
+    
+    .available-item {
+      width: 274px;
+      margin-bottom: 85px;
+      padding: 5px;
+    }
+    
+    .available-item img {
+      max-width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    
+    .available-item .item-name {
+      text-align: center;
+      padding: 0;
+      color: #333;
+      font-size: 20px;
+    }
+    
+    .available-item .deposit-require {
+      text-align: center;
+      padding: 0;
+      color: #333;
+      font-size: 15px;
+    }
+    
+    .available-item:hover {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var menuItems = ['fashion-item', 'electronic-item', 'sporting-item', 'book-item', 'home-item', 'toy-item', 'else-item']
+    
+      menuItems.forEach(function (itemId) {
+        var item = document.getElementById(itemId)
+        var link = item.querySelector('a')
+    
+        if (window.location.href.includes(link.getAttribute('href'))) {
+          item.style.borderBottom = '2px solid #02a9f7'
+        }
+    
+        item.addEventListener('mouseenter', function () {
+          item.style.borderBottom = '2px solid #02a9f7'
+        })
+    
+        item.addEventListener('mouseleave', function () {
+          if (!window.location.href.includes(link.getAttribute('href'))) {
+            item.style.borderBottom = ''
+          }
+        })
+      })
+    })
+  </script>
+
+  <nav class="item-category-bar">
+    <ul class="item-category-links">
+      <li id="fashion-item">
+        <a href="{% url 'available_fashion_items' %}">Fashion</a>
+      </li>
+      <li id="electronic-item">
+        <a href="{% url 'available_electronics_items' %}">Electronic</a>
+      </li>
+      <li id="sporting-item">
+        <a href="{% url 'available_sporting_items' %}">Sporting-Goods</a>
+      </li>
+      <li id="book-item">
+        <a href="{% url 'available_books_movie_and_music_items' %}">Books, Movies and Music</a>
+      </li>
+      <li id="home-item">
+        <a href="{% url 'available_home_and_garden_items' %}">Home and Garden</a>
+      </li>
+      <li id="toy-item">
+        <a href="{% url 'available_toys_and_hobbies_items' %}">Toys and Hobbies</a>
+      </li>
+      <li id="else-item">
+        <a href="{% url 'available_everything_else_items' %}">Everything Else</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="available-item-grid">
+    {% for item in available_items %}
+      <div class="available-item">
+        <a href="{% url 'available_borrow_item' item.item_id %}">
+          <img class="item-image" src="{{ item.item_image.url }}" alt="{{ item.item_name }}" />
+          <p class="item-name">{{ item.item_name }}</p>
+          <p class="deposit-require">Deposit require{{ item.item_deposit_require }}</p>
+        </a>
+      </div>
+    {% endfor %}
+  </div>
+{% endblock %}

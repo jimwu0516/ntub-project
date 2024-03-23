@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>user history orders</title>
+{% endblock %}
+
+{% block content %}
+  <h1>User History Orders</h1>
+  {% if borrower_history_orders %}
+    <ul>
+      {% for order in borrower_history_orders %}
+        <li>Order ID: {{ order.order_id }}</li>
+        <li>Borrower: {{ order.borrower }}</li>
+        <li>Item: {{ order.item.item_name }}</li>
+        <li>Start Time: {{ order.start_time }}</li>
+        <li>End Time: {{ order.end_time }}</li>
+        <li>Status: {{ order.status }}</li>
+        <hr/>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No history orders found !!!!!</p>
+  {% endif %}
+{% endblock %}

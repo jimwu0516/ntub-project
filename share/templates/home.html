@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+  <div class="home-page">
+    <h1 style="padding: 50px;">Title Title Title Title Title Title Title</h1>
+    <p style="padding: 50px;">Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle</p>
+
+    <div class="home-card-container">
+      <div class="home-card">
+        <img src="{% static 'images/pexels-steve-johnson-963048.jpg' %}" alt="IMGIMG" />
+        <h3>減少浪費</h3>
+        <p>透過資源共享，讓閒置物品得到再利用，延長其使用壽命，並減少廢棄物產生。同時以借用所需物品取代購買新的，減少了對新資源的需求，降低了浪費。</p>
+      </div>
+      <div class="home-card">
+        <img src="{% static 'images/pexels-michael-steinberg-318820.jpg' %}" alt="IMGIMG" />
+        <h3>共享經濟</h3>
+        <p>提供平台，用戶可以將自己的閒置物品租借給其他人，同時也可以通過租借他人的物品來滿足自己的需求，從而實現了資源的有效共享和最大化利用，並從中獲得利益。</p>
+      </div>
+      <div class="home-card">
+        <img src="{% static 'images/pexels-singkham-1108572.jpg' %}" alt="IMGIMG" />
+        <h3>碳足跡</h3>
+        <p>透過共享資源、延長物品壽命、降低生產需求等方式減少碳足跡。通過租借物品而非購買新物品，減少原始資源開採和加工，進而降低生產過程中的能源消耗和碳排放。</p>
+      </div>
+    </div>
+
+    <div class="text-image-container">
+      <div class="image-container">
+        <img src="{% static 'images/testImage.png' %}" alt="Alt Text" style="width:100%; height:auto;" />
+      </div>
+
+      <div class="text-container">
+        <h3>Title Title Title Title Title</h3>
+        <p>Subtitle Subtitle Subtitle Subtitle Subtitle Subtitle</p>
+      </div>
+    </div>
+
+    <div class="borrow-flow-chart">
+      <img src="{% static 'images/testImage.png' %}" alt="Alt Text" style="width:100%; height:auto; border-radius: 10px;" />
+    </div>
+
+    {% if not request.user.is_authenticated %}
+      <a class="home-page-startbtn" href="{% url 'register' %}">Start</a>
+    {% endif %}
+  </div>
+{% endblock %}

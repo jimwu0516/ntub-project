@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {% block title %}
+      <title>share to earn</title>
+    {% endblock %}
+
+    {% block css %}
+      <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    {% endblock %}
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+    <script src="{% static 'js/web3.min.js' %}"></script>
+    <script src="{% static 'js/connect_wallet.js' %}"></script>
+  </head>
+
+  <body>
+    <header class="header">
+      {% if request.user.is_authenticated %}
+        <nav class="login-nav">
+          <div class="navbar-left">
+            <a href="{% url 'home' %}" class="navbar-logo">Share To Earn</a>
+            <a href="{% url 'available_borrow_items' %}" class="menu-item">Borrow</a>
+            <a href="{% url 'user_orders' %}" class="menu-item">Order</a>
+          </div>
+
+          <div class="navbar-right">
+            <div class="connect-wallet-btn">
+              <button id="connectWalletBtn" class="connectWalletBtn" style="background-color: green; color: white; border: 0px; padding: 10px; border-radius: 5px;">Connect Wallet</button>
+              <select id="disconnectSelect" class="disconnectSelect" style="display: none;"></select>
+            </div>
+            <div class="dropdown">
+              <a href="#" class="dropbtn">Hi {{ request.user }}</a>
+
+              <div class="dropdown-content">
+                <a href="{% url 'profile' %}" title="Update my profile">Profile</a>
+                <a href="{% url 'items' %}">Contribute</a>
+                <a href="{% url 'logout' %}" id="logoutBtn" style="color: red; font-weight: bold;">Logout</a>
+              </div>
+            </div>
+          </div>
+        </nav>
+      {% else %}
+        <nav class="logout-nav">
+          <a href="{% url 'home' %}" class="navbar-logo">Share To Earn</a>
+          <a href="{% url 'login' %}" class="login">Login</a>
+        </nav>
+      {% endif %}
+    </header>
+    <main>
+      <div class="container">
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+        {% block content %}
+
+        {% endblock %}
+      </div>
+    </main>
+    <footer class="footer"></footer>
+  </body>
+</html>

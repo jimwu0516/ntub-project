@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>approve_order</title>
+{% endblock %}
+
+{% block content %}
+  <h1>approve_order</h1>
+  {% if orders %}
+    {% for order in orders %}
+      <div>
+        <p>Item: {{ order.item.item_name }}</p>
+        <p>Borrower: {{ order.borrower.username }}</p>
+        <p>Start time:{{ order.start_time }}</p>
+        <p>End time:{{ order.end_time }}</p>
+
+        <form method="post" action="{% url 'update_order_status_approve' order.order_id %}">
+          {% csrf_token %}
+          <button type="submit" name="decision" value="accept">Accept</button>
+          <button type="submit" name="decision" value="deny">Deny</button>
+        </form>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>there is no order need to be approved</p>
+  {% endif %}
+{% endblock %}
