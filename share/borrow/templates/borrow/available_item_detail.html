@@ -5,82 +5,6 @@
 {% endblock %}
 
 {% block content %}
-  <style>
-    .borrow-request-container {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      height: 100vh;
-      padding: 10px;
-      margin-top: 100px;
-    }
-    
-    .borrow-request-card {
-      border: 1px solid #ddd;
-      padding: 40px;
-      display: flex;
-      font-size: 1.2rem;
-      align-items: center;
-    }
-    
-    .borrow-request-card img {
-      width: 400px;
-      height: auto;
-      margin-right: 40px;
-    }
-    
-    .details {
-      max-width: 450px;
-      margin: auto;
-      display: flex;
-      flex-direction: column;
-      text-align: left;
-      align-items: left;
-    }
-    
-    .details h2 {
-      font-size: 2.5rem;
-      color: #333;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-    
-    .details p {
-      margin: 10px 0;
-      color: #666;
-      font-size: 1.5rem;
-      display: inline-block;
-      margin-right: 10px;
-    }
-    
-    .details input[type='datetime-local'] {
-      font-size: 1.2rem;
-      padding: 10px;
-      margin-bottom: 20px;
-      width: 180px;
-      height: 10px;
-    }
-    
-    .details button {
-      background-color: #30878a;
-      border-radius: 10px;
-      padding: 15px 30px;
-      font-size: 1.5rem;
-      color: white;
-      border: none;
-      transition: background-color 0.3s ease;
-    }
-    
-    .request-submit-btn {
-      text-align: center;
-      align-items: center;
-    }
-    
-    .details button:hover {
-      background-color: #02a9f7;
-    }
-  </style>
-
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       document.getElementById('borrowForm').addEventListener('submit', function (event) {
@@ -124,10 +48,10 @@
 
         <form id="borrowForm" action="{% url 'borrow_item' item.pk %}" method="post">
           {% csrf_token %}
-          <p>start time :</p>
+          <p>start:</p>
           <input type="datetime-local" name="start_time" required />
           <br />
-          <p>end time :</p>
+          <p>end:</p>
           <input type="datetime-local" name="end_time" required />
           <br />
           <div class="request-submit-btn">

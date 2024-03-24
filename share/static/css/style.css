@@ -228,14 +228,14 @@ a {
   padding: 40px;
 }
 
-.home-page-startbtn{
-  background-color: #30878A; 
-  padding: 20px 80px; 
-  border-radius: 10px; 
-  color:white;
+.home-page-startbtn {
+  background-color: #30878A;
+  padding: 20px 80px;
+  border-radius: 10px;
+  color: white;
 }
 
-.home-page-startbtn:hover{
+.home-page-startbtn:hover {
   background-color: #02a9f7;
 }
 
@@ -405,4 +405,82 @@ h1.text-center {
   background-color: #dff0d8;
   border-color: #d6e9c6;
   color: #468847;
+}
+
+
+/*available_item_detail------------------------------------------------------------*/
+
+.borrow-request-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  height: 100vh;
+  padding: 10px;
+  margin-top: 100px;
+}
+
+.borrow-request-card {
+  border: 1px solid #ddd;
+  padding: 40px;
+  display: flex;
+  font-size: 1.2rem;
+  align-items: center;
+}
+
+.borrow-request-card img {
+  width: 400px;
+  height: auto;
+  margin-right: 40px;
+}
+
+.details {
+  max-width: 450px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  align-items: left;
+}
+
+.details h2 {
+  font-size: 2.5rem;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.details p {
+  margin: 10px 0;
+  color: #666;
+  font-size: 1.5rem;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.details input[type='datetime-local'] {
+  font-size: 1.2rem;
+  padding: 10px;
+  margin-bottom: 20px;
+  width: 180px;
+  height: 10px;
+}
+
+.details button {
+  background-color: #30878a;
+  border-radius: 10px;
+  padding: 10px 25px;
+  margin-top: 20px;
+  font-size: 1.5rem;
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.request-submit-btn {
+  text-align: center;
+  align-items: center;
+}
+
+.details button:hover {
+  background-color: #02a9f7;
 }
