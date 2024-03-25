@@ -5,23 +5,105 @@
 {% endblock %}
 
 {% block content %}
-  <h1>approve_order</h1>
-  {% if orders %}
-    {% for order in orders %}
-      <div>
-        <p>Item: {{ order.item.item_name }}</p>
-        <p>Borrower: {{ order.borrower.username }}</p>
-        <p>Start time:{{ order.start_time }}</p>
-        <p>End time:{{ order.end_time }}</p>
-
-        <form method="post" action="{% url 'update_order_status_approve' order.order_id %}">
-          {% csrf_token %}
-          <button type="submit" name="decision" value="accept">Accept</button>
-          <button type="submit" name="decision" value="deny">Deny</button>
-        </form>
-      </div>
-    {% endfor %}
-  {% else %}
-    <p>there is no order need to be approved</p>
-  {% endif %}
+  <style>
+    .approve-order-container {
+      width: 95%;
+      margin: 20px auto;
+      text-align: center;
+    }
+    
+    .approve-order-container h1 {
+      color: #30878a;
+      margin-bottom: 20px;
+    }
+    
+    .order-table {
+      width: 100%;
+    }
+    
+    .approve-order-container .order-header,
+    .approve-order-container .order-row {
+      display: flex;
+      justify-content: center;
+      align-items: center; /* This centers the content vertically */
+      text-align: center;
+    }
+    
+    .approve-order-container .order-header > div,
+    .approve-order-container .order-row > div {
+      flex: 1;
+      padding: 10px;
+    }
+    
+    ..approve-order-container.confirm {
+      flex: 1.5;
+    
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .approve-order-container .order-header {
+      background-color: #f9f9f9;
+      font-weight: bold;
+    }
+    
+    .approve-order-container .order-row {
+      background-color: #fff;
+      border-bottom: 1px solid #ccc;
+    }
+    
+    .accept-btn,
+    .deny-btn {
+      padding: 5px 10px;
+      border: none;
+      color: white;
+      cursor: pointer;
+      margin-left: 5px;
+    }
+    
+    .accept-btn {
+      background-color: #02a9f7;
+    }
+    
+    .deny-btn {
+      background-color: #f70202;
+    }
+    
+    .accept-btn:hover,
+    .deny-btn:hover {
+      opacity: 0.8;
+    }
+  </style>
+  <div class="approve-order-container">
+    <h1>Approve Order</h1>
+    <div class="order-table">
+      {% if orders %}
+        <div class="order-header">
+          <div>Item</div>
+          <div>Borrower</div>
+          <div>Start Time</div>
+          <div>End Time</div>
+          <div class="confirm">Confirm</div>
+        </div>
+        {% for order in orders %}
+          <div class="order-row">
+            <div>{{ order.item.item_name }}</div>
+            <div>{{ order.borrower.username }}</div>
+            <div>{{ order.start_time }}</div>
+            <div>{{ order.end_time }}</div>
+            <div class="confirm">
+              <form method="post" action="{% url 'update_order_status_approve' order.order_id %}">
+                {% csrf_token %}
+                <button type="submit" name="decision" value="accept" class="accept-btn">Accept</button>
+                <button type="submit" name="decision" value="deny" class="deny-btn">Deny</button>
+              </form>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>there is no order need to be approved</p>
+      {% endif %}
+    </div>
+  </div>
 {% endblock %}
