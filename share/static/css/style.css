@@ -408,9 +408,77 @@ h1.text-center {
   color: #468847;
 }
 
+/*available_borrow_item------------------------------------------------------------*/
+.item-category-bar {
+  padding: 10px 0;
+  margin-top: 15px;
+}
+
+.item-category-links {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0;
+  margin: 0 20px;
+}
+
+.item-category-links li {
+  display: inline;
+  padding: 10px 0;
+  border-bottom: 2px solid transparent;
+}
+
+.item-category-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.item-category-links a:hover {
+  color: #02a9f7;
+}
+
+.available-item-grid {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  padding: 2em;
+}
+
+.available-item {
+  width: 274px;
+  margin-bottom: 85px;
+  padding: 5px;
+}
+
+.available-item img {
+  max-width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.available-item .item-name {
+  text-align: center;
+  padding: 0;
+  color: #333;
+  font-size: 20px;
+}
+
+.available-item .deposit-require {
+  text-align: center;
+  padding: 0;
+  color: #333;
+  font-size: 15px;
+}
+
+.available-item:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
 /*available_item_detail------------------------------------------------------------*/
-
 .borrow-request-container {
   display: flex;
   justify-content: center;
@@ -484,4 +552,167 @@ h1.text-center {
 
 .details button:hover {
   background-color: #02a9f7;
+}
+
+
+/*user orders page----------------------------------------------------------*/
+.user-order-status-bar {
+  padding: 10px 0;
+  margin-top: 15px;
+}
+
+.user-order-status-links {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0;
+  margin: 0 20px;
+}
+
+.user-order-status-links li {
+  display: inline;
+  padding: 10px 0;
+  border-bottom: 2px solid transparent;
+}
+
+.user-order-status-links a {
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  padding: 10px;
+}
+
+.user-order-status-links a:hover {
+  color: #02a9f7;
+}
+
+
+
+.order-container {
+  width: 95%;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.order-table {
+  width: 100%;
+}
+
+.order-container .order-header,
+.order-container .order-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* This centers the content vertically */
+  text-align: center;
+}
+
+.order-container .order-header>div,
+.order-container .order-row>div {
+  flex: 1;
+  padding: 10px;
+}
+
+.order-container.cancel {
+  flex: 1.5;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.order-container .order-header {
+  background-color: #f9f9f9;
+  font-weight: bold;
+}
+
+.order-container .order-row {
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+}
+
+.cancel-btn {
+  padding: 8px 12px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin-left: 5px;
+  border-radius: 5px;
+  background-color: #f70202;
+}
+
+.cancel-btn :hover {
+  opacity: 0.8;
+}
+
+
+/*approve request page -------------------------------------------------------*/
+.approve-order-container {
+  width: 95%;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.approve-order-container h1 {
+  color: #30878a;
+  margin-bottom: 20px;
+}
+
+.order-table {
+  width: 100%;
+}
+
+.approve-order-container .order-header,
+.approve-order-container .order-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.approve-order-container .order-header>div,
+.approve-order-container .order-row>div {
+  flex: 1;
+  padding: 10px;
+}
+
+.approve-order-container.confirm {
+  flex: 1.5;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.approve-order-container .order-header {
+  background-color: #f9f9f9;
+  font-weight: bold;
+}
+
+.approve-order-container .order-row {
+  background-color: #fff;
+  border-bottom: 1px solid #ccc;
+}
+
+.accept-btn,
+.deny-btn {
+  padding: 8px 12px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin-left: 5px;
+  border-radius: 5px;
+}
+
+.accept-btn {
+  background-color: #02a9f7;
+}
+
+.deny-btn {
+  background-color: #f70202;
+}
+
+.accept-btn:hover,
+.deny-btn:hover {
+  opacity: 0.8;
 }

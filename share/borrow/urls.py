@@ -5,9 +5,6 @@ urlpatterns = [
     path('available_borrow_items/', views.available_items, name='available_borrow_items'),
     path('available_borrow_item/<int:pk>/', views.available_item_detail, name='available_borrow_item'),
     path('borrow_item/<int:pk>/', views.borrow_item, name='borrow_item'), 
-    path('user_orders/', views.user_orders, name='user_orders'),
-    path('cancel_order/<int:order_id>/', views.cancel_order, name='cancel_order'),
-    path('borrower_history_orders/', views.borrower_history_orders, name='borrower_history_orders'),
     
     path('view_pending_orders/', views.view_pending_orders, name='view_pending_orders'),
     path('update_order_status_approve/<int:order_id>/', views.update_order_status_approve, name='update_order_status_approve'),
@@ -20,9 +17,13 @@ urlpatterns = [
     path('available/Toys and Hobbies', views.available_toys_and_hobbies_items, name='available_toys_and_hobbies_items'),
     path('available/Everything Else', views.available_everything_else_items, name='available_everything_else_items'),
 
+    path('orders/latest-status', views.latest_status_user_orders, name='latest_status_user_orders'),
+    path("orders/unpaid-order", views.unpaid_user_orders, name="unpaid_user_orders"),
+    path("orders/cancel-order", views.cancel_order_user_orders, name="cancel_order_user_orders"),
+    path("orders/hostory-order", views.history_user_orders, name="history_user_orders"),
+    path('cancel_order/<int:order_id>/', views.cancel_order, name='cancel_order'),
 
-
-
+    
 
 ]
 

@@ -55,40 +55,6 @@ def borrow_item(request, pk):
     
     return render(request, 'borrow/available_item_detail.html', {'item': item})
 
-def user_orders(request):
-    desired_statuses = ['wait_to_pay','unpaid', 'pending', 'accept','return']
-    user_orders = Order.objects.filter(borrower=request.user, status__in=desired_statuses)
-    return render(request, 'borrow/user_orders.html', {'user_orders': user_orders})
-    
-    #if success paid 
-    #   status == pending 
-    #   messages.success(request,'Item borrowed request successfully sent')
-    #else :
-    #   messages.alert(request,'please complete pay ')
-    
-    
-def cancel_order(request, order_id):
-    if request.method == 'POST':
-        Order.objects.filter(order_id=order_id).update(status='cancel_order')
-        order=Order.objects.get(order_id=order_id)
-        order.item.item_available = True
-        order.item.save()
-        messages.success(request, 'Order successfully cancelled') 
-        return redirect('user_orders')
-    
-#def make a trainsit (By pressing pay button)
-    #call smart contract 
-    #if true update status to pending 
-    
-    
-#smart contract func 
-#   return true or false 
-    
-def borrower_history_orders(request):
-    desired_statuses = ['cancel_order', 'deny', 'finish']
-    borrower_history_orders = Order.objects.filter(borrower=request.user, status__in=desired_statuses)
-    return render(request, 'borrow/borrower_history_orders.html', {'borrower_history_orders': borrower_history_orders})
-    
 @login_required
 def view_pending_orders(request):
     orders = Order.objects.filter(
@@ -133,13 +99,6 @@ def update_order_status_approve(request, order_id):
     
 def send_confirm_email(email_address,subject, message):
     send_mail(subject, message, 'sharetoearn999@gmail.com', [email_address])
-    
-
-
-
-
-
-
 
 
 @login_required
@@ -214,3 +173,67 @@ def available_everything_else_items(request):
         'available_items': available_everything_else_items
     }
     return render(request, 'borrow/available_borrow_items.html', context)
+
+#---------------------------------------------------------------------
+
+
+    
+#def make a trainsit (By pressing pay button)
+    #call smart contract 
+    #if true update status to pending 
+    
+    
+#smart contract func 
+#   return true or false 
+    
+def latest_status_user_orders(request):
+    desired_statuses = ['wait_to_pay', 'pending', 'accept','return', 'get_item']
+    latest_status_user_orders = Order.objects.filter(borrower=request.user, status__in=desired_statuses)
+    
+    context = {
+        'user_orders': latest_status_user_orders  
+    }
+    return render(request, 'borrow/user_orders.html', context)
+
+def unpaid_user_orders(request):
+    desired_statuses = ['unpaid']
+    unpaid_user_orders = Order.objects.filter(borrower=request.user, status__in=desired_statuses)
+    
+    context = {
+        'user_orders': unpaid_user_orders
+    }
+    return render(request, 'borrow/user_orders.html', context)
+
+    #if success paid 
+        #   status == pending 
+        #   messages.success(request,'Item borrowed request successfully sent')
+        #else :
+        #   messages.alert(request,'please complete pay ')
+    
+def cancel_order_user_orders(request):
+    desired_statuses = ['deny','cancel_order']
+    cancel_order_user_orders = Order.objects.filter(borrower=request.user, status__in=desired_statuses)
+    
+    context = {
+        'user_orders': cancel_order_user_orders
+    }
+    return render(request, 'borrow/user_orders.html', context)
+
+def history_user_orders(request):
+    desired_statuses = ['finish']
+    history_user_orders = Order.objects.filter(borrower=request.user, status__in=desired_statuses)
+    
+    context = {
+        'user_orders': history_user_orders
+    }
+    return render(request, 'borrow/user_orders.html', context)
+
+
+def cancel_order(request, order_id):
+    if request.method == 'POST':
+        Order.objects.filter(order_id=order_id).update(status='cancel_order')
+        order=Order.objects.get(order_id=order_id)
+        order.item.item_available = True
+        order.item.save()
+        messages.success(request, 'Order successfully cancelled') 
+        return redirect('latest_status_user_orders')
