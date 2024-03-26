@@ -189,18 +189,23 @@ def available_everything_else_items(request):
 def latest_status_user_orders(request):
     desired_statuses = ['wait_to_pay', 'pending', 'accept','return', 'get_item']
     latest_status_user_orders = Order.objects.filter(borrower=request.user, status__in=desired_statuses)
+    unpaid_orders_exist = Order.objects.filter(borrower=request.user, status='unpaid').exists()
     
     context = {
-        'user_orders': latest_status_user_orders  
+        'user_orders': latest_status_user_orders,
+        'unpaid_orders_exist': unpaid_orders_exist,
     }
     return render(request, 'borrow/user_orders.html', context)
 
 def unpaid_user_orders(request):
     desired_statuses = ['unpaid']
     unpaid_user_orders = Order.objects.filter(borrower=request.user, status__in=desired_statuses)
+    unpaid_orders_exist = Order.objects.filter(borrower=request.user, status='unpaid').exists()
+
     
     context = {
-        'user_orders': unpaid_user_orders
+        'user_orders': unpaid_user_orders,
+        'unpaid_orders_exist': unpaid_orders_exist,
     }
     return render(request, 'borrow/user_orders.html', context)
 
@@ -213,18 +218,23 @@ def unpaid_user_orders(request):
 def cancel_order_user_orders(request):
     desired_statuses = ['deny','cancel_order']
     cancel_order_user_orders = Order.objects.filter(borrower=request.user, status__in=desired_statuses)
-    
+    unpaid_orders_exist = Order.objects.filter(borrower=request.user, status='unpaid').exists()
+
     context = {
-        'user_orders': cancel_order_user_orders
+        'user_orders': cancel_order_user_orders,
+        'unpaid_orders_exist': unpaid_orders_exist,
     }
     return render(request, 'borrow/user_orders.html', context)
 
 def history_user_orders(request):
     desired_statuses = ['finish']
     history_user_orders = Order.objects.filter(borrower=request.user, status__in=desired_statuses)
+    unpaid_orders_exist = Order.objects.filter(borrower=request.user, status='unpaid').exists()
+
     
     context = {
-        'user_orders': history_user_orders
+        'user_orders': history_user_orders,
+        'unpaid_orders_exist': unpaid_orders_exist,
     }
     return render(request, 'borrow/user_orders.html', context)
 
