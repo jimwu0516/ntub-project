@@ -46,27 +46,27 @@ class ItemDetail(LoginRequiredMixin, DetailView):
 
 class ItemUpdate(LoginRequiredMixin, UpdateView):
     model = Item
-    fields = ['item_name','item_description','item_category','item_address','item_deposit_require','item_image']
+    fields = ['item_name', 'item_description', 'item_category', 'item_address', 'item_deposit_require', 'item_image']
     success_url = reverse_lazy('items')
     
     def form_valid(self, form):
-        # 獲取現有物品
-        item_instance = self.get_object()
-        
-        # 更新照片時刪除舊的圖片
-        if item_instance.item_image:
+        item_instance = form.instance
+
+        if not item_instance.item_available:
+            messages.error(self.request, "This item has been borrowing now !!")
+            return super(ItemUpdate, self).form_invalid(form)
+
+        if 'item_image' in form.changed_data and item_instance.item_image:
             old_image_path = item_instance.item_image.path
             if os.path.exists(old_image_path):
                 os.remove(old_image_path)
-        
+
         messages.success(self.request, "The item was updated successfully.")
-        return super(ItemUpdate,self).form_valid(form)
-      
+        return super(ItemUpdate, self).form_valid(form)
+    
     def get_queryset(self):
         base_qs = super(ItemUpdate, self).get_queryset()
         return base_qs.filter(contributor=self.request.user)
-    
-
 
 class ItemDelete(LoginRequiredMixin, DeleteView):
     model = Item
@@ -74,10 +74,8 @@ class ItemDelete(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy('items')
     
     def form_valid(self, form):
-        # 獲取要刪除的物品實例
         item_instance = self.get_object()
         
-        # 刪除物品的照片
         if item_instance.item_image:
             image_path = item_instance.item_image.path
             if os.path.exists(image_path):
