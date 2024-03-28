@@ -201,7 +201,6 @@ def unpaid_user_orders(request):
     desired_statuses = ['unpaid']
     unpaid_user_orders = Order.objects.filter(borrower=request.user, status__in=desired_statuses)
     unpaid_orders_exist = Order.objects.filter(borrower=request.user, status='unpaid').exists()
-
     
     context = {
         'user_orders': unpaid_user_orders,
@@ -231,7 +230,6 @@ def history_user_orders(request):
     history_user_orders = Order.objects.filter(borrower=request.user, status__in=desired_statuses)
     unpaid_orders_exist = Order.objects.filter(borrower=request.user, status='unpaid').exists()
 
-    
     context = {
         'user_orders': history_user_orders,
         'unpaid_orders_exist': unpaid_orders_exist,

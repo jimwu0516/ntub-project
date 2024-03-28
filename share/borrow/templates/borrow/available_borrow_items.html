@@ -15,6 +15,7 @@
     
         if (window.location.href.includes(link.getAttribute('href'))) {
           item.style.borderBottom = '2px solid #02a9f7'
+          link.style.color = '#02a9f7'
         }
     
         item.addEventListener('mouseenter', function () {
@@ -24,7 +25,20 @@
         item.addEventListener('mouseleave', function () {
           if (!window.location.href.includes(link.getAttribute('href'))) {
             item.style.borderBottom = ''
+            link.style.color = ''
           }
+        })
+    
+        link.addEventListener('click', function () {
+          menuItems.forEach(function (itemId) {
+            var otherItem = document.getElementById(itemId)
+            var otherLink = otherItem.querySelector('a')
+            otherItem.style.borderBottom = ''
+            otherLink.style.color = ''
+          })
+    
+          item.style.borderBottom = '2px solid #02a9f7'
+          link.style.color = '#02a9f7'
         })
       })
     })

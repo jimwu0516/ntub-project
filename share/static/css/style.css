@@ -435,10 +435,6 @@ h1.text-center {
   padding: 10px;
 }
 
-.item-category-links a:hover {
-  color: #02a9f7;
-}
-
 .available-item-grid {
   display: flex;
   flex-direction: row;
@@ -582,12 +578,6 @@ h1.text-center {
   padding: 10px;
 }
 
-.user-order-status-links a:hover {
-  color: #02a9f7;
-}
-
-
-
 .order-container {
   width: 95%;
   margin: 20px auto;
@@ -603,7 +593,6 @@ h1.text-center {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* This centers the content vertically */
   text-align: center;
 }
 

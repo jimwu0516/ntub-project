@@ -15,24 +15,34 @@
     
         if (window.location.href.includes(link.getAttribute('href'))) {
           item.style.borderBottom = '2px solid #02a9f7'
+          link.style.color = '#02a9f7'
         }
     
         item.addEventListener('mouseenter', function () {
-          item.style.borderBottom = '2px solid #02a9f7'
+          if (!window.location.href.includes(link.getAttribute('href'))) {
+            item.style.borderBottom = '2px solid #02a9f7'
+          }
         })
     
         item.addEventListener('mouseleave', function () {
           if (!window.location.href.includes(link.getAttribute('href'))) {
             item.style.borderBottom = ''
+            link.style.color = ''
           }
         })
+    
+        link.addEventListener('click', function () {
+          menuItems.forEach(function (itemId) {
+            var otherItem = document.getElementById(itemId)
+            var otherLink = otherItem.querySelector('a')
+            otherItem.style.borderBottom = ''
+            otherLink.style.color = ''
+          })
+    
+          item.style.borderBottom = '2px solid #02a9f7'
+          link.style.color = '#02a9f7'
+        })
       })
-
-      var unpaidOrdersExist = {% if unpaid_orders_exist %}true{% else %}false{% endif %};
-      if (unpaidOrdersExist) {
-        var unpaidLink = document.getElementById('unpaid').querySelector('a');
-        unpaidLink.style.color = 'red';
-      }
     })
   </script>
 
@@ -64,11 +74,9 @@
           <div>End Time</div>
           <div>Request Time</div>
           <div>Status</div>
-          {% for order in user_orders %}
-            {% if order.status == 'unpaid' or order.status == 'wait_to_pay' %}
-              <div class="cancel">Cancel</div>
-            {% endif %}
-          {% endfor %}
+          {% if unpaid_orders_exist %}
+            <div class="cancel">Cancel</div>
+          {% endif %}
         </div>
 
         {% for order in user_orders %}
