@@ -74,8 +74,8 @@
           <div>End Time</div>
           <div>Request Time</div>
           <div>Status</div>
-          {% if unpaid_orders_exist %}
-            <div class="cancel">Cancel</div>
+          {% if show_cancel_column %}
+          <div class="cancel">Cancel</div>
           {% endif %}
         </div>
 
