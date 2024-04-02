@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>contributor order status</title>
+{% endblock %}
+
+{% block content %}
+<h2 class="text-center">My Contribute status</h2>
+  <div class="order-container">
+    <div class="order-table">
+      {% if contributor_orders %}
+        <div class="order-header">
+          <div>Borrower</div>
+          <div>Item</div>
+          <div>Start Time</div>
+          <div>End Time</div>
+          <div>Request Time</div>
+          <div>Status</div>
+          <div>Action</div>
+        </div>
+        {% for order in contributor_orders %}
+          <div class="order-row">
+            <div>{{ order.borrower }}</div>
+            <div>{{ order.item.item_name }}</div>
+            <div>{{ order.start_time }}</div>
+            <div>{{ order.end_time }}</div>
+            <div>{{ order.request_time }}</div>
+            <div>{{ order.status }}</div>
+            {% if order.status == 'pending' %}
+                <div>
+                    <form method="post" action="{% url 'update_order_status_approve' order.order_id %}">
+                        {% csrf_token %}
+                        <div class="action-buttons">
+                            <button type="submit" name="decision" value="accept" class="accept-btn">Accept</button>
+                            <button type="submit" name="decision" value="deny" class="deny-btn">Deny</button>
+                        </div>
+                    </form>
+                </div>
+            {%else%}
+                <div>
+                    ---
+                </div>
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>No orders found !!!!!</p>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

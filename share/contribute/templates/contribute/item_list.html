@@ -12,9 +12,8 @@
     }
   </script>
 
-  <h2>My Contribute item</h2>
-  <a href="{% url 'item-create' %}">＋</a>
-  <a href="{% url 'view_pending_orders' %}">Approve Request here</a>
+  <h2 class="text-center">My Contribute item</h2>
+  <a href="{% url 'item-create' %}">Add item</a>
   <br />
   <div class="contributor-item-list">
     {% for item in items %}

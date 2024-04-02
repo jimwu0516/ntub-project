@@ -6,7 +6,7 @@ urlpatterns = [
     path('available_borrow_item/<int:pk>/', views.available_item_detail, name='available_borrow_item'),
     path('borrow_item/<int:pk>/', views.borrow_item, name='borrow_item'), 
     
-    path('view_pending_orders/', views.view_pending_orders, name='view_pending_orders'),
+    #path('view_pending_orders/', views.view_pending_orders, name='view_pending_orders'),
     path('update_order_status_approve/<int:order_id>/', views.update_order_status_approve, name='update_order_status_approve'),
     
     path('available/fashion/', views.available_fashion_items, name='available_fashion_items'),
@@ -22,6 +22,8 @@ urlpatterns = [
     path("orders/cancel-order", views.cancel_order_user_orders, name="cancel_order_user_orders"),
     path("orders/hostory-order", views.history_user_orders, name="history_user_orders"),
     path('cancel_order/<int:order_id>/', views.cancel_order, name='cancel_order'),
+    
+    path('contributor-orders/', views.contributor_order_status, name='contributor_order_status'), 
 
     
 

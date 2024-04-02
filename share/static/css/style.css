@@ -633,6 +633,7 @@ h1.text-center {
 
 
 /*approve request page -------------------------------------------------------*/
+/*
 .approve-order-container {
   width: 95%;
   margin: 20px auto;
@@ -702,10 +703,11 @@ h1.text-center {
 .deny-btn:hover {
   opacity: 0.8;
 }
+*/
 
 /*contributor-item-list page ---------------------------------*/
 .contributor-item-list {
-  margin: 20px;
+  margin: 20px auto;
 }
 
 .item-list-card {
@@ -756,3 +758,35 @@ h1.text-center {
 .item-delete-button:hover {
   opacity: 0.8;
 }
+
+/*contributor-order-status page ----------------------------*/
+.order-container .action-buttons {
+  display: flex;
+}
+
+.accept-btn,
+.deny-btn {
+  padding: 8px 12px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin-left: 5px;
+  border-radius: 5px;
+  flex-grow: 1;
+  margin: 0 5px;
+}
+
+.accept-btn {
+  background-color: #02a9f7;
+}
+
+.deny-btn {
+  background-color: #f70202;
+}
+
+.accept-btn:hover,
+.deny-btn:hover {
+  opacity: 0.8;
+}
+
+

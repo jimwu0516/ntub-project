@@ -54,7 +54,7 @@ def borrow_item(request, pk):
         return redirect('user_orders')
     
     return render(request, 'borrow/available_item_detail.html', {'item': item})
-
+"""
 @login_required
 def view_pending_orders(request):
     orders = Order.objects.filter(
@@ -66,6 +66,7 @@ def view_pending_orders(request):
         'orders': orders
     }
     return render(request, 'borrow/approve_order.html', context)
+"""
 
 @login_required
 def update_order_status_approve(request, order_id):
@@ -95,7 +96,7 @@ def update_order_status_approve(request, order_id):
             #return deposit to borrower call smart contract 
         
         Order.objects.filter(order_id=order_id).update(status=new_status)
-        return HttpResponseRedirect(reverse('view_pending_orders'))
+        return HttpResponseRedirect(reverse('contributor_order_status'))
     
 def send_confirm_email(email_address,subject, message):
     send_mail(subject, message, 'sharetoearn999@gmail.com', [email_address])
@@ -243,3 +244,18 @@ def cancel_order(request, order_id):
         order.item.save()
         messages.success(request, 'Order successfully cancelled') 
         return redirect('latest_status_user_orders')
+
+@login_required
+def contributor_order_status(request):
+    desired_statuses = ['pending','accept','get_item','return']
+      
+    contributor_orders = Order.objects.filter(
+        status__in=desired_statuses,
+        item__contributor__username=request.user.username
+    )
+
+    context = {
+        'contributor_orders': contributor_orders
+    }
+    
+    return render(request, 'borrow/contributor_order_status.html', context)
