@@ -71,14 +71,18 @@
   </nav>
 
   <div class="available-item-grid">
-    {% for item in available_items %}
-      <div class="available-item">
-        <a href="{% url 'available_borrow_item' item.item_id %}">
-          <img class="item-image" src="{{ item.item_image.url }}" alt="{{ item.item_name }}" />
-          <p class="item-name">{{ item.item_name }}</p>
-          <p class="deposit-require">Deposit require{{ item.item_deposit_require }}</p>
-        </a>
-      </div>
-    {% endfor %}
+    {% if  available_items%}
+      {% for item in available_items %}
+        <div class="available-item">
+          <a href="{% url 'available_borrow_item' item.item_id %}">
+            <img class="item-image" src="{{ item.item_image.url }}" alt="{{ item.item_name }}" />
+            <p class="item-name">{{ item.item_name }}</p>
+            <p class="deposit-require">Deposit require{{ item.item_deposit_require }}</p>
+          </a>
+        </div>
+      {% endfor %}
+    {% else %}
+        <p>There are no items available</p>
+    {% endif %}
   </div>
 {% endblock %}
