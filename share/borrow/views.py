@@ -194,6 +194,7 @@ def latest_status_user_orders(request):
     context = {
         'user_orders': latest_status_user_orders,
         'show_cancel_column': False,
+        'show_action_column': True,
     }
     return render(request, 'borrow/user_orders.html', context)
 
@@ -206,6 +207,7 @@ def unpaid_user_orders(request):
         'user_orders': unpaid_user_orders,
         'unpaid_orders_exist': unpaid_orders_exist,
         'show_cancel_column': show_cancel_column,
+        'show_action_column': False,
     }
     return render(request, 'borrow/user_orders.html', context)
 
@@ -222,6 +224,7 @@ def cancel_order_user_orders(request):
     context = {
         'user_orders': cancel_order_user_orders,
         'show_cancel_column': False,
+        'show_action_column': False,
     }
     return render(request, 'borrow/user_orders.html', context)
 
@@ -232,6 +235,7 @@ def history_user_orders(request):
     context = {
         'user_orders': history_user_orders,
         'show_cancel_column': False,
+        'show_action_column': False,
     }
     return render(request, 'borrow/user_orders.html', context)
 
@@ -259,3 +263,24 @@ def contributor_order_status(request):
     }
     
     return render(request, 'borrow/contributor_order_status.html', context)
+
+#----------------------------------------------------------------------------
+@login_required
+def borrower_get_item_page(request, order_id):
+    order = get_object_or_404(Order, pk=order_id)
+    context = {
+        'order': order
+    }
+    return render(request, 'borrow/borrower_get_item.html', context)
+
+    
+@login_required
+def update_to_get_item(request, order_id):
+    if request.method == "POST":
+        order = get_object_or_404(Order, order_id=order_id)
+        order.status = 'get_item'
+        order.save()
+        
+        messages.success(request, 'Get item successfully.')
+
+        return redirect('latest_status_user_orders')

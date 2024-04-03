@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>borrower get item</title>
+{% endblock %}
+
+{% block content %}
+<p>{{order.order_id}}</p>
+  <form action="{% url 'update_to_get_item' order.order_id %}" method="post">
+    {% csrf_token %}
+    <button type="submit">Update Status to Get Item</button>
+  </form>
+{% endblock %}

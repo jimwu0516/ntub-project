@@ -599,7 +599,8 @@ h1.text-center {
   padding: 10px;
 }
 
-.order-container.cancel {
+.order-container.cancel,
+.order-container.detail {
   flex: 1.5;
 
   display: flex;
@@ -627,8 +628,19 @@ h1.text-center {
   background-color: #f70202;
 }
 
-.cancel-btn:hover {
+.cancel-btn:hover,
+.detail-btn:hover {
   opacity:0.8;
+}
+
+.detail-btn {
+  padding: 8px 12px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin-left: 5px;
+  border-radius: 5px;
+  background-color: #30878A;
 }
 
 
