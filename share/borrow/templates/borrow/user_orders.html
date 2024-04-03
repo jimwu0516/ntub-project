@@ -104,7 +104,7 @@
 
             {% if order.status == 'accept' %}
               <div class="detail">
-                <form method="post" action="{% url 'borrower_get_item_page' order_id = order.order_id %}">
+                <form method="post" action="{% url 'borrower_get_item_page' order.order_id %}">
                   {% csrf_token %}
                   <button type="submit" value="info" class="detail-btn">detail</button>
                 </form>
