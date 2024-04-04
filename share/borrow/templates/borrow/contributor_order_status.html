@@ -5,7 +5,50 @@
 {% endblock %}
 
 {% block content %}
-<h2 class="text-center">My Contribute status</h2>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const orders = document.querySelectorAll('.order-row')
+      orders.forEach((order) => {
+        updateTimeAndCheck(order)
+        setInterval(() => updateTimeAndCheck(order), 1000)
+      })
+    })
+    
+    function updateTimeAndCheck(order) {
+      var startTimeString = order.getAttribute('data-start-time')
+      const startTime = new Date(startTimeString)
+      const currentTime = new Date()
+      const timeDiff = Math.abs(currentTime - startTime)
+      const diffInSeconds = timeDiff / 1000
+      const minutes = Math.floor(diffInSeconds / 60)
+      const seconds = Math.floor(diffInSeconds % 60)
+      const overdueTimeSpan = order.querySelector('.overdue-time')
+    
+      if (currentTime > startTime) {
+        overdueTimeSpan.innerHTML = 'Delay <br> ' + minutes + ' min  ' + seconds + ' sec'
+        overdueTimeSpan.style.color = 'red'
+      } else {
+        overdueTimeSpan.textContent = '--------'
+        overdueTimeSpan.style.color = 'black'
+      }
+    
+      if ((currentTime > startTime) & (minutes >= 60)) {
+        var xhr = new XMLHttpRequest()
+        const cancelOrderUrl = order.getAttribute('cancel-url')
+        xhr.open('POST', cancelOrderUrl, true)
+        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}')
+        xhr.send()
+    
+        var orderId = order.getAttribute('data-order-id')
+        var userConfirmed = confirm('The borrower is late over one hour,order #' + orderId + 'has been canceled automatically ')
+        if (userConfirmed) {
+          window.location.href = "{% url 'contributor_order_status' %}"
+        }
+      }
+    }
+  </script>
+
+  <h2 class="text-center">My Contribute status</h2>
   <div class="order-container">
     <div class="order-table">
       {% if contributor_orders %}
@@ -19,7 +62,7 @@
           <div>Action</div>
         </div>
         {% for order in contributor_orders %}
-          <div class="order-row">
+          <div class="order-row" data-order-id="{{ order.order_id }}" data-start-time="{{ order.start_time|date:'Y-m-d H:i:s' }}" data-status="{{ order.status }}" cancel-url="{% url 'cancel_order' order.order_id %}">
             <div>{{ order.borrower }}</div>
             <div>{{ order.item.item_name }}</div>
             <div>{{ order.start_time }}</div>
@@ -27,19 +70,19 @@
             <div>{{ order.request_time }}</div>
             <div>{{ order.status }}</div>
             {% if order.status == 'pending' %}
-                <div>
-                    <form method="post" action="{% url 'update_order_status_approve' order.order_id %}">
-                        {% csrf_token %}
-                        <div class="action-buttons">
-                            <button type="submit" name="decision" value="accept" class="accept-btn">Accept</button>
-                            <button type="submit" name="decision" value="deny" class="deny-btn">Deny</button>
-                        </div>
-                    </form>
-                </div>
-            {%else%}
-                <div>
-                    ---
-                </div>
+              <div>
+                <form method="post" action="{% url 'update_order_status_approve' order.order_id %}">
+                  {% csrf_token %}
+                  <div class="action-buttons">
+                    <button type="submit" name="decision" value="accept" class="accept-btn">Accept</button>
+                    <button type="submit" name="decision" value="deny" class="deny-btn">Deny</button>
+                  </div>
+                </form>
+              </div>
+            {% elif order.status == 'accept' %}
+              <div class="overdue-time"></div>
+            {% else %}
+              <div>---</div>
             {% endif %}
           </div>
         {% endfor %}
