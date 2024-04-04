@@ -27,6 +27,7 @@ urlpatterns = [
     
     path('borrower_get_item_page/<int:order_id>/', views.borrower_get_item_page, name='borrower_get_item_page'),
     path('update_to_get_item/<int:order_id>/', views.update_to_get_item, name='update_to_get_item'),
+    
 
     
 

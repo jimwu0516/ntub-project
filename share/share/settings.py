@@ -142,6 +142,7 @@ EMAIL_HOST_PASSWORD = 'rfds sbzw evqx ewku'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
+GOOGLE_MAPS_API_KEY = 'AIzaSyC_HJzrT5_rEj4wb4eIlkUTX_EsfuMUQRA'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

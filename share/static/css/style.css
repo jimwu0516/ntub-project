@@ -771,7 +771,7 @@ h1.text-center {
   opacity: 0.8;
 }
 
-/*contributor-order-status page ----------------------------*/
+/*contributor-order-status page ---------------------------------------------------*/
 .order-container .action-buttons {
   display: flex;
 }
@@ -799,6 +799,63 @@ h1.text-center {
 .accept-btn:hover,
 .deny-btn:hover {
   opacity: 0.8;
+}
+
+/*get item page ---------------------------------------------------*/
+.get-item-page-container {
+  text-align: center;
+  margin-top: 40px;
+}
+
+.get-item-page-container h2 {
+  color: #30878a;
+  font-size: 40px;
+  text-align: center;
+}
+
+#get-item-map {
+  max-width: 100%;
+  height: 500px;
+  width: 100%;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.get-item-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  margin-left: 50px;
+}
+
+.get-item-info-left,
+.get-item-info-right {
+  flex: 1;
+  padding: 10px;
+}
+
+.get-item-info p {
+  margin: 10px 0;
+  color: #666;
+  font-size: 1.5rem;
+  text-align: left;
+}
+
+.get-item-btn {
+  background-color: #30878a;
+  border-radius: 10px;
+  padding: 10px 25px;
+  font-size: 1.5rem;
+  color: white;
+  border: none;
+}
+.get-item-btn:hover {
+  background-color: #02a9f7;
+}
+
+#get-item-btn {
+  cursor: pointer;
 }
 
 

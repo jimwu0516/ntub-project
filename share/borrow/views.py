@@ -10,7 +10,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 
 from django.core.mail import send_mail
-
+from django.conf import settings
+from django.http import JsonResponse
 
 @login_required
 def available_item_detail(request, pk):
@@ -246,7 +247,7 @@ def cancel_order(request, order_id):
         order=Order.objects.get(order_id=order_id)
         order.item.item_available = True
         order.item.save()
-        messages.success(request, 'Order successfully cancelled') 
+        messages.success(request, 'Order has been cancelled') 
         return redirect('latest_status_user_orders')
 
 @login_required
@@ -264,12 +265,16 @@ def contributor_order_status(request):
     
     return render(request, 'borrow/contributor_order_status.html', context)
 
-#----------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
 @login_required
 def borrower_get_item_page(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
+    item_address = order.item.item_address
     context = {
-        'order': order
+        'order': order,
+        'item_address': item_address,
+        'google_maps_api_key': settings.GOOGLE_MAPS_API_KEY
+        
     }
     return render(request, 'borrow/borrower_get_item.html', context)
 
@@ -284,3 +289,7 @@ def update_to_get_item(request, order_id):
         messages.success(request, 'Get item successfully.')
 
         return redirect('latest_status_user_orders')
+
+    
+
+
