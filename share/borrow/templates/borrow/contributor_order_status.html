@@ -7,12 +7,16 @@
 {% block content %}
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const orders = document.querySelectorAll('.order-row')
+      const orders = document.querySelectorAll('.order-row');
       orders.forEach((order) => {
-        updateTimeAndCheck(order)
-        setInterval(() => updateTimeAndCheck(order), 1000)
-      })
-    })
+        const status = order.getAttribute('data-status');
+        if (status === 'accept') {
+          updateTimeAndCheck(order);
+          setInterval(() => updateTimeAndCheck(order), 1000);
+        }
+      });
+    });
+    
     
     function updateTimeAndCheck(order) {
       var startTimeString = order.getAttribute('data-start-time')
@@ -25,7 +29,7 @@
       const overdueTimeSpan = order.querySelector('.overdue-time')
     
       if (currentTime > startTime) {
-        overdueTimeSpan.innerHTML = 'Delay <br> ' + minutes + ' min  ' + seconds + ' sec'
+        overdueTimeSpan.innerHTML = 'Borrower Delay <br> ' + minutes + ' min  ' + seconds + ' sec'
         overdueTimeSpan.style.color = 'red'
       } else {
         overdueTimeSpan.textContent = '--------'
