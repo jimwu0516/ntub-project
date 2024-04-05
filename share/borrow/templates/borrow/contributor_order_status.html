@@ -97,7 +97,9 @@
                 </form>
               </div>
             {% elif order.status == 'return_item' %}
-              <a href="{% url 'contributor_submit_review' order.order_id %}" class="return-btn">Give Review</a>
+              <div class="detail">
+                <a href="{% url 'contributor_submit_review' order.order_id %}" class="return-btn">Give Review</a>
+              </div>
             {% else %}
               <div>---</div>
             {% endif %}

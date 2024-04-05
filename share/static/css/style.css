@@ -602,7 +602,6 @@ h1.text-center {
 .order-container.cancel,
 .order-container.detail {
   flex: 1.5;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -873,4 +872,100 @@ h1.text-center {
 
 .return-btn:hover {
   opacity: 0.8;
+}
+
+/*contributor review page----------------------------------------------*/
+.contributor-review-container {
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: 100px auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.contributor-review-container h2 {
+  color: #30878a;
+  font-size: 30px;
+  text-align: center;
+}
+
+.contributor-review-container label {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.contributor-review-container input[type='text'],
+.contributor-review-container select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.contributor-review-container textarea {
+  width: 96%;
+  padding: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  height: 120px;
+}
+
+.contributor-review-container input[type='radio'] {
+  display: none;
+}
+
+.contributor-review-container .review-result {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.contributor-review-container .button-like,
+.contributor-review-container .button-dislike {
+  display: inline-block;
+  cursor: pointer;
+  padding: 20px 5px;
+  border-radius: 100px;
+  user-select: none;
+  width: 35%;
+  font-size: 80px;
+  text-align: center;
+}
+
+.button-like:hover {
+  background-color: #e0e0e0;
+}
+
+.button-dislike:hover {
+  background-color: #e0e0e0;
+}
+
+.contributor-review-container input[type='radio']:checked+label {
+  background-color: #4caf50;
+  color: white;
+}
+
+#dislike:checked+label.button-dislike {
+  background-color: #f44336;
+}
+
+.contributor-review-container input[type='submit'] {
+  width: 100%;
+  background-color: #30878A;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 30px;
+  font-size: 20px;
+}
+
+input[type='submit']:hover {
+  background-color: #02a9f7;
 }
