@@ -11,7 +11,7 @@
       <label for="breakage">Breakage:</label>
       <select name="breakage" id="breakage" required>
         {% for choice in breakage_choices %}
-          <option value="{{ choice[0] }}">{{ choice[1] }}</option>
+          <option value="{{ choice.0 }}">{{ choice.1 }}</option>
         {% endfor %}
       </select>
 

@@ -191,7 +191,7 @@ def available_everything_else_items(request):
 #   return true or false 
     
 def latest_status_user_orders(request):
-    desired_statuses = ['wait_to_pay', 'pending', 'accept','return', 'get_item']
+    desired_statuses = ['wait_to_pay', 'pending', 'accept','return_item', 'get_item','borrower_comment']
     latest_status_user_orders = Order.objects.filter(borrower=request.user, status__in=desired_statuses)    
     
     context = {
@@ -298,6 +298,7 @@ def update_to_return_item(request, order_id):
     if request.method == "POST":
         order = get_object_or_404(Order, order_id=order_id)
         order.status = 'return_item'
+        order.item.item_available = True
         order.save()
         
         messages.success(request, 'Return item successfully.')

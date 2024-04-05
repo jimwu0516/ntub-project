@@ -5,18 +5,22 @@
 {% endblock %}
 
 {% block content %}
+<script>
+  function confirmGetItem() {
+    return confirm('Are you sure you alreay got this item?')
+  }
+</script>
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const orders = document.querySelectorAll('.order-row');
+      const orders = document.querySelectorAll('.order-row')
       orders.forEach((order) => {
-        const status = order.getAttribute('data-status');
+        const status = order.getAttribute('data-status')
         if (status === 'accept') {
-          updateTimeAndCheck(order);
-          setInterval(() => updateTimeAndCheck(order), 1000);
+          updateTimeAndCheck(order)
+          setInterval(() => updateTimeAndCheck(order), 1000)
         }
-      });
-    });
-    
+      })
+    })
     
     function updateTimeAndCheck(order) {
       var startTimeString = order.getAttribute('data-start-time')
@@ -85,14 +89,15 @@
               </div>
             {% elif order.status == 'accept' %}
               <div class="overdue-time"></div>
-            
             {% elif order.status == 'get_item' %}
-              <form method="post" action="{% url 'update_to_return_item' order.order_id %}">
-                {% csrf_token %}
-                <div class="action-buttons">
+              <div class="detail">
+                <form  action="{% url 'update_to_return_item' order.order_id %}" method="post" onsubmit="return confirmGetItem()">
+                  {% csrf_token %}
                   <button type="submit" name="decision" value="return item" class="return-btn">Return item</button>
-                </div>
-              </form>
+                </form>
+              </div>
+            {% elif order.status == 'return_item' %}
+              <a href="{% url 'contributor_submit_review' order.order_id %}" class="return-btn">Give Review</a>
             {% else %}
               <div>---</div>
             {% endif %}
