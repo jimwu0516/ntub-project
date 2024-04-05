@@ -85,6 +85,14 @@
               </div>
             {% elif order.status == 'accept' %}
               <div class="overdue-time"></div>
+            
+            {% elif order.status == 'get_item' %}
+              <form method="post" action="{% url 'update_to_return_item' order.order_id %}">
+                {% csrf_token %}
+                <div class="action-buttons">
+                  <button type="submit" name="decision" value="return item" class="return-btn">Return item</button>
+                </div>
+              </form>
             {% else %}
               <div>---</div>
             {% endif %}

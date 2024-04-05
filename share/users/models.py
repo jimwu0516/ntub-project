@@ -20,7 +20,7 @@ class Review(models.Model):
     review_id = models.AutoField(primary_key=True)
     username = models.ForeignKey(User, on_delete=models.CASCADE)
     review_type = models.CharField(max_length=20, choices=[
-        ('contributor', 'Contributor'), ('borrower', 'Borrower')])
+        ('as_contributor', 'As Contributor'), ('as_borrower', 'As Borrower')])
     review_result = models.CharField(
         max_length=20, choices=[('like', 'Like'), ('dislike', 'Dislike')])
     review_comment = models.TextField()

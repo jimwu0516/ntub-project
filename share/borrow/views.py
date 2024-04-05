@@ -252,7 +252,7 @@ def cancel_order(request, order_id):
 
 @login_required
 def contributor_order_status(request):
-    desired_statuses = ['pending','accept','get_item','return']
+    desired_statuses = ['pending','accept','get_item','return_item']
       
     contributor_orders = Order.objects.filter(
         status__in=desired_statuses,
@@ -289,6 +289,20 @@ def update_to_get_item(request, order_id):
         messages.success(request, 'Get item successfully.')
 
         return redirect('latest_status_user_orders')
+
+#--------------------------------------------------------------------------------------------------------------------
+@login_required
+def update_to_return_item(request, order_id):
+    if request.method == "POST":
+        order = get_object_or_404(Order, order_id=order_id)
+        order.status = 'return_item'
+        order.save()
+        
+        messages.success(request, 'Return item successfully.')
+        
+        #redirect to contributor review page 
+        return redirect('latest_status_user_orders')
+    
 
     
 

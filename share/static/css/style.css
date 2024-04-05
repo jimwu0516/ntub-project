@@ -861,3 +861,15 @@ h1.text-center {
 }
 
 
+.return-btn{
+  padding: 8px 12px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin-left: 5px;
+  border-radius: 5px;
+  flex-grow: 1;
+  margin: 0 5px;
+  background-color: #30878a;
+}
+
