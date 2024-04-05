@@ -22,11 +22,24 @@ class Order(models.Model):
         ('cancel_order', 'Cancel Order'),
         ('get_item', 'Get Item'),
         ('return_item', 'Return Item'),
-        ('borrower_comment ', 'Borrower Comment'),
+        ('borrower_comment', 'Borrower Comment'),
         ('finish', 'Finish'),
     ]
     status = models.CharField(max_length=20, choices=STATUS_CHOICES) 
-    breakage = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(0, 101, 10)])
+    BREAKAGE_CHOICES = (
+            (0, '0'),
+            (10, '10'),
+            (20, '20'),
+            (30, '30'),
+            (40, '40'),
+            (50, '50'),
+            (60, '60'),
+            (70, '70'),
+            (80, '80'),
+            (90, '90'),
+            (100, '100'),
+        )
+    breakage = models.IntegerField(default=0, choices=BREAKAGE_CHOICES)
     
     objects = models.Manager() 
     

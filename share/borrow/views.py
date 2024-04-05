@@ -13,6 +13,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.http import JsonResponse
 
+from users.models import Review
+
 @login_required
 def available_item_detail(request, pk):
     item = get_object_or_404(Item, pk=pk)
@@ -300,10 +302,31 @@ def update_to_return_item(request, order_id):
         
         messages.success(request, 'Return item successfully.')
         
-        #redirect to contributor review page 
-        return redirect('latest_status_user_orders')
+        return redirect('contributor_submit_review', order_id=order_id)
     
-
+#------------------------------------------------------------------------------------------------------------------------
+@login_required
+def contributor_submit_review(request, order_id):    
+    order = get_object_or_404(Order, order_id=order_id)
     
+    if request.method == 'POST':
+        review_comment = request.POST['review_comment']
+        review_result = request.POST['review_result']
+        breakage = request.POST['breakage']
 
+        Review.objects.create(
+            username=order.borrower,
+            review_type='as_borrower',
+            review_comment=review_comment,
+            review_result=review_result
+        )
+        
+        order.breakage = breakage
+        order.status = 'borrower_comment'
+        order.save()
+        
+        messages.success(request, 'Your review has been submitted.')
+        return redirect('contributor_order_status') 
+
+    return render(request, 'borrow/contributor_submit_review.html', {'order_id': order_id,'breakage_choices': Order.BREAKAGE_CHOICES})
 

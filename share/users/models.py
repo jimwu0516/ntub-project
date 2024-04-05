@@ -24,3 +24,6 @@ class Review(models.Model):
     review_result = models.CharField(
         max_length=20, choices=[('like', 'Like'), ('dislike', 'Dislike')])
     review_comment = models.TextField()
+    
+    objects = models.Manager() 
+
