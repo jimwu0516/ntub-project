@@ -21,10 +21,12 @@ class Order(models.Model):
         ('deny', 'Deny'),
         ('cancel_order', 'Cancel Order'),
         ('get_item', 'Get Item'),
-        ('return', 'Return'),
+        ('return_item', 'Return Item'),
+        ('borrower_comment ', 'Borrower Comment'),
         ('finish', 'Finish'),
     ]
     status = models.CharField(max_length=20, choices=STATUS_CHOICES) 
+    breakage = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(0, 101, 10)])
     
     objects = models.Manager() 
     
