@@ -5,19 +5,13 @@
 {% endblock %}
 
 {% block content %}
-  <form method="post" action="{% url 'contributor_submit_review' order_id %}" class="contributor-review-container">
+  <form method="post" action="{% url 'borrower_submit_review' order_id %}" class="contributor-review-container">
     {% csrf_token %}
 
-    <h2>Contributor review</h2>
-    <label for="breakage">Breakage:</label>
-    <select name="breakage" id="breakage" required>
-      {% for choice_value, choice_label in breakage_choices %}
-        <option value="{{ choice_value }}">{{ choice_label }}</option>
-      {% endfor %}
-    </select>
-
+    <h2>Borrower review</h2>
+    
     <label for="review_comment">Comment:</label>
-    <textarea name="review_comment" id="review_comment" placeholder="Give your borrower some comments" required></textarea>
+    <textarea name="review_comment" id="review_comment" placeholder="Give your contributor some comments"required></textarea>
 
     <label>Feeling:</label>
     <div class="review-result">

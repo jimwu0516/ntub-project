@@ -31,6 +31,7 @@ urlpatterns = [
     path('update_to_return_item/<int:order_id>/', views.update_to_return_item, name='update_to_return_item'),
     
     path('contributor_submit_review/<int:order_id>/', views.contributor_submit_review, name='contributor_submit_review'),
+    path('borrower_submit_review/<int:order_id>/', views.borrower_submit_review, name='borrower_submit_review'),
 
     
 

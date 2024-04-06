@@ -331,3 +331,29 @@ def contributor_submit_review(request, order_id):
 
     return render(request, 'borrow/contributor_submit_review.html', {'order_id': order_id,'breakage_choices': Order.BREAKAGE_CHOICES})
 
+#------------------------------------------------------------------------------------------------------------------------
+@login_required
+def borrower_submit_review(request, order_id):    
+    order = get_object_or_404(Order, order_id=order_id)
+    
+    if request.method == 'POST':
+        review_comment = request.POST['review_comment']
+        review_result = request.POST['review_result']
+
+        Review.objects.create(
+            username=order.item.contributor,
+            review_type='as_contributor',
+            review_comment=review_comment,
+            review_result=review_result
+        )
+        
+        order.status = 'finish'
+        order.save()
+        #return deposit
+        #airdrop token
+        
+        messages.success(request, 'Your review has been submitted.')
+        return redirect('latest_status_user_orders') 
+
+    return render(request, 'borrow/borrower_submit_review.html', {'order_id': order_id})
+

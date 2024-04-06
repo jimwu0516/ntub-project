@@ -5,6 +5,12 @@
 {% endblock %}
 
 {% block content %}
+<script>
+  function confirmCancel() {
+    return confirm('Are you sure you want to cancel the request?')
+  }
+</script>
+
   <script>
     document.addEventListener('DOMContentLoaded', function () {
       var menuItems = ['latest-status', 'unpaid', 'cancel', 'history']
@@ -91,11 +97,11 @@
             <div>{{ order.start_time }}</div>
             <div>{{ order.end_time }}</div>
             <div>{{ order.request_time }}</div>
-            <div>{{ order.status }}</div>
+            <div>{{ order.get_status_display }}</div>
 
             {% if order.status == 'unpaid' or order.status == 'wait_to_pay' %}
               <div class="cancel">
-                <form method="post" action="{% url 'cancel_order' order.order_id %}">
+                <form method="post" action="{% url 'cancel_order' order.order_id %}" onsubmit="return confirmCancel()">
                   {% csrf_token %}
                   <button type="submit" name="decision" value="Cancel Order" class="cancel-btn">cancel</button>
                 </form>
@@ -106,8 +112,12 @@
               <div class="detail">
                 <form method="post" action="{% url 'borrower_get_item_page' order.order_id %}">
                   {% csrf_token %}
-                  <button type="submit" value="info" class="detail-btn">detail</button>
+                  <button type="submit" value="info" class="action-btn" >More detail</button>
                 </form>
+              </div>
+            {% elif order.status == 'borrower_comment' %}
+              <div class="detail">
+                <a href="{% url 'borrower_submit_review' order.order_id %}" class="action-btn">Give review</a>
               </div>
             {% elif show_action_column %}
               <div>---</div>
