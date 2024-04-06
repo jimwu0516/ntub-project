@@ -76,7 +76,7 @@
             <div>{{ order.start_time }}</div>
             <div>{{ order.end_time }}</div>
             <div>{{ order.request_time }}</div>
-            <div>{{ order.status }}</div>
+            <div>{{ order.get_status_display }}</div>
             {% if order.status == 'pending' %}
               <div>
                 <form method="post" action="{% url 'update_order_status_approve' order.order_id %}">
