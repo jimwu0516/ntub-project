@@ -718,7 +718,21 @@ h1.text-center {
 
 /*contributor-item-list page ---------------------------------*/
 .contributor-item-list {
-  margin: 20px auto;
+  margin: 50px auto;
+}
+
+.add-item-btn{
+  float: right;
+  margin-right: 125px;
+  font-size: 20px;
+  border-radius: 5px;
+  padding: 8px 8px;
+  font-weight: bold;
+}
+
+.add-item-btn:hover{
+  color:white ;
+  background-color:#30878a;
 }
 
 .item-list-card {
@@ -727,7 +741,7 @@ h1.text-center {
   padding: 20px;
   display: flex;
   align-items: center;
-  margin: 10px 100px;
+  margin: 15px 100px;
 }
 
 .item-list-image {
