@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.removeItem('walletConnected');
         connectWalletBtn.style.display = 'inline-block';
         disconnectSelect.style.display = 'none';
-        connectWalletBtn.innerText = "連接錢包";
+        connectWalletBtn.innerText = "Connect Wallet";
     }
 
     disconnectSelect.addEventListener("change", function () {
