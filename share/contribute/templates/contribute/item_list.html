@@ -10,45 +10,35 @@
       }
       return true
     }
-  </script>  
+  </script>
+
   <div class="contributor-item-list">
     <h2 class="text-center">My Contribute item</h2>
-    <a href="{% url 'item-create' %}" class="add-item-btn">＋ Add</a>
-    <br>
-    <br>
-    {% for item in items %}
-      <div class="item-list-card">
-        <img class="item-list-image" src="{{ item.item_image.url }}" alt="{{ item.item_name }}" />
-        <div class="item-details">
-          <p>item name: {{ item.item_name }}</p>
-          <p>item category : {{ item.item_category }}</p>
-          <p>item available: {{ item.item_available }}</p>
-          <p>item deposit require: {{ item.item_deposit_require }}</p>
+    {% if items %}
+      <a href="{% url 'item-create' %}" class="add-item-btn">＋ Add</a>
+      <br />
+      <br />
+      {% for item in items %}
+        <div class="item-list-card">
+          <img class="item-list-image" src="{{ item.item_image.url }}" alt="{{ item.item_name }}" />
+          <div class="item-details">
+            <p>item name: {{ item.item_name }}</p>
+            <p>item category : {{ item.item_category }}</p>
+            <p>item available: {{ item.item_available }}</p>
+            <p>item deposit require: {{ item.item_deposit_require }}</p>
+          </div>
+          <div class="item-edit-delete-btn">
+            <a href="{% url 'item-update' item.item_id %}" class="item-edit-button" onclick="return checkItemAvailable(this);" data-item-available="{{ item.item_available }}">Edit</a>
+            <a href="{% url 'item-delete' item.item_id %}" class="item-delete-button">Delete</a>
+          </div>
         </div>
-        <div class="item-edit-delete-btn">
-          <a href="{% url 'item-update' item.item_id %}" class="item-edit-button" onclick="return checkItemAvailable(this);" data-item-available="{{ item.item_available }}">Edit</a>
-          <a href="{% url 'item-delete' item.item_id %}" class="item-delete-button">Delete</a>
-        </div>
+      {% endfor %}
+    {% else %}
+      <div class="no-contribute-item">
+        <p>no contribute item!</p>
+        <br />
+        <a href="{% url 'item-create' %}" class="contribute-my-item-btn">contribute my item</a>
       </div>
-    {% endfor %}
+    {% endif %}
   </div>
 {% endblock %}
-
-{% comment %}
-
-{% if items %}
-  <ul class="">
-    <hr />
-    {% for item in items %}
-      <li>
-        <a href="{% url 'item' item.item_id %}">{{ item.item_name }}</a>
-      </li>
-    {% endfor %}
-  </ul>
-{% else %}
-  <p>
-    no contribute item! <a href="{% url 'item-create' %}">contribute my item</a>
-  </p>
-{% endif %}
-
-{% endcomment %}
