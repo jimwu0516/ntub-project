@@ -293,18 +293,20 @@ def update_to_get_item(request, order_id):
         return redirect('latest_status_user_orders')
 
 #--------------------------------------------------------------------------------------------------------------------
-@login_required
+@login_required    
 def update_to_return_item(request, order_id):
     if request.method == "POST":
-        order = get_object_or_404(Order, order_id=order_id)
+        order = Order.objects.get(order_id=order_id)
         order.status = 'return_item'
-        order.item.item_available = True
         order.save()
+        
+        item = order.item
+        item.item_available = True 
+        item.save()
         
         messages.success(request, 'Return item successfully.')
         
         return redirect('contributor_submit_review', order_id=order_id)
-    
 #------------------------------------------------------------------------------------------------------------------------
 @login_required
 def contributor_submit_review(request, order_id):    
