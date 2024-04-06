@@ -54,7 +54,7 @@ def borrow_item(request, pk):
         #   messages.alert(request,'please complete pay ')
         #   
          
-        return redirect('user_orders')
+        return redirect('latest_status_user_orders')
     
     return render(request, 'borrow/available_item_detail.html', {'item': item})
 """
@@ -191,7 +191,7 @@ def available_everything_else_items(request):
 #   return true or false 
     
 def latest_status_user_orders(request):
-    desired_statuses = ['wait_to_pay', 'pending', 'accept','return_item', 'get_item','borrower_comment']
+    desired_statuses = ['pending', 'accept','return_item', 'get_item','borrower_comment']
     latest_status_user_orders = Order.objects.filter(borrower=request.user, status__in=desired_statuses)    
     
     context = {
@@ -202,7 +202,7 @@ def latest_status_user_orders(request):
     return render(request, 'borrow/user_orders.html', context)
 
 def unpaid_user_orders(request):
-    desired_statuses = ['unpaid']
+    desired_statuses = ['unpaid','wait_to_pay']
     unpaid_user_orders = Order.objects.filter(borrower=request.user, status__in=desired_statuses)
     unpaid_orders_exist = Order.objects.filter(borrower=request.user, status='unpaid').exists()
     show_cancel_column = unpaid_orders_exist
