@@ -9,6 +9,8 @@ psycopg2-binary = "*"
 web3 = "*"
 pillow = "*"
 python-dotenv = "*"
+google-cloud-storage = "*"
+configparser = "*"
 
 [dev-packages]
 

@@ -358,4 +358,3 @@ def borrower_submit_review(request, order_id):
         return redirect('latest_status_user_orders') 
 
     return render(request, 'borrow/borrower_submit_review.html', {'order_id': order_id})
-
