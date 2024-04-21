@@ -21,8 +21,6 @@ config.read(os.path.join(path, 'config.ini'))
 google_maps_api_key = config['credentials']['google_maps_api_key']
 email_host_password = config['credentials']['email_host_password']
 database_password = config['credentials']['database_password']
-contract_address = config['credentials']['contract_address']
-chain_id = config['credentials']['chain_id']
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -157,6 +155,5 @@ GOOGLE_MAPS_API_KEY = google_maps_api_key
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-CONTRACT_ADDRESS = contract_address
-CHAIN_ID = chain_id
+
 

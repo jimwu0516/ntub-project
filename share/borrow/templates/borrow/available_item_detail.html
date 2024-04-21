@@ -13,9 +13,9 @@
           window.web3 = new Web3(ethereum);
           const response = await fetch('{% static "abi/ShareTokenABI.json" %}');
           const contractABI = await response.json();
-          const contractAddress = '0x146dBaE602B862835797c82011cdFe1AbCcb46F0';
+          const contractAddress = localStorage.getItem('contract_address');
           const contract = new web3.eth.Contract(contractABI, contractAddress);
-  
+
           document.getElementById('borrowForm').addEventListener('submit', async function (event) {
               event.preventDefault();
 
@@ -50,7 +50,7 @@
                 return
               }
   
-              const depositAmount = 99;
+              const depositAmount = document.getElementById('depositAmount').value;
               const accounts = await web3.eth.getAccounts();
               const account = accounts[0];
   
@@ -91,7 +91,7 @@
           {% csrf_token %}
 
           <input type="hidden" id="transactionStatus" name="transaction_status" value="unpaid" />
-
+          <input type="hidden" id="depositAmount" value="{{ item.item_deposit_require }}" />
 
           <p>start:</p>
           <input type="datetime-local" name="start_time" required />

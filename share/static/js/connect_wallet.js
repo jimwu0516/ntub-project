@@ -2,9 +2,10 @@ document.addEventListener("DOMContentLoaded", function () {
     var connectWalletBtn = document.getElementById("connectWalletBtn");
     var disconnectSelect = document.getElementById("disconnectSelect");
     var logoutBtn = document.getElementById("logoutBtn");
+    localStorage.setItem('contract_address', '0x146dBaE602B862835797c82011cdFe1AbCcb46F0');
 
     function switchNetwork() {
-        const chainId = '0x61';
+        const chainId = '0x61'; //mainnet 0x38 testnet 0x61
         window.ethereum.request({
             method: 'wallet_switchEthereumChain',
             params: [{ chainId: chainId }]

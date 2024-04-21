@@ -54,9 +54,8 @@ def borrow_item(request, pk):
 
     context = {
         'item': item,
-        'contract_address': settings.CONTRACT_ADDRESS, 
-        'chain_id': settings.CHAIN_ID
     }
+
     return render(request, 'borrow/available_item_detail.html', context)
 
 @login_required
@@ -167,16 +166,6 @@ def available_everything_else_items(request):
     return render(request, 'borrow/available_borrow_items.html', context)
 
 #---------------------------------------------------------------------
-
-
-    
-#def make a trainsit (By pressing pay button)
-    #call smart contract 
-    #if true update status to pending 
-    
-    
-#smart contract func 
-#   return true or false 
     
 def latest_status_user_orders(request):
     desired_statuses = ['pending', 'accept','return_item', 'get_item','borrower_comment']
