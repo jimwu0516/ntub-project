@@ -27,10 +27,11 @@ def available_item_detail(request, pk):
 @login_required
 def borrow_item(request, pk):
     item = get_object_or_404(Item, pk=pk)
-    
+
     if request.method == 'POST':
         start_time_str = request.POST.get('start_time')
         end_time_str = request.POST.get('end_time')
+        transaction_status = request.POST.get('transaction_status', 'unpaid')
         
         start_time = timezone.make_aware(datetime.strptime(start_time_str, '%Y-%m-%dT%H:%M'))
         end_time = timezone.make_aware(datetime.strptime(end_time_str, '%Y-%m-%dT%H:%M'))
@@ -40,36 +41,23 @@ def borrow_item(request, pk):
             item=item,
             start_time=start_time,
             end_time=end_time,
-            status='wait_to_pay'
+            status=transaction_status
         )
         
         item.item_available = False
         item.save()
-        #call smart contract 
-        #if success paid 
-        #   status == pending 
-        #   messages.success(request,'Item borrowed request successfully sent')
-        #else :
-        #   status == unpaid 
-        #   messages.alert(request,'please complete pay ')
-        #   
-         
-        return redirect('latest_status_user_orders')
-    
-    return render(request, 'borrow/available_item_detail.html', {'item': item})
-"""
-@login_required
-def view_pending_orders(request):
-    orders = Order.objects.filter(
-        status='pending',
-        item__contributor__username=request.user.username
-    )
+
+        if transaction_status == 'unpaid':
+            return redirect('unpaid_user_orders') 
+        else:
+            return redirect('latest_status_user_orders')
 
     context = {
-        'orders': orders
+        'item': item,
+        'contract_address': settings.CONTRACT_ADDRESS, 
+        'chain_id': settings.CHAIN_ID
     }
-    return render(request, 'borrow/approve_order.html', context)
-"""
+    return render(request, 'borrow/available_item_detail.html', context)
 
 @login_required
 def update_order_status_approve(request, order_id):

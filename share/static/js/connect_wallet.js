@@ -3,8 +3,31 @@ document.addEventListener("DOMContentLoaded", function () {
     var disconnectSelect = document.getElementById("disconnectSelect");
     var logoutBtn = document.getElementById("logoutBtn");
 
-    var isConnectedAddress = localStorage.getItem('walletConnected');
+    function switchNetwork() {
+        const chainId = '0x61';
+        window.ethereum.request({
+            method: 'wallet_switchEthereumChain',
+            params: [{ chainId: chainId }]
+        }).catch((switchError) => {
+            if (switchError.code === 4902) {
+                try {
+                    window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [{
+                            chainId: chainId,
+                            rpcUrl: "https://rpc.ankr.com/bsc_testnet_chapel" 
+                        }]
+                    });
+                } catch (addError) {
+                    console.error('Failed to add the network:', addError);
+                }
+            } else {
+                console.error('Failed to switch the network:', switchError);
+            }
+        });
+    }
 
+    var isConnectedAddress = localStorage.getItem('walletConnected');
     if (isConnectedAddress) {
         connectWalletBtn.style.display = 'none';
         disconnectSelect.style.display = 'inline-block';
@@ -21,8 +44,8 @@ document.addEventListener("DOMContentLoaded", function () {
                             localStorage.setItem('walletConnected', walletAddress);
                             connectWalletBtn.style.display = 'none';
                             disconnectSelect.style.display = 'inline-block';
-                            disconnectSelect.innerHTML = `<option value="connect" selected>${walletAddress.substring(0, 9)}...</option>
-                            <option value="disconnect">中斷連接錢包</option>`;
+                            disconnectSelect.innerHTML = `<option value="connect" selected>${walletAddress.substring(0, 9)}...</option><option value="disconnect">中斷連接錢包</option>`;
+                            switchNetwork();
                         })
                         .catch(function (error) {
                             console.error(error);
@@ -56,19 +79,12 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     connectWalletBtn.addEventListener('mouseover', function () {
-
         connectWalletBtn.style.backgroundColor = "red";
         connectWalletBtn.style.transform = "scale(1.1)";
-        
-
     });
 
     connectWalletBtn.addEventListener('mouseout', function () {
-
         connectWalletBtn.style.backgroundColor = "green";
         connectWalletBtn.style.transform = "scale(1)";
-
     });
-
-
 });
