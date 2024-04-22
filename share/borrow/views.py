@@ -15,6 +15,7 @@ from django.http import JsonResponse
 
 from users.models import Review
 
+
 @login_required
 def available_item_detail(request, pk):
     item = get_object_or_404(Item, pk=pk)
@@ -191,11 +192,12 @@ def unpaid_user_orders(request):
     }
     return render(request, 'borrow/user_orders.html', context)
 
-    #if success paid 
-        #   status == pending 
-        #   messages.success(request,'Item borrowed request successfully sent')
-        #else :
-        #   messages.alert(request,'please complete pay ')
+@login_required
+def update_order_status_to_pending(request, order_id):
+    if request.method == 'POST':
+        Order.objects.filter(order_id=order_id).update(status='pending')
+        messages.success(request, 'Request has been submitted') 
+        return redirect('latest_status_user_orders')
     
 def cancel_order_user_orders(request):
     desired_statuses = ['deny','cancel_order']

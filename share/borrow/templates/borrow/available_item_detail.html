@@ -56,7 +56,10 @@
   
               contract.methods
                   .payDeposit(depositAmount)
-                  .send({ from: account })
+                  .send({ 
+                    from: account
+        
+                  })
                   .on('transactionHash', function (hash) {
                       console.log('Transaction Hash:', hash);
                   })

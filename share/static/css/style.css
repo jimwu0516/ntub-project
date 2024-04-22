@@ -600,7 +600,8 @@ h1.text-center {
 }
 
 .order-container.cancel,
-.order-container.detail {
+.order-container.detail,
+.order-container.payDeposit {
   flex: 1.5;
   display: flex;
   justify-content: center;
@@ -629,6 +630,21 @@ h1.text-center {
 }
 
 .cancel-btn:hover{
+  opacity: 0.8;
+}
+
+.pay-deposit-btn{
+  padding: 8px 12px;
+  border: none;
+  color: white;
+  cursor: pointer;
+  margin-left: 5px;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #30878A;
+}
+
+.pay-deposit-btn:hover{
   opacity: 0.8;
 }
 

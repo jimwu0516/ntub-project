@@ -18,9 +18,10 @@ urlpatterns = [
     path('available/Everything Else', views.available_everything_else_items, name='available_everything_else_items'),
 
     path('orders/latest-status', views.latest_status_user_orders, name='latest_status_user_orders'),
-    path("orders/unpaid-order", views.unpaid_user_orders, name="unpaid_user_orders"),
-    path("orders/cancel-order", views.cancel_order_user_orders, name="cancel_order_user_orders"),
-    path("orders/hostory-order", views.history_user_orders, name="history_user_orders"),
+    path('orders/unpaid-order', views.unpaid_user_orders, name='unpaid_user_orders'),
+    path('update_order_status_to_pending/<int:order_id>/', views.update_order_status_to_pending, name='update_order_status_to_pending'),
+    path('orders/cancel-order', views.cancel_order_user_orders, name='cancel_order_user_orders'),
+    path('orders/hostory-order', views.history_user_orders, name='history_user_orders'),
     path('cancel_order/<int:order_id>/', views.cancel_order, name='cancel_order'),
     
     path('contributor-orders/', views.contributor_order_status, name='contributor_order_status'), 
