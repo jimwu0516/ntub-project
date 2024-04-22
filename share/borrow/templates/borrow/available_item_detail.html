@@ -62,6 +62,7 @@
                   })
                   .on('transactionHash', function (hash) {
                       console.log('Transaction Hash:', hash);
+                      transaction_processing (hash);
                   })
                   .on('receipt', function (receipt) {
                       console.log('Receipt:', receipt);
@@ -78,7 +79,13 @@
           alert('Non-Ethereum browser detected. You should consider trying MetaMask!');
       }
   });
-  
+
+
+  function transaction_processing(transactionHash) {
+      var transaction_processing = document.getElementById('transaction_processing');
+      document.getElementById('hashDisplay').innerText = transactionHash;
+      transaction_processing.style.display = "block";
+  }
   </script>
 
   <div class="borrow-request-container">
@@ -107,6 +114,14 @@
           </div>
         </form>
       </div>
+    </div>
+  </div>
+
+  <div id="transaction_processing" class="transaction_processing">
+    <div class="transaction_processing-content">
+      <p style="font-size: 50px;">Transaction Processing...</p>
+      <p>Transaction Hash</p>
+      <p><span style="font-size: 25px; font-family: 'Consolas';" id="hashDisplay"></span></p>
     </div>
   </div>
 {% endblock %}

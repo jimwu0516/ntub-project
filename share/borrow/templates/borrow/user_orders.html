@@ -78,6 +78,7 @@
             .send({ from: account })
             .on('transactionHash', function (hash) {
               console.log('Transaction Hash:', hash);
+              transaction_processing (hash);
             })
             .on('receipt', function (receipt) {
               console.log('Receipt:', receipt);
@@ -120,6 +121,12 @@
       setInterval(updateRemainingTime, 1000);
       updateRemainingTime();
     });
+
+    function transaction_processing(transactionHash) {
+        var transaction_processing = document.getElementById('transaction_processing');
+        document.getElementById('hashDisplay').innerText = transactionHash;
+        transaction_processing.style.display = "block";
+    }
   
   </script>
 
@@ -152,7 +159,7 @@
           <div>Request Time</div>
           <div>Status</div>
           {% if show_cancel_column %}
-            <div class="cancel">Pay deposit within</div>
+            <div class="cancel">Pay deposit</div>
             <div class="cancel">Cancel</div>
           {% endif %}
 
@@ -209,6 +216,15 @@
       {% else %}
         <p>No orders found !!!!!</p>
       {% endif %}
+    </div>
+  </div>
+
+  
+  <div id="transaction_processing" class="transaction_processing">
+    <div class="transaction_processing-content">
+      <p style="font-size: 50px;">Transaction Processing...</p>
+      <p>Transaction Hash</p>
+      <p><span style="font-size: 25px; font-family: 'Consolas';" id="hashDisplay"></span></p>
     </div>
   </div>
 {% endblock %}

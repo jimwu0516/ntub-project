@@ -126,8 +126,10 @@ def borrow_item(request, pk):
         item.save()
 
         if transaction_status == 'unpaid':
+            messages.error(request, 'Transaction failed! Please pay deposit within an hour') 
             return redirect('unpaid_user_orders') 
         else:
+            messages.success(request, 'Pay deposit successfully, your request has been submitted') 
             return redirect('latest_status_user_orders')
 
     context = {
@@ -209,7 +211,7 @@ def update_order_status_to_pending(request, order_id):
         end_time= order.end_time
         send_confirm_email(contributor_email,'You have a new borrow request',f'\n\nItem name: {borrow_item_name}' f'\n\nStart Time: {start_time}' f'\n\nEnd Time: {end_time}')
         
-        messages.success(request, 'Request has been submitted') 
+        messages.success(request, 'Pay deposit successfully, your request has been submitted') 
         return redirect('latest_status_user_orders')
     
 def cancel_order_user_orders(request):
