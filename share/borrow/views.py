@@ -26,7 +26,6 @@ def available_items(request):
     }
     return render(request, 'borrow/available_borrow_items.html', context)
 
-
 @login_required
 def available_fashion_items(request):
     available_fashion_items = Item.objects.filter(item_available=True, item_category='fashion').exclude(contributor=request.user)
@@ -45,7 +44,6 @@ def available_electronics_items(request):
     }
     return render(request, 'borrow/available_borrow_items.html', context)
 
-
 @login_required
 def available_sporting_items(request):
     available_sporting_items = Item.objects.filter(item_available=True, item_category='sporting-goods').exclude(contributor=request.user)
@@ -55,7 +53,6 @@ def available_sporting_items(request):
     }
     return render(request, 'borrow/available_borrow_items.html', context)
 
-
 @login_required
 def available_books_movie_and_music_items(request):
     available_books_movie_and_music_items = Item.objects.filter(item_available=True, item_category='books, movies & music').exclude(contributor=request.user)
@@ -63,7 +60,6 @@ def available_books_movie_and_music_items(request):
         'available_items': available_books_movie_and_music_items
     }
     return render(request, 'borrow/available_borrow_items.html', context)
-
 
 @login_required
 def available_home＿and_garden_items(request):
@@ -89,6 +85,7 @@ def available_everything_else_items(request):
     }
     return render(request, 'borrow/available_borrow_items.html', context)
 
+
 #---------borrower choose date and submitting request ------------------------------------------------------------------------------
 @login_required
 def available_item_detail(request, pk):
@@ -97,7 +94,6 @@ def available_item_detail(request, pk):
         'item': item
     }
     return render(request, 'borrow/available_item_detail.html', context)
-
 
 @login_required
 def borrow_item(request, pk):
@@ -119,6 +115,13 @@ def borrow_item(request, pk):
             status=transaction_status
         )
         
+        contributor_email=order.item.contributor.email
+        borrow_item_name=order.item.item_name
+        start_time=order.start_time
+        end_time= order.end_time
+        
+        send_confirm_email(contributor_email,'You have a new borrow request',f'\n\nItem name: {borrow_item_name}' f'\n\nStart Time: {start_time}' f'\n\nEnd Time: {end_time}')
+        
         item.item_available = False
         item.save()
 
@@ -133,7 +136,8 @@ def borrow_item(request, pk):
 
     return render(request, 'borrow/available_item_detail.html', context)
 
-#---------contributor approves or denies request------------------------------------------------------------------------------
+
+#-------------------------------contributor approves or denies request------------------------------------------------------------------------------
 @login_required
 def update_order_status_approve(request, order_id):
     if request.method == 'POST':
@@ -167,7 +171,8 @@ def update_order_status_approve(request, order_id):
 def send_confirm_email(email_address,subject, message):
     send_mail(subject, message, 'sharetoearn999@gmail.com', [email_address])
 
-#----------------filter user order status page---------------------------------------------------------------------------------
+
+#--------------------------------------filter user order status page---------------------------------------------------------------------------------
 def latest_status_user_orders(request):
     desired_statuses = ['pending', 'accept','return_item', 'get_item','borrower_comment']
     latest_status_user_orders = Order.objects.filter(borrower=request.user, status__in=desired_statuses)    
@@ -196,6 +201,14 @@ def unpaid_user_orders(request):
 def update_order_status_to_pending(request, order_id):
     if request.method == 'POST':
         Order.objects.filter(order_id=order_id).update(status='pending')
+        
+        order = Order.objects.get(order_id=order_id)
+        contributor_email=order.item.contributor.email
+        borrow_item_name=order.item.item_name
+        start_time=order.start_time
+        end_time= order.end_time
+        send_confirm_email(contributor_email,'You have a new borrow request',f'\n\nItem name: {borrow_item_name}' f'\n\nStart Time: {start_time}' f'\n\nEnd Time: {end_time}')
+        
         messages.success(request, 'Request has been submitted') 
         return redirect('latest_status_user_orders')
     
@@ -221,7 +234,6 @@ def history_user_orders(request):
     }
     return render(request, 'borrow/user_orders.html', context)
 
-
 def cancel_order(request, order_id):
     if request.method == 'POST':
         Order.objects.filter(order_id=order_id).update(status='cancel_order')
@@ -230,6 +242,8 @@ def cancel_order(request, order_id):
         order.item.save()
         messages.success(request, 'Order has been cancelled') 
         return redirect('latest_status_user_orders')
+    
+    
 #-----------------contributor order status page------------------------------------------------------------------------------------------
 @login_required
 def contributor_order_status(request):
@@ -246,6 +260,7 @@ def contributor_order_status(request):
     
     return render(request, 'borrow/contributor_order_status.html', context)
 
+
 #----------------borrower get item page--------------------------------------------------------------------------------------
 @login_required
 def borrower_get_item_page(request, order_id):
@@ -259,7 +274,6 @@ def borrower_get_item_page(request, order_id):
     }
     return render(request, 'borrow/borrower_get_item.html', context)
 
-    
 @login_required
 def update_to_get_item(request, order_id):
     if request.method == "POST":
@@ -270,6 +284,7 @@ def update_to_get_item(request, order_id):
         messages.success(request, 'Get item successfully.')
 
         return redirect('latest_status_user_orders')
+
 
 #---------------contributor gets the item back-------------------------------------------------------------
 @login_required    
@@ -286,6 +301,8 @@ def update_to_return_item(request, order_id):
         messages.success(request, 'Return item successfully.')
         
         return redirect('contributor_submit_review', order_id=order_id)
+    
+    
 #-------------------contributor_submit_review------------------------------------------------------------------
 @login_required
 def contributor_submit_review(request, order_id):    
@@ -311,6 +328,7 @@ def contributor_submit_review(request, order_id):
         return redirect('contributor_order_status') 
 
     return render(request, 'borrow/contributor_submit_review.html', {'order_id': order_id,'breakage_choices': Order.BREAKAGE_CHOICES})
+
 
 #--------------borrower_submit_review---------------------------------------------------------------------
 @login_required
