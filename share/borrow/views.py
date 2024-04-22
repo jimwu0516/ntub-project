@@ -15,84 +15,7 @@ from django.http import JsonResponse
 
 from users.models import Review
 
-
-@login_required
-def available_item_detail(request, pk):
-    item = get_object_or_404(Item, pk=pk)
-    context = {
-        'item': item
-    }
-    return render(request, 'borrow/available_item_detail.html', context)
-
-
-@login_required
-def borrow_item(request, pk):
-    item = get_object_or_404(Item, pk=pk)
-
-    if request.method == 'POST':
-        start_time_str = request.POST.get('start_time')
-        end_time_str = request.POST.get('end_time')
-        transaction_status = request.POST.get('transaction_status', 'unpaid')
-        
-        start_time = timezone.make_aware(datetime.strptime(start_time_str, '%Y-%m-%dT%H:%M'))
-        end_time = timezone.make_aware(datetime.strptime(end_time_str, '%Y-%m-%dT%H:%M'))
-        
-        order = Order.objects.create(
-            borrower=request.user,
-            item=item,
-            start_time=start_time,
-            end_time=end_time,
-            status=transaction_status
-        )
-        
-        item.item_available = False
-        item.save()
-
-        if transaction_status == 'unpaid':
-            return redirect('unpaid_user_orders') 
-        else:
-            return redirect('latest_status_user_orders')
-
-    context = {
-        'item': item,
-    }
-
-    return render(request, 'borrow/available_item_detail.html', context)
-
-@login_required
-def update_order_status_approve(request, order_id):
-    if request.method == 'POST':
-        decision = request.POST.get('decision')
-        if decision == 'accept':
-            new_status= 'accept'
-            order = Order.objects.get(order_id=order_id)
-            contributor_email = order.item.contributor.email
-            borrower_email = order.borrower.email
-            borrower = order.borrower.username
-            start_time = order.start_time
-            end_time = order.end_time
-            borrow_item_name = order.item.item_name
-            borrow_item_addr = order.item.item_address
-            send_confirm_email(borrower_email,'Request Approved',f'\n\nHi {borrower} Your request has been approved' f'\n\nItem name: {borrow_item_name}' f'\n\nAddress: {borrow_item_addr}' f'\n\nStart Time: {start_time}' f'\n\nEnd Time: {end_time}')
-            send_confirm_email(contributor_email,'Request Approved',f'\n\nYou has approved request'  f'\n\nItem name: {borrow_item_name}' f'\n\nAddress: {borrow_item_addr}'f'\n\nStart Time: {start_time}' f'\n\nEnd Time: {end_time}')
-        else:
-            new_status= 'deny'
-            order = Order.objects.get(order_id=order_id)
-            borrower_email = order.borrower.email
-            borrow_item_name = order.item.item_name
-            borrower = order.borrower.username
-            send_confirm_email(borrower_email,'Request Denied',f'\n\nSorry {borrower} Your request has been denied' f'\n\nItem name: {borrow_item_name}')
-            order.item.item_available = True
-            order.item.save()
-            #return deposit to borrower call smart contract 
-        
-        Order.objects.filter(order_id=order_id).update(status=new_status)
-        return HttpResponseRedirect(reverse('contributor_order_status'))
-    
-def send_confirm_email(email_address,subject, message):
-    send_mail(subject, message, 'sharetoearn999@gmail.com', [email_address])
-
-
+#----------------------borrower browse available items ------------------------------------------------------------------------
 @login_required
 def available_items(request):
     
@@ -166,8 +89,85 @@ def available_everything_else_items(request):
     }
     return render(request, 'borrow/available_borrow_items.html', context)
 
-#---------------------------------------------------------------------
+#---------borrower choose date and submitting request ------------------------------------------------------------------------------
+@login_required
+def available_item_detail(request, pk):
+    item = get_object_or_404(Item, pk=pk)
+    context = {
+        'item': item
+    }
+    return render(request, 'borrow/available_item_detail.html', context)
+
+
+@login_required
+def borrow_item(request, pk):
+    item = get_object_or_404(Item, pk=pk)
+
+    if request.method == 'POST':
+        start_time_str = request.POST.get('start_time')
+        end_time_str = request.POST.get('end_time')
+        transaction_status = request.POST.get('transaction_status', 'unpaid')
+        
+        start_time = timezone.make_aware(datetime.strptime(start_time_str, '%Y-%m-%dT%H:%M'))
+        end_time = timezone.make_aware(datetime.strptime(end_time_str, '%Y-%m-%dT%H:%M'))
+        
+        order = Order.objects.create(
+            borrower=request.user,
+            item=item,
+            start_time=start_time,
+            end_time=end_time,
+            status=transaction_status
+        )
+        
+        item.item_available = False
+        item.save()
+
+        if transaction_status == 'unpaid':
+            return redirect('unpaid_user_orders') 
+        else:
+            return redirect('latest_status_user_orders')
+
+    context = {
+        'item': item,
+    }
+
+    return render(request, 'borrow/available_item_detail.html', context)
+
+#---------contributor approves or denies request------------------------------------------------------------------------------
+@login_required
+def update_order_status_approve(request, order_id):
+    if request.method == 'POST':
+        decision = request.POST.get('decision')
+        if decision == 'accept':
+            new_status= 'accept'
+            order = Order.objects.get(order_id=order_id)
+            contributor_email = order.item.contributor.email
+            borrower_email = order.borrower.email
+            borrower = order.borrower.username
+            start_time = order.start_time
+            end_time = order.end_time
+            borrow_item_name = order.item.item_name
+            borrow_item_addr = order.item.item_address
+            send_confirm_email(borrower_email,'Request Approved',f'\n\nHi {borrower} Your request has been approved' f'\n\nItem name: {borrow_item_name}' f'\n\nAddress: {borrow_item_addr}' f'\n\nStart Time: {start_time}' f'\n\nEnd Time: {end_time}')
+            send_confirm_email(contributor_email,'Request Approved',f'\n\nYou has approved request'  f'\n\nItem name: {borrow_item_name}' f'\n\nAddress: {borrow_item_addr}'f'\n\nStart Time: {start_time}' f'\n\nEnd Time: {end_time}')
+        else:
+            new_status= 'deny'
+            order = Order.objects.get(order_id=order_id)
+            borrower_email = order.borrower.email
+            borrow_item_name = order.item.item_name
+            borrower = order.borrower.username
+            send_confirm_email(borrower_email,'Request Denied',f'\n\nSorry {borrower} Your request has been denied' f'\n\nItem name: {borrow_item_name}')
+            order.item.item_available = True
+            order.item.save()
+            #return deposit to borrower call smart contract 
+        
+        Order.objects.filter(order_id=order_id).update(status=new_status)
+        return HttpResponseRedirect(reverse('contributor_order_status'))
     
+def send_confirm_email(email_address,subject, message):
+    send_mail(subject, message, 'sharetoearn999@gmail.com', [email_address])
+
+#----------------filter user order status page---------------------------------------------------------------------------------
 def latest_status_user_orders(request):
     desired_statuses = ['pending', 'accept','return_item', 'get_item','borrower_comment']
     latest_status_user_orders = Order.objects.filter(borrower=request.user, status__in=desired_statuses)    
@@ -230,7 +230,7 @@ def cancel_order(request, order_id):
         order.item.save()
         messages.success(request, 'Order has been cancelled') 
         return redirect('latest_status_user_orders')
-
+#-----------------contributor order status page------------------------------------------------------------------------------------------
 @login_required
 def contributor_order_status(request):
     desired_statuses = ['pending','accept','get_item','return_item']
@@ -246,7 +246,7 @@ def contributor_order_status(request):
     
     return render(request, 'borrow/contributor_order_status.html', context)
 
-#--------------------------------------------------------------------------------------------------------------------
+#----------------borrower get item page--------------------------------------------------------------------------------------
 @login_required
 def borrower_get_item_page(request, order_id):
     order = get_object_or_404(Order, pk=order_id)
@@ -271,7 +271,7 @@ def update_to_get_item(request, order_id):
 
         return redirect('latest_status_user_orders')
 
-#--------------------------------------------------------------------------------------------------------------------
+#---------------contributor gets the item back-------------------------------------------------------------
 @login_required    
 def update_to_return_item(request, order_id):
     if request.method == "POST":
@@ -286,7 +286,7 @@ def update_to_return_item(request, order_id):
         messages.success(request, 'Return item successfully.')
         
         return redirect('contributor_submit_review', order_id=order_id)
-#------------------------------------------------------------------------------------------------------------------------
+#-------------------contributor_submit_review------------------------------------------------------------------
 @login_required
 def contributor_submit_review(request, order_id):    
     order = get_object_or_404(Order, order_id=order_id)
@@ -312,7 +312,7 @@ def contributor_submit_review(request, order_id):
 
     return render(request, 'borrow/contributor_submit_review.html', {'order_id': order_id,'breakage_choices': Order.BREAKAGE_CHOICES})
 
-#------------------------------------------------------------------------------------------------------------------------
+#--------------borrower_submit_review---------------------------------------------------------------------
 @login_required
 def borrower_submit_review(request, order_id):    
     order = get_object_or_404(Order, order_id=order_id)
