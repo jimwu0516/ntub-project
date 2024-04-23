@@ -1,8 +1,16 @@
+html {
+  height: 100%; 
+}
+
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   padding-top: 100px;
+  
+  display: flex;
+  flex-direction: column;
+  min-height: 90%;
 }
 
 a {
@@ -149,9 +157,13 @@ a {
 }
 
 /* Home --------------------------------------------------------------------- */
+.content-wrap {
+  flex: 1;
+}
+
 .container {
+  margin: 0 auto;
   max-width: 1200px;
-  margin: auto;
 }
 
 .home-page {
@@ -181,7 +193,6 @@ a {
   border-radius: 10px;
 }
 
-
 .home-card h3 {
   color: #333;
 }
@@ -189,8 +200,6 @@ a {
 .home-card p {
   color: #666;
 }
-
-
 
 .text-image-container {
   display: flex;
@@ -233,6 +242,37 @@ a {
 
 .home-page-startbtn:hover {
   background-color: #02a9f7;
+}
+
+/*footer ------------------------------------------------------------------*/
+.footer {
+  width: 100%;
+  height: 85px; 
+  background-color: #F8FAFB;  
+  text-align: center;
+  line-height: 50px;
+}
+
+.footer-container{
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.addNetworkBtn{
+  border-radius: 5px;
+  background-color: #EAEBEF;
+  display: flex; 
+  align-items: center;
+  color: #061D35 ;
+  border: none;
+  padding: 10px;
+  margin-top:25px ;
+  margin-left: 10px;
+}
+
+.addNetworkBtn:hover{
+  background-color: #DFE2E6;
+  cursor: pointer;
 }
 
 /*account card --------------------------------------------------------------------- */
