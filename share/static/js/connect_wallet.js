@@ -3,9 +3,10 @@ document.addEventListener("DOMContentLoaded", function () {
     var disconnectSelect = document.getElementById("disconnectSelect");
     var logoutBtn = document.getElementById("logoutBtn");
     localStorage.setItem('contract_address', '0x146dBaE602B862835797c82011cdFe1AbCcb46F0');
+    var rpcUrl = "https://rpc.ankr.com/bsc_testnet_chapel"
+    const chainId = '0x61'; //mainnet 0x38 testnet 0x61
 
     function switchNetwork() {
-        const chainId = '0x61'; //mainnet 0x38 testnet 0x61
         window.ethereum.request({
             method: 'wallet_switchEthereumChain',
             params: [{ chainId: chainId }]
@@ -16,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         method: 'wallet_addEthereumChain',
                         params: [{
                             chainId: chainId,
-                            rpcUrl: "https://rpc.ankr.com/bsc_testnet_chapel" 
+                            rpcUrl: rpcUrl
                         }]
                     });
                 } catch (addError) {
@@ -59,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Metamask未安裝！！！");
         }
     });
-    
+
     function disconnect() {
         localStorage.removeItem('walletConnected');
         connectWalletBtn.style.display = 'inline-block';
@@ -88,4 +89,103 @@ document.addEventListener("DOMContentLoaded", function () {
         connectWalletBtn.style.backgroundColor = "green";
         connectWalletBtn.style.transform = "scale(1)";
     });
+
+    //-----------------------------------------------------------------------------------------------------------------------------
+    const addNetworkBtn = document.getElementById("addNetworkBtn");
+
+    addNetworkBtn.addEventListener("click", function () {
+        if (typeof window.ethereum !== 'undefined') {
+            ethereum
+                .request({ method: 'eth_requestAccounts' })
+                .then((accounts) => {
+                    if (ethereum.networkVersion !== '97') {
+                        ethereum
+                            .request({
+                                method: 'wallet_addEthereumChain',
+                                params: [
+                                    {
+                                        chainId: chainId,
+                                        chainName: 'Binance Smart Chain Testnet',
+                                        rpcUrls: [rpcUrl],
+                                        blockExplorerUrls: ['https://testnet.bscscan.com/'],
+                                        nativeCurrency: {
+                                            name: 'BNB',
+                                            symbol: 'BNB',
+                                            decimals: 18
+                                        }
+                                    }
+                                ]
+                            })
+                            .then(() => {
+                                console.log('BSC Testnet added')
+                                addTokenToWallet()
+                            })
+                            .catch((error) => {
+                                console.error(error)
+                            })
+                    } else {
+                        addTokenToWallet()
+                    }
+                })
+                .catch((error) => {
+                    console.error(error)
+                })
+
+        } else {
+            alert("Metamask未安裝！！！");
+        }
+
+
+    })
+
+
+
+    function addTokenToWallet() {
+        ethereum
+            .request({
+                method: 'wallet_watchAsset',
+                params: {
+                    type: 'ERC20',
+                    options: {
+                        address: localStorage.getItem('contract_address'),
+                        symbol: 'STE',
+                        decimals: 18,
+                        image: ''
+                    }
+                }
+            })
+            .then((isAdded) => {
+                if (isAdded) {
+                    console.log('Token is already added to wallet')
+                } else {
+                    console.log('Token is not added to wallet')
+                    ethereum
+                        .request({
+                            method: 'wallet_watchAsset',
+                            params: {
+                                type: 'ERC20',
+                                options: {
+                                    address: localStorage.getItem('contract_address'),
+                                    symbol: 'STE',
+                                    decimals: 18,
+                                    image: ''
+                                }
+                            }
+                        })
+                        .then((success) => {
+                            if (success) {
+                                console.log('Token added to wallet')
+                            } else {
+                                console.log('Failed to add token to wallet')
+                            }
+                        })
+                        .catch((error) => {
+                            console.error(error)
+                        })
+                }
+            })
+            .catch((error) => {
+                console.error('Error checking token in wallet:', error)
+            })
+    }
 });

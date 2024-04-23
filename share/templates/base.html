@@ -20,66 +20,56 @@
 
   <body>
     <div class="content-wrap">
-    <header class="header">
-      {% if request.user.is_authenticated %}
-        <nav class="login-nav">
-          <div class="navbar-left">
-            <a href="{% url 'home' %}" class="navbar-logo">Share To Earn</a>
-            <a href="{% url 'available_borrow_items' %}" class="menu-item">Borrow</a>
-            <a href="{% url 'latest_status_user_orders' %}" class="menu-item">Order</a>
-          </div>
-
-          <div class="navbar-right">
-            <div class="connect-wallet-btn">
-              <button id="connectWalletBtn" class="connectWalletBtn" style="background-color: green; color: white; border: 0px; padding: 10px; border-radius: 5px;">Connect Wallet</button>
-              <select id="disconnectSelect" class="disconnectSelect" style="display: none;"></select>
+      <header class="header">
+        {% if request.user.is_authenticated %}
+          <nav class="login-nav">
+            <div class="navbar-left">
+              <a href="{% url 'home' %}" class="navbar-logo">Share To Earn</a>
+              <a href="{% url 'available_borrow_items' %}" class="menu-item">Borrow</a>
+              <a href="{% url 'latest_status_user_orders' %}" class="menu-item">Order</a>
             </div>
-            <div class="dropdown">
-              <a href="#" class="dropbtn">Hi {{ request.user }}</a>
 
-              <div class="dropdown-content">
-                <a href="{% url 'profile' %}" title="Update my profile">Profile</a>
-                <a href="{% url 'items' %}">My item</a>
-                <a href="{%url 'contributor_order_status' %}">Contribute status</a> 
-                <a href="{% url 'logout' %}" id="logoutBtn" style="color: red; font-weight: bold;">Logout</a>
+            <div class="navbar-right">
+              <div class="connect-wallet-btn">
+                <button id="connectWalletBtn" class="connectWalletBtn" style="background-color: green; color: white; border: 0px; padding: 10px; border-radius: 5px;">Connect Wallet</button>
+                <select id="disconnectSelect" class="disconnectSelect" style="display: none;"></select>
+              </div>
+              <div class="dropdown">
+                <a href="#" class="dropbtn">Hi {{ request.user }}</a>
+
+                <div class="dropdown-content">
+                  <a href="{% url 'profile' %}" title="Update my profile">Profile</a>
+                  <a href="{% url 'items' %}">My item</a>
+                  <a href="{% url 'contributor_order_status' %}">Contribute status</a>
+                  <a href="{% url 'logout' %}" id="logoutBtn" style="color: red; font-weight: bold;">Logout</a>
+                </div>
               </div>
             </div>
-          </div>
-        </nav>
-      {% else %}
-        <nav class="logout-nav">
-          <a href="{% url 'home' %}" class="navbar-logo">Share To Earn</a>
-          <a href="{% url 'login' %}" class="login">Login</a>
-        </nav>
-      {% endif %}
-    </header>
-    <main>
-      <div class="container">
-        {% if messages %}
-          {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-          {% endfor %}
+          </nav>
+        {% else %}
+          <nav class="logout-nav">
+            <a href="{% url 'home' %}" class="navbar-logo">Share To Earn</a>
+            <a href="{% url 'login' %}" class="login">Login</a>
+          </nav>
         {% endif %}
-        {% block content %}
+      </header>
+      <main>
+        <div class="container">
+          {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+          {% block content %}
 
-        {% endblock %}
-      </div>
-    </main>
+          {% endblock %}
+        </div>
+      </main>
     </div>
     <footer class="footer">
       <div class="footer-container">
-        <button id="addNetworkBtn" class="addNetworkBtn" onclick="confirmCancel()">
-          <img src="{% static 'images/metamask-icon.svg' %}" alt="Metamask" style="width:20px; margin-right: 10px;" />Add BSC Testnet Network
-        </button>
+        <button id="addNetworkBtn" class="addNetworkBtn" onclick="addNetwork()"><img src="{% static 'images/metamask-icon.svg' %}" alt="Metamask" style="width:20px; margin-right: 10px;" />Add BSC Testnet Network</button>
       </div>
     </footer>
-  
   </body>
 </html>
-
-
-<script>
-  function confirmCancel() {
-    return confirm('Are you sure you want to cancel the request?')
-  }
-</script>
