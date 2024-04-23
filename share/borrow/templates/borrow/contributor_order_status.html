@@ -10,51 +10,80 @@
     return confirm('Are you sure you already got this item back?')
   }
 </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const orders = document.querySelectorAll('.order-row')
-      orders.forEach((order) => {
-        const status = order.getAttribute('data-status')
-        if (status === 'accept') {
-          updateTimeAndCheck(order)
-          setInterval(() => updateTimeAndCheck(order), 1000)
-        }
-      })
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const orders = document.querySelectorAll('.order-row')
+    orders.forEach((order) => {
+      const status = order.getAttribute('data-status')
+      if (status === 'accept') {
+        updateTimeAndCheck(order)
+        setInterval(() => updateTimeAndCheck(order), 1000)
+      }
+      
+      if (status === 'pending') {
+      calculateRemainingTime(order)
+      setInterval(() => calculateRemainingTime(order), 1000)
+      }
     })
-    
-    function updateTimeAndCheck(order) {
-      var startTimeString = order.getAttribute('data-start-time')
-      const startTime = new Date(startTimeString)
-      const currentTime = new Date()
-      const timeDiff = Math.abs(currentTime - startTime)
-      const diffInSeconds = timeDiff / 1000
-      const minutes = Math.floor(diffInSeconds / 60)
-      const seconds = Math.floor(diffInSeconds % 60)
-      const overdueTimeSpan = order.querySelector('.overdue-time')
-    
-      if (currentTime > startTime) {
-        overdueTimeSpan.innerHTML = 'Borrower Delay <br> ' + minutes + ' min  ' + seconds + ' sec'
-        overdueTimeSpan.style.color = 'red'
-      } else {
-        overdueTimeSpan.textContent = '--------'
-        overdueTimeSpan.style.color = 'black'
-      }
-    
-      if ((currentTime > startTime) & (minutes >= 60)) {
-        var xhr = new XMLHttpRequest()
-        const cancelOrderUrl = order.getAttribute('cancel-url')
-        xhr.open('POST', cancelOrderUrl, true)
-        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}')
-        xhr.send()
-    
-        var orderId = order.getAttribute('data-order-id')
-        var userConfirmed = confirm('The borrower is late over one hour,order #' + orderId + 'has been canceled automatically ')
-        if (userConfirmed) {
-          window.location.href = "{% url 'contributor_order_status' %}"
-        }
-      }
+  })
+  
+  function updateTimeAndCheck(order) {
+    var startTimeString = order.getAttribute('data-start-time')
+    const startTime = new Date(startTimeString)
+    const currentTime = new Date()
+    const timeDiff = Math.abs(currentTime - startTime)
+    const diffInSeconds = timeDiff / 1000
+    const minutes = Math.floor(diffInSeconds / 60)
+    const seconds = Math.floor(diffInSeconds % 60)
+    const overdueTimeSpan = order.querySelector('.overdue-time')
+
+    if (currentTime > startTime) {
+      overdueTimeSpan.innerHTML = 'Borrower Delay <br> ' + minutes + ' min  ' + seconds + ' sec'
+      overdueTimeSpan.style.color = 'red'
+    } else {
+      overdueTimeSpan.textContent = '--------'
+      overdueTimeSpan.style.color = 'black'
     }
-  </script>
+  
+    if ((currentTime > startTime) & (minutes >= 60)) {
+      var xhr = new XMLHttpRequest()
+      const cancelOrderUrl = order.getAttribute('cancel-url')
+      xhr.open('POST', cancelOrderUrl, true)
+      xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}')
+      xhr.send()
+  
+      window.location.href = "{% url 'contributor_order_status' %}"
+    }
+  }
+
+  function calculateRemainingTime(order) {
+    const requestTimeString = order.getAttribute('data-request-time')
+    const requestTime = new Date(requestTimeString)
+    const endTime = new Date(requestTime.getTime() + 8 * 60 * 60 * 1000) 
+    const remainingTimeSpan = order.querySelector('.remaining-time')
+
+    const currentTime = new Date()
+    const remainingTimeDiff = Math.abs(endTime - currentTime)
+    const remainingDiffInSeconds = remainingTimeDiff / 1000
+    const remainingHours = Math.floor(remainingDiffInSeconds / 3600)
+    const remainingMinutes = Math.floor((remainingDiffInSeconds % 3600) / 60)
+    const remainingSeconds = Math.floor((remainingDiffInSeconds % 3600) % 60)
+
+    remainingTimeSpan.innerHTML = remainingHours + ' h ' + remainingMinutes + ' m ' + remainingSeconds + ' s'
+
+    if (currentTime > endTime) {
+      var xhr = new XMLHttpRequest()
+      const cancelOrderUrl = order.getAttribute('cancel-url')
+      xhr.open('POST', cancelOrderUrl, true)
+      xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}')
+      xhr.send()
+      
+      window.location.href = "{% url 'contributor_order_status' %}"
+    }
+  }
+
+</script>
 
   <h2 class="text-center">My Contribute status</h2>
   <div class="order-container">
@@ -65,17 +94,16 @@
           <div>Item</div>
           <div>Start Time</div>
           <div>End Time</div>
-          <div>Request Time</div>
           <div>Status</div>
           <div>Action</div>
+          <div>Decide within</div>
         </div>
         {% for order in contributor_orders %}
-          <div class="order-row" data-order-id="{{ order.order_id }}" data-start-time="{{ order.start_time|date:'Y-m-d H:i:s' }}" data-status="{{ order.status }}" cancel-url="{% url 'cancel_order' order.order_id %}">
+          <div class="order-row" data-request-time="{{ order.request_time|date:'Y-m-d H:i:s' }}" data-order-id="{{ order.order_id }}" data-start-time="{{ order.start_time|date:'Y-m-d H:i:s' }}" data-status="{{ order.status }}" cancel-url="{% url 'contributor_cancel_order' order.order_id %}">
             <div>{{ order.borrower }}</div>
             <div>{{ order.item.item_name }}</div>
             <div>{{ order.start_time }}</div>
             <div>{{ order.end_time }}</div>
-            <div>{{ order.request_time }}</div>
             <div>{{ order.get_status_display }}</div>
             {% if order.status == 'pending' %}
               <div>
@@ -102,6 +130,15 @@
               </div>
             {% else %}
               <div>---</div>
+            {% endif %}
+            
+            {% if order.status == 'pending'  %}
+              <div class="remaining-time"></div>
+              <form id="cancelForm-{{ order.order_id }}" method="post" action="{% url 'cancel_order'  order.order_id  %}">
+                {% csrf_token %}
+              </form>
+            {% else  %}
+              <div>------</div>
             {% endif %}
           </div>
         {% endfor %}

@@ -4,7 +4,7 @@ from .models import Item ,Order
 from django.contrib import messages
 
 from django.utils import timezone
-from datetime import datetime
+from datetime import datetime,timedelta
 
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -172,6 +172,16 @@ def update_order_status_approve(request, order_id):
     
 def send_confirm_email(email_address,subject, message):
     send_mail(subject, message, 'sharetoearn999@gmail.com', [email_address])
+    
+def contributor_cancel_order(request, order_id):
+    if request.method == 'POST':
+        Order.objects.filter(order_id=order_id).update(status='cancel_order')
+        order=Order.objects.get(order_id=order_id)
+        order.item.item_available = True
+        order.item.save()
+        #return deposit
+        
+        return redirect('contributor_order_status')
 
 
 #--------------------------------------filter user order status page---------------------------------------------------------------------------------
@@ -243,6 +253,7 @@ def cancel_order(request, order_id):
         order.item.item_available = True
         order.item.save()
         messages.success(request, 'Order has been cancelled') 
+
         return redirect('latest_status_user_orders')
     
     
