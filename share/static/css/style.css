@@ -206,11 +206,15 @@ a {
   align-items: center;
   justify-content: center;
   padding: 20px;
-  background-color: antiquewhite;
+}
+
+.text-image-container img{
+  border-radius: 10px;
 }
 
 .image-container {
-  margin-right: 20px;
+  margin-right: 10px;
+  border-radius: 10px;
 }
 
 .text-container {

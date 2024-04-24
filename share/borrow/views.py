@@ -187,7 +187,7 @@ def borrower_not_picked_up(request, order_id):
         order=Order.objects.get(order_id=order_id)
         order.item.item_available = True
         order.item.save()
-        #return deposit
+        #return deposit : 30% to contributor, 70% to borrower 
 
 
 #--------------------------------------filter user order status page---------------------------------------------------------------------------------
