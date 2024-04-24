@@ -85,45 +85,45 @@
       })
     }
     
+    
     function updateTimeAndCheck() {
-      var startTimeString = document.getElementById('get-item-info').getAttribute('data-start-time')
-      var startTime = new Date(startTimeString)
-      var currentTime = new Date()
-      var timeDiff = Math.abs(currentTime - startTime)
-      var diffInSeconds = timeDiff / 1000
-      var minutes = Math.floor(diffInSeconds / 60)
-      var seconds = Math.floor(diffInSeconds % 60)
-    
+      var order = document.querySelector('.get-item-page-container');
+      var startTimeString = order.getAttribute('data-start-time');
+      var startTime = new Date(startTimeString);
+      var currentTime = new Date();
+      var timeDiff = Math.abs(currentTime - startTime);
+      var diffInSeconds = timeDiff / 1000;
+      var minutes = Math.floor(diffInSeconds / 60);
+      var seconds = Math.floor(diffInSeconds % 60);
+  
       if (currentTime > startTime) {
-        var Timeoutwarn = document.getElementById('Timeout')
-        Timeoutwarn.textContent = 'Delay ' + minutes + ' min  ' + seconds + ' sec'
-        Timeoutwarn.style.color = 'red'
+        var Timeoutwarn = document.getElementById('Timeout');
+        Timeoutwarn.textContent = 'Delay ' + minutes + ' min  ' + seconds + ' sec';
+        Timeoutwarn.style.color = 'red';
       }
-    
-      if ((currentTime > startTime) & (minutes >= 60)) {
-        var xhr = new XMLHttpRequest()
-        var cancelOrderUrl = document.getElementById('cancel-order-url').getAttribute('cancel-url')
-        xhr.open('POST', cancelOrderUrl, true)
-        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}')
-        xhr.send()
-    
-        var userConfirmed = confirm('You are late more than one hour')
-        if (userConfirmed) {
-          window.location.href = "{% url 'latest_status_user_orders' %}"
-        }
+  
+      if (currentTime > startTime && minutes >= 60) {
+        var xhr = new XMLHttpRequest();
+        var borrower_not_picked_up_url = order.getAttribute('borrower-not-picked-up-url');
+        xhr.open('POST', borrower_not_picked_up_url, true);
+        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+        xhr.send();
+  
+        window.location.href = "{% url 'latest_status_user_orders' %}";
       }
     }
-    
+  
     document.addEventListener('DOMContentLoaded', function () {
-      updateTimeAndCheck()
-      setInterval(updateTimeAndCheck, 1000)
-    })
+      updateTimeAndCheck();
+      setInterval(updateTimeAndCheck, 1000);
+    });
+
+    
   </script>
 
   <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
 
-  <div class="get-item-page-container">
-    <div id="cancel-order-url" cancel-url="{% url 'cancel_order' order.order_id %}"></div>
+  <div class="get-item-page-container" borrower-not-picked-up-url="{% url 'borrower_not_picked_up' order.order_id %}" data-start-time="{{ order.start_time|date:'Y-m-d H:i:s' }}">
     <h2>Get item location</h2>
 
     <div id="get-item-map"></div>
@@ -134,7 +134,6 @@
         <p>Item Address:</p>
         <p>{{ order.item.item_address }}</p>
 
-        <div id="get-item-info" data-start-time="{{ order.start_time|date:'Y-m-d H:i:s' }}"></div>
       </div>
       <div class="get-item-info-right">
         <p id="Timeout"></p>

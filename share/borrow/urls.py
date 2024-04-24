@@ -22,8 +22,11 @@ urlpatterns = [
     path('update_order_status_to_pending/<int:order_id>/', views.update_order_status_to_pending, name='update_order_status_to_pending'),
     path('orders/cancel-order', views.cancel_order_user_orders, name='cancel_order_user_orders'),
     path('orders/hostory-order', views.history_user_orders, name='history_user_orders'),
+    
     path('cancel_order/<int:order_id>/', views.cancel_order, name='cancel_order'),
-    path('contributor_cancel_order/<int:order_id>/', views.contributor_cancel_order, name='contributor_cancel_order'),
+    path('contributor_approve_expired/<int:order_id>/', views.contributor_approve_expired, name='contributor_approve_expired'),
+    path('borrower_not_picked_up/<int:order_id>/', views.borrower_not_picked_up, name='borrower_not_picked_up'),
+
     
     path('contributor-orders/', views.contributor_order_status, name='contributor_order_status'), 
     

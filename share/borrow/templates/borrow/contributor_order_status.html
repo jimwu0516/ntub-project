@@ -48,8 +48,8 @@
   
     if ((currentTime > startTime) & (minutes >= 60)) {
       var xhr = new XMLHttpRequest()
-      const cancelOrderUrl = order.getAttribute('cancel-url')
-      xhr.open('POST', cancelOrderUrl, true)
+      const borrower_not_picked_up_url = order.getAttribute('borrower-not-picked-up-url')
+      xhr.open('POST', borrower_not_picked_up_url, true)
       xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}')
       xhr.send()
   
@@ -74,8 +74,8 @@
 
     if (currentTime > endTime) {
       var xhr = new XMLHttpRequest()
-      const cancelOrderUrl = order.getAttribute('cancel-url')
-      xhr.open('POST', cancelOrderUrl, true)
+      const contributor_approve_expired_url = order.getAttribute('contributor-approve-expired-url')
+      xhr.open('POST', contributor_approve_expired_url, true)
       xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}')
       xhr.send()
       
@@ -99,7 +99,7 @@
           <div>Decide within</div>
         </div>
         {% for order in contributor_orders %}
-          <div class="order-row" data-request-time="{{ order.request_time|date:'Y-m-d H:i:s' }}" data-order-id="{{ order.order_id }}" data-start-time="{{ order.start_time|date:'Y-m-d H:i:s' }}" data-status="{{ order.status }}" cancel-url="{% url 'contributor_cancel_order' order.order_id %}">
+          <div class="order-row" data-request-time="{{ order.request_time|date:'Y-m-d H:i:s' }}" data-order-id="{{ order.order_id }}" data-start-time="{{ order.start_time|date:'Y-m-d H:i:s' }}" data-status="{{ order.status }}" contributor-approve-expired-url="{% url 'contributor_approve_expired' order.order_id %}" borrower-not-picked-up-url= "{% url 'borrower_not_picked_up' order.order_id %}">
             <div>{{ order.borrower }}</div>
             <div>{{ order.item.item_name }}</div>
             <div>{{ order.start_time }}</div>
@@ -134,9 +134,6 @@
             
             {% if order.status == 'pending'  %}
               <div class="remaining-time"></div>
-              <form id="cancelForm-{{ order.order_id }}" method="post" action="{% url 'cancel_order'  order.order_id  %}">
-                {% csrf_token %}
-              </form>
             {% else  %}
               <div>------</div>
             {% endif %}

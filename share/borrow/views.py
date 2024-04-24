@@ -139,7 +139,7 @@ def borrow_item(request, pk):
     return render(request, 'borrow/available_item_detail.html', context)
 
 
-#-------------------------------contributor approves or denies request------------------------------------------------------------------------------
+#-------------------contributor approves or denies request------------------------------------------------------------------------------
 @login_required
 def update_order_status_approve(request, order_id):
     if request.method == 'POST':
@@ -173,15 +173,21 @@ def update_order_status_approve(request, order_id):
 def send_confirm_email(email_address,subject, message):
     send_mail(subject, message, 'sharetoearn999@gmail.com', [email_address])
     
-def contributor_cancel_order(request, order_id):
+def contributor_approve_expired(request, order_id):
     if request.method == 'POST':
-        Order.objects.filter(order_id=order_id).update(status='cancel_order')
+        Order.objects.filter(order_id=order_id).update(status='approve_expired')
         order=Order.objects.get(order_id=order_id)
         order.item.item_available = True
         order.item.save()
         #return deposit
-        
-        return redirect('contributor_order_status')
+    
+def borrower_not_picked_up(request, order_id):
+    if request.method == 'POST':
+        Order.objects.filter(order_id=order_id).update(status='not_picked_up')
+        order=Order.objects.get(order_id=order_id)
+        order.item.item_available = True
+        order.item.save()
+        #return deposit
 
 
 #--------------------------------------filter user order status page---------------------------------------------------------------------------------
@@ -225,7 +231,7 @@ def update_order_status_to_pending(request, order_id):
         return redirect('latest_status_user_orders')
     
 def cancel_order_user_orders(request):
-    desired_statuses = ['deny','cancel_order']
+    desired_statuses = ['deny','cancel_order', 'approve_expired', 'not_picked_up' ]
     cancel_order_user_orders = Order.objects.filter(borrower=request.user, status__in=desired_statuses)
 
     context = {
