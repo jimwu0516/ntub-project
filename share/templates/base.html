@@ -52,7 +52,9 @@
           </nav>
         {% else %}
           <nav class="logout-nav">
-            <a href="{% url 'home' %}" class="navbar-logo">Share To Earn</a>
+            <a href="{% url 'home' %}" class="navbar-logo">
+              <img src="{% static 'images/logo.PNG' %}" alt="Logo" style="width:auto; max-width: 250px;" />
+            </a>
             <a href="{% url 'login' %}" class="login">Login</a>
           </nav>
         {% endif %}

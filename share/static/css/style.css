@@ -210,16 +210,20 @@ a {
 
 .text-image-container img{
   border-radius: 10px;
+  max-width:100% ;
+  height: auto;
 }
 
 .image-container {
   margin-right: 10px;
   border-radius: 10px;
+  width: 60%;
 }
 
 .text-container {
+  max-width: 40%;;
   text-align: left;
-  margin-left: 200px;
+  margin-left: 80px;
 }
 
 .text-image-container h3 {
@@ -239,10 +243,15 @@ a {
 
 .home-page-startbtn {
   background-color: #30878A;
-  padding: 20px 80px;
+  padding: 20px 40px;
   border-radius: 10px;
   color: white;
+  margin: 5px 50px; 
+  display: block; 
+  width: 20%;
+  box-sizing: border-box;
 }
+
 
 .home-page-startbtn:hover {
   background-color: #02a9f7;
