@@ -21,8 +21,7 @@ class Item(models.Model):
     item_category = models.CharField(
         max_length=50, choices=USER_ITEM_CATEGORY)
     item_address = models.CharField(max_length=255)
-    item_deposit_require = models.DecimalField(
-        max_digits=10, decimal_places=0, validators=[MinValueValidator(0)])
+    item_deposit_require = models.IntegerField(validators=[MinValueValidator(0)])
     item_image = models.ImageField(upload_to='item_images/')
     item_available = models.BooleanField(default=True)
     

@@ -16,7 +16,23 @@ from django.http import JsonResponse
 from users.models import Review, Profile
 from django.contrib.auth.models import User
 
-from .web3 import airdrop_token
+from .web3 import airdrop_token,return_deposit
+#----------------------------------handle_return_deposit ---------------------------------------------------
+def handle_return_deposit(order):
+    contributor_profile = get_object_or_404(Profile, user=order.item.contributor)
+    contributor_address = contributor_profile.airdrop_wallet_address
+    
+    borrower_profile = get_object_or_404(Profile, user=order.borrower)
+    borrower_address = borrower_profile.airdrop_wallet_address
+    
+    amount = order.item.item_deposit_require
+    damage_percentage = order.breakage
+
+    return_deposit_hash = return_deposit(borrower_address, contributor_address, amount, damage_percentage)
+    
+    return return_deposit_hash
+
+
 #----------------------borrower browse available items ------------------------------------------------------------------------
 @login_required
 def available_items(request):
@@ -167,7 +183,7 @@ def update_order_status_approve(request, order_id):
             send_confirm_email(borrower_email,'Request Denied',f'\n\nSorry {borrower} Your request has been denied' f'\n\nItem name: {borrow_item_name}')
             order.item.item_available = True
             order.item.save()
-            #return deposit to borrower call smart contract 
+            handle_return_deposit(order)
         
         Order.objects.filter(order_id=order_id).update(status=new_status)
         return HttpResponseRedirect(reverse('contributor_order_status'))
@@ -181,7 +197,7 @@ def contributor_approve_expired(request, order_id):
         order=Order.objects.get(order_id=order_id)
         order.item.item_available = True
         order.item.save()
-        #return deposit
+        handle_return_deposit(order)
     
 def borrower_not_picked_up(request, order_id):
     if request.method == 'POST':
@@ -371,11 +387,10 @@ def borrower_submit_review(request, order_id):
         profile = get_object_or_404(Profile, user=order.item.contributor)
         contributor_address = profile.airdrop_wallet_address
         amount = 678
-        txn_hash = airdrop_token(contributor_address, amount)
-        
-                
+        airdrop_token_hash = airdrop_token(contributor_address, amount)
         
         #return deposit
+        handle_return_deposit(order)
         
         order.status = 'finish'
         order.save()
@@ -384,3 +399,5 @@ def borrower_submit_review(request, order_id):
         return redirect('latest_status_user_orders') 
 
     return render(request, 'borrow/borrower_submit_review.html', {'order_id': order_id})
+
+    
