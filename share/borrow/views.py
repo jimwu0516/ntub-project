@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404,redirect
-from .models import Item ,Order
+from .models import Item ,Order 
 from django.contrib import messages
 
 from django.utils import timezone
@@ -13,8 +13,10 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.http import JsonResponse
 
-from users.models import Review
+from users.models import Review, Profile
+from django.contrib.auth.models import User
 
+from .web3 import airdrop_token
 #----------------------borrower browse available items ------------------------------------------------------------------------
 @login_required
 def available_items(request):
@@ -365,10 +367,18 @@ def borrower_submit_review(request, order_id):
             review_result=review_result
         )
         
+        #airdrop token 
+        profile = get_object_or_404(Profile, user=order.item.contributor)
+        contributor_address = profile.airdrop_wallet_address
+        amount = 678
+        txn_hash = airdrop_token(contributor_address, amount)
+        
+                
+        
+        #return deposit
+        
         order.status = 'finish'
         order.save()
-        #return deposit
-        #airdrop token
         
         messages.success(request, 'Your review has been submitted.')
         return redirect('latest_status_user_orders') 
