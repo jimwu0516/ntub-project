@@ -13,22 +13,21 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const orders = document.querySelectorAll('.order-row')
-    orders.forEach((order) => {
+    document.querySelectorAll('.order-row').forEach((order) => {
       const status = order.getAttribute('data-status')
       if (status === 'accept') {
-        updateTimeAndCheck(order)
-        setInterval(() => updateTimeAndCheck(order), 1000)
+        updateBorrowerGetItemDelayTime(order)
+        setInterval(() => updateBorrowerGetItemDelayTime(order), 1000)
       }
       
       if (status === 'pending') {
-      calculateRemainingTime(order)
-      setInterval(() => calculateRemainingTime(order), 1000)
+        updateRemainingTimeForContributorDecision(order)
+        setInterval(() => updateRemainingTimeForContributorDecision(order), 1000)
       }
     })
   })
   
-  function updateTimeAndCheck(order) {
+  function updateBorrowerGetItemDelayTime(order) {
     var startTimeString = order.getAttribute('data-start-time')
     const startTime = new Date(startTimeString)
     const currentTime = new Date()
@@ -57,7 +56,7 @@
     }
   }
 
-  function calculateRemainingTime(order) {
+  function updateRemainingTimeForContributorDecision(order) {
     const requestTimeString = order.getAttribute('data-request-time')
     const requestTime = new Date(requestTimeString)
     const endTime = new Date(requestTime.getTime() + 8 * 60 * 60 * 1000) 

@@ -56,6 +56,18 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', async function () {
+      document.querySelectorAll('.order-row').forEach((order) => {
+        const status = order.getAttribute('data-status')
+        if (status === 'get_item') {
+          updateBorrowerDelayedReturnTime(order)
+          setInterval(() => updateBorrowerDelayedReturnTime(order), 1000)
+        }
+
+        if (status === 'unpaid') {
+          updateRemainingTimeForDepositPayment(order)
+          setInterval(() => updateRemainingTimeForDepositPayment(order), 1000)
+        }
+      })
       if (window.ethereum) {
         window.web3 = new Web3(ethereum);
         const response = await fetch('{% static "abi/ShareTokenABI.json" %}');
@@ -92,34 +104,6 @@
       } else {
         alert('Non-Ethereum browser detected. You should consider trying MetaMask!');
       }
-    
-      const updateRemainingTime = () => {
-        document.querySelectorAll('.pay-deposit-btn').forEach(button => {
-          const requestTime = new Date(button.getAttribute('data-request-time'));
-          const endTime = new Date(requestTime.getTime() + 3600000); 
-          const now = new Date();
-          const remainingTime = endTime - now;
-    
-          if (remainingTime > 0) {
-            const minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
-            button.textContent = `${minutes} m ${seconds} s`;
-          } else {
-            button.textContent = 'Time expired';
-            button.disabled = true;
-
-            const orderRow = button.closest('.order-row');
-            const cancelForm = orderRow.querySelector('.cancel form');
-            if (cancelForm) {
-              cancelForm.submit(); 
-            }
-            
-          }
-        });
-      };
-    
-      setInterval(updateRemainingTime, 1000);
-      updateRemainingTime();
     });
 
     function transaction_processing(transactionHash) {
@@ -127,6 +111,53 @@
         document.getElementById('hashDisplay').innerText = transactionHash;
         transaction_processing.style.display = "block";
     }
+
+    function updateRemainingTimeForDepositPayment(order) {
+      var requestTimeString = order.getAttribute('data-request-time');
+      const requestTime = new Date(requestTimeString);
+      const endTime = new Date(requestTime.getTime() + 3600000); 
+      const currentTime = new Date();
+      const remainingTime = endTime - currentTime; 
+  
+      if (remainingTime > 0) {
+          const minutes = Math.floor(remainingTime / 60000); 
+          const seconds = Math.floor((remainingTime % 60000) / 1000); 
+  
+          const paydeposit_btn = order.querySelector('.pay-deposit-btn');
+          paydeposit_btn.textContent = `${minutes} m ${seconds} s`;
+      } else {
+          const paydeposit_btn = order.querySelector('.pay-deposit-btn');
+          paydeposit_btn.textContent = 'Time expired';
+          paydeposit_btn.disabled = true;
+  
+          var xhr = new XMLHttpRequest();
+          const cancel_order_url = order.getAttribute('cancel-order-url');
+          xhr.open('POST', cancel_order_url, true);
+          xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+          xhr.send();
+  
+          window.location.href = "{% url 'latest_status_user_orders' %}";
+      }
+
+      function updateBorrowerDelayedReturnTime(order){
+        var endTimeString = order.getAttribute('data-end-time')
+        const endTime = new Date(endTimeString)
+        const currentTime = new Date()
+        const timeDiff = Math.abs(currentTime - endTime)
+        const diffInSeconds = timeDiff / 1000
+        const minutes = Math.floor(diffInSeconds / 60)
+        const seconds = Math.floor(diffInSeconds % 60)
+        const overTime = order.querySelector('.borrower-delay-return-time')
+    
+        if (currentTime > endTime) {
+          overTime.innerHTML = 'Delay return <br> ' + minutes + ' min  ' + seconds + ' sec'
+          overTime.style.color = 'red'
+        } else {
+          overTime.textContent = '--------'
+          overTime.style.color = 'black'
+        }
+      }
+  }
   
   </script>
 
@@ -169,7 +200,7 @@
         </div>
 
         {% for order in user_orders %}
-          <div class="order-row">
+          <div class="order-row" data-end-time="{{ order.end_time|date:'Y-m-d H:i:s' }}" data-status="{{ order.status }}" data-request-time="{{ order.request_time|date:'c' }}" cancel-order-url="{% url 'cancel_order'  order.order_id  %}">
             <div>{{ order.order_id }}</div>
             <div>{{ order.item.contributor }}</div>
             <div>{{ order.item.item_name }}</div>
@@ -208,6 +239,8 @@
               <div class="detail">
                 <a href="{% url 'borrower_submit_review'  order.order_id  %}" class="action-btn">Give review</a>
               </div>
+            {% elif order.status == 'get_item' %}
+              <div class="borrower-delay-return-time"></div>
             {% elif show_action_column %}
               <div>---</div>
             {% endif %}
