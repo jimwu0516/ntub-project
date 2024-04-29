@@ -5,6 +5,14 @@
 {% endblock %}
 
 {% block content %}
+  <script>
+    function transaction_processing() {
+      var transaction_processing = document.getElementById('transaction_processing');
+      document.getElementById('hashDisplay').innerText = transactionHash;
+      transaction_processing.style.display = "block";
+    }
+  </script>
+
   <form method="post" action="{% url 'borrower_submit_review' order_id %}" class="contributor-review-container">
     {% csrf_token %}
 
@@ -22,5 +30,12 @@
     </div>
 
     <input type="submit" value="Submit Review" />
+
   </form>
+
+  <div id="transaction_processing" class="transaction_processing">
+    <div class="transaction_processing-content">
+      <p style="font-size: 50px;">Transaction Processing...</p>
+    </div>
+  </div>
 {% endblock %}

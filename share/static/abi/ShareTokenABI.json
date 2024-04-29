@@ -3,16 +3,39 @@
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "_to",
+				"name": "borrower_address",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "contributor_address",
 				"type": "address"
 			},
 			{
 				"internalType": "uint256",
-				"name": "_amount",
+				"name": "depositAmount",
 				"type": "uint256"
 			}
 		],
-		"name": "airdropTo",
+		"name": "borrowerNotPickedUpReturnDeposit",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "borrower_address",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "depositAmount",
+				"type": "uint256"
+			}
+		],
+		"name": "cancelOrderReturnDeposit",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -50,16 +73,21 @@
 			},
 			{
 				"internalType": "uint256",
-				"name": "amount",
+				"name": "depositAmount",
 				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
 				"name": "damagePercentage",
 				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "airdropAmount",
+				"type": "uint256"
 			}
 		],
-		"name": "returnDeposit",
+		"name": "returnDepositAndAirdrop",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"

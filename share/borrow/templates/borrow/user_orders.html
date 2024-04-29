@@ -138,27 +138,26 @@
   
           window.location.href = "{% url 'latest_status_user_orders' %}";
       }
+    }
 
-      function updateBorrowerDelayedReturnTime(order){
-        var endTimeString = order.getAttribute('data-end-time')
-        const endTime = new Date(endTimeString)
-        const currentTime = new Date()
-        const timeDiff = Math.abs(currentTime - endTime)
-        const diffInSeconds = timeDiff / 1000
-        const minutes = Math.floor(diffInSeconds / 60)
-        const seconds = Math.floor(diffInSeconds % 60)
-        const overTime = order.querySelector('.borrower-delay-return-time')
-    
-        if (currentTime > endTime) {
-          overTime.innerHTML = 'Delay return <br> ' + minutes + ' min  ' + seconds + ' sec'
-          overTime.style.color = 'red'
-        } else {
-          overTime.textContent = '--------'
-          overTime.style.color = 'black'
-        }
-      }
-  }
+    function updateBorrowerDelayedReturnTime(order){
+      var endTimeString = order.getAttribute('data-end-time')
+      const endTime = new Date(endTimeString)
+      const currentTime = new Date()
+      const timeDiff = Math.abs(currentTime - endTime)
+      const diffInSeconds = timeDiff / 1000
+      const minutes = Math.floor(diffInSeconds / 60)
+      const seconds = Math.floor(diffInSeconds % 60)
+      const overTime = order.querySelector('.borrower-delay-return-time')
   
+      if (currentTime > endTime) {
+        overTime.innerHTML = 'Delay return <br> ' + minutes + ' min  ' + seconds + ' sec'
+        overTime.style.color = 'red'
+      } else {
+        overTime.textContent = '--------'
+        overTime.style.color = 'black'
+      }
+    }
   </script>
 
   <nav class="user-order-status-bar">
@@ -249,15 +248,6 @@
       {% else %}
         <p>No orders found !!!!!</p>
       {% endif %}
-    </div>
-  </div>
-
-  
-  <div id="transaction_processing" class="transaction_processing">
-    <div class="transaction_processing-content">
-      <p style="font-size: 50px;">Transaction Processing...</p>
-      <p>Transaction Hash</p>
-      <p><span style="font-size: 25px; font-family: 'Consolas';" id="hashDisplay"></span></p>
     </div>
   </div>
 {% endblock %}

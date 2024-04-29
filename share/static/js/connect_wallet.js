@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var connectWalletBtn = document.getElementById("connectWalletBtn");
     var disconnectSelect = document.getElementById("disconnectSelect");
     var logoutBtn = document.getElementById("logoutBtn");
-    localStorage.setItem('contract_address', '0x146dBaE602B862835797c82011cdFe1AbCcb46F0');
+    localStorage.setItem('contract_address', '0xec0888881eFf7040FF4207853F4E2bA28310401B');
     var rpcUrl = "https://rpc.ankr.com/bsc_testnet_chapel"
     const chainId = '0x61'; //mainnet 0x38 testnet 0x61
 
