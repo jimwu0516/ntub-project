@@ -19,13 +19,13 @@ class RegisterForm(UserCreationForm):
         self.fields['user_place'].choices = [('', '')] + list(self.fields['user_place'].choices)
         self.fields['user_place'].required = True
 
-    def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if User.objects.filter(email=email).exists():
-            raise forms.ValidationError(
-                'This email address is already in use.')
-        return email
+    def clean(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get('username')
+        email = cleaned_data.get('email')
 
+        if User.objects.filter(email=email).exists():
+            self.add_error('email', 'This email address is already in use.')
 
 class ProfileForm(forms.ModelForm):
     class Meta:
@@ -42,6 +42,3 @@ class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['user_place', 'airdrop_wallet_address']
-
-
-

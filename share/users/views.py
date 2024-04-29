@@ -12,12 +12,17 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 
 # Create your views here.
-
 class RegisterView(FormView):
     template_name = 'users/register.html'
     form_class = RegisterForm
     redirect_authenticated_user = True
     success_url = reverse_lazy('items')
+    
+    def form_invalid(self, form):
+        for field, errors in form.errors.items():
+            for error in errors:
+                messages.error(self.request, f"{field.capitalize()}: {error}")
+        return super().form_invalid(form)
 
     def form_valid(self, form):
         user = form.save(commit=False)
@@ -30,6 +35,7 @@ class RegisterView(FormView):
         )
 
         login(self.request, user)
+        messages.success(self.request,"Success Register")
 
         return super().form_valid(form)
 
@@ -44,9 +50,6 @@ class MyLoginView(LoginView):
     def form_invalid(self, form):
         messages.error(self.request, 'Invalid username or password')
         return self.render_to_response(self.get_context_data(form=form))
-
-
-
 
 class MyProfile(LoginRequiredMixin, View):
     def get(self, request):
