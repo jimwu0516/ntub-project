@@ -18,22 +18,8 @@ from django.contrib.auth.models import User
 
 from .web3 import returnDepositAndAirdrop, borrowerNotPickedUpReturnDeposit, cancelOrderReturnDeposit
 
-#--------------------handle_return_deposit_and_airdrop ---------------------------------------------------
-def handle_return_deposit_and_airdrop(order):
-    contributor_profile = get_object_or_404(Profile, user=order.item.contributor)
-    contributor_address = contributor_profile.airdrop_wallet_address
-    
-    borrower_profile = get_object_or_404(Profile, user=order.borrower)
-    borrower_address = borrower_profile.airdrop_wallet_address
-    
-    depositAmount = order.item.item_deposit_require
-    damage_percentage = order.breakage
-    
-    airdropAmount = 543
 
-    return returnDepositAndAirdrop(borrower_address, contributor_address, depositAmount, damage_percentage, airdropAmount)
-
-#----------------------borrower browse available items ------------------------------------------------------------------------
+#----------------------borrower browse available items --------------------------------------------------------
 @login_required
 def available_items(request):
     
@@ -202,7 +188,6 @@ def contributor_approve_expired(request, order_id):
         order.item.item_available = True
         order.item.save()
         
-        
         borrower_profile = get_object_or_404(Profile, user=order.borrower)
         borrower_address = borrower_profile.airdrop_wallet_address
         deposit_amount = order.item.item_deposit_require
@@ -222,6 +207,7 @@ def borrower_not_picked_up(request, order_id):
         borrower_address = borrower_profile.airdrop_wallet_address
         depositAmount = order.item.item_deposit_require
         borrowerNotPickedUpReturnDeposit(borrower_address, contributor_address, depositAmount) 
+
 
 #--------------------------------------filter user order status page---------------------------------------------------------------------------------
 def latest_status_user_orders(request):
@@ -398,7 +384,6 @@ def borrower_submit_review(request, order_id):
             review_result=review_result
         )
         
-        #return deposit and airdrop token 
         handle_return_deposit_and_airdrop(order)
         
         order.status = 'finish'
@@ -410,3 +395,17 @@ def borrower_submit_review(request, order_id):
     return render(request, 'borrow/borrower_submit_review.html', {'order_id': order_id})
 
 
+#--------------------handle_return_deposit_and_airdrop ---------------------------------------------------
+def handle_return_deposit_and_airdrop(order):
+    contributor_profile = get_object_or_404(Profile, user=order.item.contributor)
+    contributor_address = contributor_profile.airdrop_wallet_address
+    
+    borrower_profile = get_object_or_404(Profile, user=order.borrower)
+    borrower_address = borrower_profile.airdrop_wallet_address
+    
+    depositAmount = order.item.item_deposit_require
+    damage_percentage = order.breakage
+    
+    airdropAmount = 543
+
+    return returnDepositAndAirdrop(borrower_address, contributor_address, depositAmount, damage_percentage, airdropAmount)

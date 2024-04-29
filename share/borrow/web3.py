@@ -14,6 +14,7 @@ def load_contract_abi():
     return contract_abi
 
 contract_address = '0xec0888881eFf7040FF4207853F4E2bA28310401B'
+chain_id = '0x61'; #mainnet 0x38 testnet 0x61
 abi = load_contract_abi()
 contract = web3.eth.contract(address=contract_address, abi=abi)
 
@@ -23,7 +24,7 @@ owner_account = Account.from_key(owner_private_key)
 def returnDepositAndAirdrop(borrower_address, contributor_address, depositAmount, damagePercentage, airdropAmount):
     nonce = web3.eth.get_transaction_count(owner_account.address)
     transaction = contract.functions.returnDepositAndAirdrop(borrower_address, contributor_address, depositAmount, damagePercentage, airdropAmount).build_transaction({
-        'chainId': 97, 
+        'chainId': chain_id, 
         'gas': 2000000,
         'nonce': nonce,
     })
@@ -35,7 +36,7 @@ def returnDepositAndAirdrop(borrower_address, contributor_address, depositAmount
 def borrowerNotPickedUpReturnDeposit(borrower_address, contributor_address, depositAmount) :
     nonce = web3.eth.get_transaction_count(owner_account.address)
     transaction = contract.functions.borrowerNotPickedUpReturnDeposit(borrower_address, contributor_address, depositAmount).build_transaction({
-        'chainId': 97,  
+        'chainId': chain_id,  
         'gas': 2000000,
         'nonce': nonce,
     })
@@ -47,7 +48,7 @@ def borrowerNotPickedUpReturnDeposit(borrower_address, contributor_address, depo
 def cancelOrderReturnDeposit(borrower_address, depositAmount) :
     nonce = web3.eth.get_transaction_count(owner_account.address)
     transaction = contract.functions.cancelOrderReturnDeposit(borrower_address, depositAmount).build_transaction({
-        'chainId': 97, 
+        'chainId': chain_id, 
         'gas': 2000000,
         'nonce': nonce,
     })
@@ -55,7 +56,4 @@ def cancelOrderReturnDeposit(borrower_address, depositAmount) :
     signed_txn = web3.eth.account.sign_transaction(transaction, owner_private_key)
     signed_txn_raw = signed_txn.rawTransaction
     txn_hashtxn_hash = web3.eth.send_raw_transaction(signed_txn_raw)
-    
-    
-    
     
