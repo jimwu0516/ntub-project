@@ -18,6 +18,7 @@ a {
   text-decoration: none;
 }
 
+
 /* Navigation ---------------------------------------------------------------------*/
 .header {
   border-bottom: solid 0.1px #c5c1c1;
@@ -156,6 +157,7 @@ a {
   cursor: pointer;
 }
 
+
 /* Home --------------------------------------------------------------------- */
 .content-wrap {
   flex: 1;
@@ -257,6 +259,7 @@ a {
   background-color: #02a9f7;
 }
 
+
 /*footer ------------------------------------------------------------------*/
 .footer {
   width: 100%;
@@ -288,6 +291,7 @@ a {
   cursor: pointer;
 }
 
+
 /*account card --------------------------------------------------------------------- */
 .center {
   display: flex;
@@ -295,7 +299,6 @@ a {
   align-items: center;
   min-height: 80vh;
 }
-
 
 .card {
   width: 400px;
@@ -307,7 +310,6 @@ a {
   flex-direction: column;
   align-items: center;
 }
-
 
 h2.text-center {
   color: #30878A;
@@ -350,9 +352,6 @@ h1.text-center {
   align-self: flex-start;
 }
 
-
-
-
 .card-image-preview {
   margin-top: 10px;
   border: 1px solid #ccc;
@@ -363,9 +362,6 @@ h1.text-center {
   object-fit: cover;
   border-radius: 10px;
 }
-
-
-
 
 .card-primary-btn {
   background-color: #30878A;
@@ -423,7 +419,6 @@ h1.text-center {
 }
 
 
-
 /* alert---------------------------------------------------------------------------*/
 .alert {
   padding: 15px;
@@ -456,6 +451,7 @@ h1.text-center {
   border-color: #d6e9c6;
   color: #468847;
 }
+
 
 /*available_borrow_item------------------------------------------------------------*/
 .item-category-bar {
@@ -522,6 +518,7 @@ h1.text-center {
 .available-item:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 
 /*available_item_detail------------------------------------------------------------*/
 .borrow-request-container {
@@ -599,6 +596,7 @@ h1.text-center {
   background-color: #02a9f7;
 }
 
+
 /*-----------------------------transaction processing pop up */
 .transaction_processing {
   display: none;
@@ -646,7 +644,6 @@ h1.text-center {
 
 
 /*user orders page----------------------------------------------------------*/
-
 .user-order-status-bar {
   padding: 10px 0;
   margin-top: 15px;
@@ -762,79 +759,6 @@ h1.text-center {
 }
 
 
-/*approve request page -------------------------------------------------------*/
-/*
-.approve-order-container {
-  width: 95%;
-  margin: 20px auto;
-  text-align: center;
-}
-
-.approve-order-container h1 {
-  color: #30878a;
-  margin-bottom: 20px;
-}
-
-.order-table {
-  width: 100%;
-}
-
-.approve-order-container .order-header,
-.approve-order-container .order-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.approve-order-container .order-header>div,
-.approve-order-container .order-row>div {
-  flex: 1;
-  padding: 10px;
-}
-
-.approve-order-container.confirm {
-  flex: 1.5;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.approve-order-container .order-header {
-  background-color: #f9f9f9;
-  font-weight: bold;
-}
-
-.approve-order-container .order-row {
-  background-color: #fff;
-  border-bottom: 1px solid #ccc;
-}
-
-.accept-btn,
-.deny-btn {
-  padding: 8px 12px;
-  border: none;
-  color: white;
-  cursor: pointer;
-  margin-left: 5px;
-  border-radius: 5px;
-}
-
-.accept-btn {
-  background-color: #02a9f7;
-}
-
-.deny-btn {
-  background-color: #f70202;
-}
-
-.accept-btn:hover,
-.deny-btn:hover {
-  opacity: 0.8;
-}
-*/
-
 /*contributor-item-list page ---------------------------------*/
 .contributor-item-list {
   margin: 50px auto;
@@ -927,6 +851,7 @@ h1.text-center {
   opacity: 0.8;
 }
 
+
 /*contributor-order-status page ---------------------------------------------------*/
 .order-container .action-buttons {
   display: flex;
@@ -956,6 +881,7 @@ h1.text-center {
 .deny-btn:hover {
   opacity: 0.8;
 }
+
 
 /*get item page ---------------------------------------------------*/
 .get-item-page-container {
@@ -1030,6 +956,7 @@ h1.text-center {
 .return-btn:hover {
   opacity: 0.8;
 }
+
 
 /*contributor review page----------------------------------------------*/
 .contributor-review-container {

@@ -6,20 +6,43 @@
 
 {% block content %}
   <script>
-    function transaction_processing() {
-      var transaction_processing = document.getElementById('transaction_processing');
-      document.getElementById('hashDisplay').innerText = transactionHash;
-      transaction_processing.style.display = "block";
+    function borrowerSubmitReviewForm() {
+      event.preventDefault()
+      var formData = new FormData(document.getElementById('reviewForm'))
+    
+      fetch("{% url 'borrower_submit_review' order_id %}", {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-CSRFToken': '{{ csrf_token }}' }
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          document.getElementById('transaction_processing').style.display = 'block'
+          document.getElementById('hashDisplay').textContent = data.txn_hash
+          checkTransactionStatus(data.txn_hash)
+        })
+    }
+    
+    function checkTransactionStatus(txn_hash) {
+      const web3 = new Web3('https://rpc.ankr.com/bsc_testnet_chapel')
+      let checkInterval = setInterval(() => {
+        web3.eth.getTransactionReceipt(txn_hash).then((receipt) => {
+          if (receipt && receipt.status) {
+            clearInterval(checkInterval)
+            window.location.href = "{% url 'latest_status_user_orders' %}"
+          }
+        })
+      }, 3000)
     }
   </script>
 
-  <form method="post" action="{% url 'borrower_submit_review' order_id %}" class="contributor-review-container">
+  <form method="post" action="#" class="contributor-review-container" id="reviewForm" onsubmit="borrowerSubmitReviewForm()">
     {% csrf_token %}
 
     <h2>Borrower review</h2>
-    
+
     <label for="review_comment">Comment:</label>
-    <textarea name="review_comment" id="review_comment" placeholder="Give your contributor some comments"required></textarea>
+    <textarea name="review_comment" id="review_comment" placeholder="Give your contributor some comments" required></textarea>
 
     <label>Feeling:</label>
     <div class="review-result">
@@ -30,12 +53,15 @@
     </div>
 
     <input type="submit" value="Submit Review" />
-
   </form>
 
-  <div id="transaction_processing" class="transaction_processing">
+  <div id="transaction_processing" class="transaction_processing" style="display: none;">
     <div class="transaction_processing-content">
-      <p style="font-size: 50px;">Transaction Processing...</p>
+      <p style="font-size: 50px;">Airdropping token and returning deposit...</p>
+      <p>Transaction Hash</p>
+      <p>
+        <span style="font-size: 25px; font-family: 'Consolas';" id="hashDisplay"></span>
+      </p>
     </div>
   </div>
 {% endblock %}
