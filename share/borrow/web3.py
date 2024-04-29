@@ -19,31 +19,6 @@ contract = web3.eth.contract(address=contract_address, abi=abi)
 
 owner_private_key = settings.PRIVATE_KEY
 owner_account = Account.from_key(owner_private_key)
-'''
-def airdrop_token(to_address, amount):
-    nonce = web3.eth.get_transaction_count(owner_account.address)
-    transaction = contract.functions.airdropTo(to_address, amount).build_transaction({
-        'chainId': 97,  # Chain ID for BSC Testnet
-        'gas': 2000000,
-        'nonce': nonce,
-    })
-
-    signed_txn = web3.eth.account.sign_transaction(transaction, owner_private_key)
-    signed_txn_raw = signed_txn.rawTransaction
-    txn_hash = web3.eth.send_raw_transaction(signed_txn_raw)
-
-def return_deposit(borrower_address, contributor_address, amount, damagePercentage):
-    nonce = web3.eth.get_transaction_count(owner_account.address)
-    transaction = contract.functions.returnDeposit(borrower_address, contributor_address, amount, damagePercentage).build_transaction({
-        'chainId': 97,  
-        'gas': 2000000,
-        'nonce': nonce,
-    })
-    
-    signed_txn = web3.eth.account.sign_transaction(transaction, owner_private_key)
-    signed_txn_raw = signed_txn.rawTransaction
-    txn_hashtxn_hash = web3.eth.send_raw_transaction(signed_txn_raw)
-'''
 
 def returnDepositAndAirdrop(borrower_address, contributor_address, depositAmount, damagePercentage, airdropAmount):
     nonce = web3.eth.get_transaction_count(owner_account.address)
