@@ -25,10 +25,10 @@
               var start_time = new Date(document.getElementsByName('start_time')[0].value);
               var end_time = new Date(document.getElementsByName('end_time')[0].value);
               var currentTime = new Date();
-              var oneDayAhead = new Date(currentTime);
-              oneDayAhead.setDate(currentTime.getDate() + 1);
+              var oneDayLater = new Date(currentTime);
+              oneDayLater.setDate(currentTime.getDate() + 1);
   
-              if (start_time <= oneDayAhead) {
+              if (start_time <= oneDayLater) {
                   alert('借用開始時間必須要在未來一天之後開始');
                   return false;
               }
