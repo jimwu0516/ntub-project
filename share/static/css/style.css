@@ -616,7 +616,7 @@ h1.text-center {
 }
 
 .transaction_processing-content {
-  background-color: gray;
+  background-color: #5cbc8c;
   margin: 15% auto;
   padding: 20px;
   border-radius: 10px;
@@ -641,6 +641,19 @@ h1.text-center {
   from { transform: scale(0.8); }
   to { transform: scale(1); }
 }
+
+#hashDisplay {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  font-size: max(22px, calc(100% - 40px));
+  font-family: 'Consolas';
+  box-sizing: border-box; 
+  padding: 10px; 
+  overflow: hidden;
+}
+
 
 
 /*user orders page----------------------------------------------------------*/
