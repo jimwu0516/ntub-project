@@ -29,19 +29,19 @@
               oneDayLater.setDate(currentTime.getDate() + 1);
   
               if (start_time <= oneDayLater) {
-                  alert('借用開始時間必須要在未來一天之後開始');
+                  alert('The borrowing start time must begin at least one day in the future');
                   return false;
               }
   
               if (end_time <= start_time) {
-                  alert('物品歸還時間必須在開始時間之後');
+                  alert('The end time must be after the start time');
                   return false;
               }
   
               var fourteenDaysLater = new Date(start_time);
               fourteenDaysLater.setDate(start_time.getDate() + 14);
               if (end_time > fourteenDaysLater) {
-                  alert('歸還時間必須在借用開始時間14天以內');
+                  alert('The end time must be within 14 days after the borrowing start time');
                   return false;
               }
   
