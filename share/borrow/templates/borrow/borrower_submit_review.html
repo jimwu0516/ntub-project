@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title %}
   <title>user orders</title>
 {% endblock %}
@@ -55,10 +57,11 @@
     <input type="submit" value="Submit Review" />
   </form>
 
-  <div id="transaction_processing" class="transaction_processing" style="display: none;">
+  <div id="transaction_processing" class="transaction_processing">
     <div class="transaction_processing-content">
-      <p style="font-size: 50px;">Airdropping token and returning deposit...</p>
-      <p>Transaction Hash</p>
+      <p class="Transaction_processing_title"style="font-size: 50px;">Airdropping token and returning deposit...</p>
+      <img src="{% static 'images/exchange.png' %}" alt="exchange"/>
+      <p class="Transaction_hash_title">Transaction Hash</p>
       <p id="hashDisplay"></p>
     </div>
   </div>
