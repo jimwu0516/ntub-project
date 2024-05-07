@@ -99,7 +99,11 @@
         </div>
         {% for order in contributor_orders %}
           <div class="order-row" data-request-time="{{ order.request_time|date:'Y-m-d H:i:s' }}" data-order-id="{{ order.order_id }}" data-start-time="{{ order.start_time|date:'Y-m-d H:i:s' }}" data-status="{{ order.status }}" contributor-approve-expired-url="{% url 'contributor_approve_expired' order.order_id %}" borrower-not-picked-up-url= "{% url 'borrower_not_picked_up' order.order_id %}">
-            <div>{{ order.borrower }}</div>
+           <div>
+            <a href="{% url 'borrower_history_dashboard' order.borrower.id %}">
+              <div>{{ order.borrower }}</div>
+            </a>
+           </div>
             <div>{{ order.item.item_name }}</div>
             <div>{{ order.start_time }}</div>
             <div>{{ order.end_time }}</div>

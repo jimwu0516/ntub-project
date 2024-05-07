@@ -410,3 +410,15 @@ def handle_return_deposit_and_airdrop(order):
     airdropAmount = 543
 
     return returnDepositAndAirdrop(borrower_address, contributor_address, depositAmount, damage_percentage, airdropAmount)
+
+
+#-------------------show borrower history dashboard------------------#
+def borrower_history_dashboard(request, borrower_id):
+    borrower = get_object_or_404(User, pk=borrower_id)
+    reviews = Review.objects.filter(username=borrower, review_type='as_borrower')
+
+    context = {
+        'borrower': borrower,
+        'reviews': reviews
+    }
+    return render(request, 'borrow/borrower_history_dashboard.html', context)

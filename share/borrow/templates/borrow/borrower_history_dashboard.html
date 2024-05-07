@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>Borrower history dashboard</title>
+{% endblock %}
+
+{% block content %}
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.5/d3.layout.cloud.min.js"></script>
+
+  <h1>------------- {{ borrower.username }}</h1>
+
+  <div id="word-cloud"></div>
+
+  <!-- Hidden  -->
+  <div id="comments-container" style="display: none;">
+    {% for review in reviews %}
+      <div class="comment">{{ review.review_comment }}</div>
+    {% endfor %}
+  </div>
+
+  <script>
+    const stopWords = new Set([
+      // Articles
+      'a',
+      'an',
+      'the',
+      // Conjunctions
+      'and',
+      'but',
+      'or',
+      'nor',
+      'so',
+      'yet',
+      // Prepositions
+      'at',
+      'by',
+      'for',
+      'from',
+      'in',
+      'into',
+      'on',
+      'out',
+      'to',
+      'with',
+      'over',
+      'under',
+      'after',
+      'before',
+      'between',
+      'about',
+      'against',
+      'among',
+      // Pronouns
+      'i',
+      'you',
+      'he',
+      'she',
+      'it',
+      'we',
+      'they',
+      'me',
+      'him',
+      'her',
+      'us',
+      'them',
+      'my',
+      'mine',
+      'your',
+      'yours',
+      'his',
+      'hers',
+      'its',
+      'our',
+      'ours',
+      'their',
+      'theirs',
+      // Other linking words
+      'as',
+      'if',
+      'then',
+      'than',
+      'which',
+      'what',
+      'who',
+      'whom',
+      'whose',
+      'this',
+      'that',
+      'these',
+      'those',
+      'is',
+      'are',
+      'was',
+      'were',
+      'be',
+      'been',
+      'being',
+      'can',
+      'could',
+      'will',
+      'would',
+      'shall',
+      'should',
+      'may',
+      'might',
+      'do',
+      'does',
+      'did',
+      'done',
+      'has',
+      'have',
+      'had'
+    ])
+    
+    const comments = Array.from(document.querySelectorAll('#comments-container .comment')).map((div) => div.innerText.trim())
+    
+    const words = {}
+    comments.forEach((comment) => {
+      const tokens = comment.split(/\s+/)
+      tokens.forEach((token) => {
+        token = token.toLowerCase().replace(/[^\w]/g, '')
+        if (!stopWords.has(token) && token) {
+          words[token] = (words[token] || 0) + 1
+        }
+      })
+    })
+    
+    const wordArray = Object.entries(words).map(([text, size]) => ({ text, size }))
+    
+    const colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+    
+    d3.layout
+      .cloud()
+      .size([800, 400])
+      .words(wordArray)
+      .padding(5)
+      .rotate(() => 0)
+      .font('Impact')
+      .fontSize((d) => d.size * 30)
+      .on('end', draw)
+      .start()
+    
+    function draw(words) {
+      d3.select('#word-cloud')
+        .append('svg')
+        .attr('width', 800)
+        .attr('height', 600)
+        .append('g')
+        .attr('transform', 'translate(400, 300)')
+        .selectAll('text')
+        .data(words)
+        .enter()
+        .append('text')
+        .style('font-size', (d) => d.size + 'px')
+        .style('font-family', 'Impact')
+        .style('fill', (d) => colorScale(d.text))
+        .attr('text-anchor', 'middle')
+        .attr('transform', (d) => 'translate(' + [d.x, d.y] + ')rotate(' + d.rotate + ')')
+        .text((d) => d.text)
+    }
+  </script>
+{% endblock %}

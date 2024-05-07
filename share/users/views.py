@@ -11,6 +11,9 @@ from .forms import ProfileEditForm, UserEditForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 
+from django.contrib.auth.decorators import login_required
+from .models import Review
+
 # Create your views here.
 class RegisterView(FormView):
     template_name = 'users/register.html'
@@ -89,4 +92,3 @@ class MyProfile(LoginRequiredMixin, View):
             messages.error(request,'Error updating you profile')
             
             return render(request, 'users/profile.html', context)
-            

@@ -37,6 +37,7 @@ urlpatterns = [
     path('contributor_submit_review/<int:order_id>/', views.contributor_submit_review, name='contributor_submit_review'),
     path('borrower_submit_review/<int:order_id>/', views.borrower_submit_review, name='borrower_submit_review'),
     
+    path('borrower-history-dashboard/<int:borrower_id>/', views.borrower_history_dashboard, name='borrower_history_dashboard'),
 
 ]
 
