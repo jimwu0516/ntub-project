@@ -12,6 +12,7 @@ class Profile(models.Model):
     user_place = models.CharField(
         max_length=20, choices=USER_PLACE_CHOICES)
     airdrop_wallet_address = models.CharField(max_length=255)
+    average_overdue_pick_up_time = models.IntegerField(default=0)
 
     objects = models.Manager()
 

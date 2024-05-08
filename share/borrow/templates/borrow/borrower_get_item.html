@@ -100,6 +100,8 @@
         var Timeoutwarn = document.getElementById('Timeout');
         Timeoutwarn.textContent = 'Delay ' + minutes + ' min  ' + seconds + ' sec';
         Timeoutwarn.style.color = 'red';
+        
+        document.getElementById('overdue_minutes').value = minutes;
       }
   
       if (currentTime > startTime && minutes >= 60) {
@@ -139,6 +141,7 @@
         <p id="Timeout"></p>
         <form action="{% url 'update_to_get_item' order.order_id %}" method="post" onsubmit="return confirmGetItem()">
           {% csrf_token %}
+          <input type="hidden" id="overdue_minutes" name="overdue_minutes" value="0">
           <button type="submit" class="get-item-btn">Get item</button>
         </form>
       </div>

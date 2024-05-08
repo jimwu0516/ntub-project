@@ -341,6 +341,14 @@ def update_to_get_item(request, order_id):
         order.status = 'get_item'
         order.save()
         
+        overdue_minutes = int(request.POST.get('overdue_minutes', 0))
+        profile = get_object_or_404(Profile, user=order.borrower)
+        if profile.average_overdue_pick_up_time == 0:
+            profile.average_overdue_pick_up_time = overdue_minutes
+        else:
+            profile.average_overdue_pick_up_time = (profile.average_overdue_pick_up_time + overdue_minutes) // 2
+        profile.save()
+        
         messages.success(request, 'Get item successfully.')
 
         return redirect('latest_status_user_orders')
