@@ -8,7 +8,27 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.5/d3.layout.cloud.min.js"></script>
 
-  <h1>------------- {{ borrower.username }}</h1>
+  <h1>------------- {{ borrower.username }}------------- </h1>
+  <div>
+    <h2>Key Statistics</h2>
+    <ul>
+      <li>Like Count: {{ like_count }}</li>
+      <li>Dislike Count: {{ dislike_count }}</li>
+      <li>Deny Percentage: {{ deny_percentage }}%</li>
+      <li>Not Picked Up Percentage: {{ not_picked_up_percentage }}%</li>
+      <li>Average Overdue Pick-Up Time: {{ average_overdue_pick_up_time }} minutes</li>
+      <li>Average Breakage: {{ average_breakage }}%</li>
+    </ul>
+  </div>
+
+  <ul>
+    {% for week, count in weekly_order_counts_in_past_three_months %}
+        <li>{{ week|date:"Y-m-d" }}: {{ count }} 次借用</li>
+    {% endfor %}
+  </ul>
+
+  <h1>----------------------------------------------------</h1>
+
 
   <div id="word-cloud"></div>
 

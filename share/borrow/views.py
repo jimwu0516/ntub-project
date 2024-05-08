@@ -18,7 +18,10 @@ from django.contrib.auth.models import User
 
 from .web3 import returnDepositAndAirdrop, borrowerNotPickedUpReturnDeposit, cancelOrderReturnDeposit
 
-from django.db.models import Avg, Count
+from django.db.models import Avg, Count,  F, Q, DateField
+from django.utils.timezone import now, timedelta
+from django.db.models.functions import TruncWeek
+from collections import OrderedDict
 #----------------------borrower browse available items --------------------------------------------------------
 @login_required
 def available_items(request):
@@ -446,9 +449,61 @@ def handle_return_deposit_and_airdrop(order):
 def borrower_history_dashboard(request, borrower_id):
     borrower = get_object_or_404(User, pk=borrower_id)
     reviews = Review.objects.filter(username=borrower, review_type='as_borrower')
-
+    
+    like_count = Review.objects.filter(
+        username=borrower, review_result='like').count()
+    dislike_count = Review.objects.filter(
+        username=borrower, review_result='dislike').count()
+    
+    denied_order_count = Order.objects.filter(borrower=borrower, status='deny').count()
+    all_order_count_a = Order.objects.filter(borrower=borrower, status__in=['deny', 'pending', 'finish', 'get_item', 'return_item', 'borrower_comment']).count()
+    deny_percentage = round((denied_order_count / all_order_count_a) * 100, 2)
+    
+    not_picked_up_count = Order.objects.filter(borrower=borrower, status='not_picked_up').count()
+    all_order_count_b = Order.objects.filter(borrower=borrower, status__in=['not_picked_up', 'finish', 'get_item', 'return_item', 'borrower_comment']).count()
+    not_picked_up_percentage = round((not_picked_up_count / all_order_count_b) * 100, 2)
+    
+    profile = get_object_or_404(Profile, user=borrower)
+    average_overdue_pick_up_time = profile.average_overdue_pick_up_time
+    
+    average_breakage = round(Order.objects.filter(borrower=borrower, status='finish').aggregate(Avg('breakage'))['breakage__avg'], 2)
+    
+    #-----------------------
+    end_date = now()
+    start_date = end_date - timedelta(days=90)
+    
+    weekly_counts = OrderedDict()
+    current_week = start_date - timedelta(days=start_date.weekday())
+    
+    while current_week < end_date:
+        weekly_counts[current_week.date()] = 0 
+        current_week += timedelta(weeks=1)
+    
+    orders_in_past_three_months = Order.objects.filter(
+        borrower=borrower,
+        status__in=['finish', 'get_item', 'return_item', 'borrower_comment'],
+        end_time__gte=start_date
+    )
+    
+    weekly_order_counts = orders_in_past_three_months.annotate(
+        week=TruncWeek('end_time', output_field=DateField())
+    ).values('week').annotate(
+        count=Count('order_id')
+    ).order_by('week')
+    
+    for entry in weekly_order_counts:
+        weekly_counts[entry['week']] = entry['count']
+    #-----------------------
+    
     context = {
         'borrower': borrower,
-        'reviews': reviews
+        'reviews': reviews,
+        'like_count': like_count,
+        'dislike_count': dislike_count,
+        'deny_percentage': deny_percentage,
+        'not_picked_up_percentage': not_picked_up_percentage,
+        'average_overdue_pick_up_time': average_overdue_pick_up_time,
+        'average_breakage': average_breakage,
+        'weekly_order_counts_in_past_three_months': weekly_counts.items()
     }
     return render(request, 'borrow/borrower_history_dashboard.html', context)
