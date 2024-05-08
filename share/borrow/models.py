@@ -44,6 +44,7 @@ class Order(models.Model):
             (100, '100'),
         )
     breakage = models.IntegerField(default=0, choices=BREAKAGE_CHOICES)
+    airdropAmount = models.IntegerField(default=0)
     
     objects = models.Manager() 
     

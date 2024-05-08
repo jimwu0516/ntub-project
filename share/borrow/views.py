@@ -18,7 +18,7 @@ from django.contrib.auth.models import User
 
 from .web3 import returnDepositAndAirdrop, borrowerNotPickedUpReturnDeposit, cancelOrderReturnDeposit
 
-
+from django.db.models import Avg, Count
 #----------------------borrower browse available items --------------------------------------------------------
 @login_required
 def available_items(request):
@@ -99,6 +99,25 @@ def available_item_detail(request, pk):
     }
     return render(request, 'borrow/available_item_detail.html', context)
 
+def calculate_airdrop_amount(contributor, base_amount=10):
+    avg_breakage = Order.objects.filter(item__contributor=contributor).aggregate(Avg('breakage'))['breakage__avg'] or 0
+    
+    like_count = Review.objects.filter(
+        username=contributor, review_result='like').count()
+    dislike_count = Review.objects.filter(
+        username=contributor, review_result='dislike').count()
+    
+    total_item_count = Item.objects.count()
+    available_item_count = Item.objects.filter(item_available=True).count()
+
+    airdrop_amount = base_amount + 10 * (100 - avg_breakage) / 100 + 10 * (like_count)/(like_count + dislike_count)+ 10 * ( 1 - ( available_item_count / total_item_count ))
+    
+    n = Order.objects.count()
+    
+    airdrop_amount = airdrop_amount * pow(0.95, n)
+
+    return round(airdrop_amount)
+
 @login_required
 def borrow_item(request, pk):
     item = get_object_or_404(Item, pk=pk)
@@ -111,12 +130,15 @@ def borrow_item(request, pk):
         start_time = timezone.make_aware(datetime.strptime(start_time_str, '%Y-%m-%dT%H:%M'))
         end_time = timezone.make_aware(datetime.strptime(end_time_str, '%Y-%m-%dT%H:%M'))
         
+        airdrop_amount = calculate_airdrop_amount(item.contributor)
+        
         order = Order.objects.create(
             borrower=request.user,
             item=item,
             start_time=start_time,
             end_time=end_time,
-            status=transaction_status
+            status=transaction_status,
+            airdropAmount=airdrop_amount
         )
         
         contributor_email=order.item.contributor.email
@@ -407,7 +429,7 @@ def handle_return_deposit_and_airdrop(order):
     depositAmount = order.item.item_deposit_require
     damage_percentage = order.breakage
     
-    airdropAmount = 543
+    airdropAmount = order.airdropAmount
 
     return returnDepositAndAirdrop(borrower_address, contributor_address, depositAmount, damage_percentage, airdropAmount)
 
