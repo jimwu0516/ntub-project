@@ -148,9 +148,7 @@ def borrow_item(request, pk):
         borrow_item_name=order.item.item_name
         start_time=order.start_time
         end_time= order.end_time
-        
-        send_confirm_email(contributor_email,'You have a new borrow request',f'\n\nItem name: {borrow_item_name}' f'\n\nStart Time: {start_time}' f'\n\nEnd Time: {end_time}')
-        
+                
         item.item_available = False
         item.save()
 
@@ -159,6 +157,7 @@ def borrow_item(request, pk):
             return redirect('unpaid_user_orders') 
         else:
             messages.success(request, 'Pay deposit successfully, your request has been submitted') 
+            send_confirm_email(contributor_email,'You have a new borrow request',f'\n\nItem name: {borrow_item_name}' f'\n\nStart Time: {start_time}' f'\n\nEnd Time: {end_time}')
             return redirect('latest_status_user_orders')
 
     context = {
