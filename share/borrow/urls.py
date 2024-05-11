@@ -38,6 +38,8 @@ urlpatterns = [
     path('borrower_submit_review/<int:order_id>/', views.borrower_submit_review, name='borrower_submit_review'),
     
     path('borrower-history-dashboard/<int:borrower_id>/', views.borrower_history_dashboard, name='borrower_history_dashboard'),
+    path('contributor-history-dashboard/<int:contributor_id>/', views.contributor_history_dashboard, name='contributor_history_dashboard'),
+
 
 ]
 

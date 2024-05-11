@@ -94,6 +94,12 @@
       <div class="details">
         <h2>Request Detail</h2>
 
+        <div>
+          <a href="{% url 'contributor_history_dashboard' item.contributor.id %}">
+            <div>{{ item.contributor }}</div>
+          </a>
+         </div>
+
         <p>Deposit Required: {{ item.item_deposit_require }}</p>
         <p>Item Address: {{ item.item_address }}</p>
 

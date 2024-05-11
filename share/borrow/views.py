@@ -198,6 +198,14 @@ def update_order_status_approve(request, order_id):
             order.item.item_available = True
             order.item.save()
             cancelOrderReturnDeposit(borrower_address,deposit_amount)
+            
+        decision_minutes = int(request.POST.get('decision_minutes', 0))
+        profile = get_object_or_404(Profile, user=order.item.contributor)
+        if profile.average_decision_making_minute == 0:
+            profile.average_decision_making_minute = decision_minutes
+        else:
+            profile.average_decision_making_minute = (profile.average_decision_making_minute + decision_minutes) // 2
+        profile.save()
         
         Order.objects.filter(order_id=order_id).update(status=new_status)
         return HttpResponseRedirect(reverse('contributor_order_status'))
@@ -456,11 +464,11 @@ def borrower_history_dashboard(request, borrower_id):
     
     denied_order_count = Order.objects.filter(borrower=borrower, status='deny').count()
     all_order_count_a = Order.objects.filter(borrower=borrower, status__in=['deny', 'pending', 'finish', 'get_item', 'return_item', 'borrower_comment']).count()
-    deny_percentage = round((denied_order_count / all_order_count_a) * 100, 2)
-    
+    deny_percentage = round((denied_order_count / all_order_count_a) * 100, 2) if all_order_count_a != 0 else 0
+
     not_picked_up_count = Order.objects.filter(borrower=borrower, status='not_picked_up').count()
     all_order_count_b = Order.objects.filter(borrower=borrower, status__in=['not_picked_up', 'finish', 'get_item', 'return_item', 'borrower_comment']).count()
-    not_picked_up_percentage = round((not_picked_up_count / all_order_count_b) * 100, 2)
+    not_picked_up_percentage = round((not_picked_up_count / all_order_count_b) * 100, 2) if all_order_count_b != 0 else 0 
     
     profile = get_object_or_404(Profile, user=borrower)
     average_overdue_pick_up_time = profile.average_overdue_pick_up_time
@@ -506,3 +514,72 @@ def borrower_history_dashboard(request, borrower_id):
         'weekly_order_counts_in_past_three_months': weekly_counts.items()
     }
     return render(request, 'borrow/borrower_history_dashboard.html', context)
+
+#-------------------show contributor history dashboard------------------#
+def contributor_history_dashboard(request, contributor_id):
+    contributor = get_object_or_404(User, pk=contributor_id)
+    reviews = Review.objects.filter(username=contributor, review_type='as_contributor')
+    
+    like_count = Review.objects.filter(
+        username=contributor, review_result='like').count()
+    dislike_count = Review.objects.filter(
+        username=contributor, review_result='dislike').count()
+    
+    denied_order_count = Order.objects.filter(item__contributor=contributor, status='deny').count()
+    all_order_count_a = Order.objects.filter(item__contributor=contributor, status__in=['deny', 'pending', 'finish', 'get_item', 'return_item', 'borrower_comment']).count()
+    deny_percentage = round((denied_order_count / all_order_count_a) * 100, 2) if all_order_count_a != 0 else 0 
+
+    not_picked_up_count = Order.objects.filter(item__contributor=contributor, status='not_picked_up').count()
+    all_order_count_b = Order.objects.filter(item__contributor=contributor, status__in=['not_picked_up', 'finish', 'get_item', 'return_item', 'borrower_comment']).count()
+    not_picked_up_percentage = round((not_picked_up_count / all_order_count_b) * 100, 2) if all_order_count_b != 0 else 0 
+
+    contributor_finish_order_count = Order.objects.filter(item__contributor=contributor, status='finish').count()
+    all_finish_order_count =  Order.objects.filter(status='finish').count()
+    finish_order_percentage = round((contributor_finish_order_count / all_finish_order_count) * 100, 2) if all_finish_order_count != 0 else 0 
+    
+    profile = get_object_or_404(Profile, user=contributor)
+    average_decision_making_minute = profile.average_decision_making_minute 
+    
+    #-----------------------
+    end_date = now()
+    start_date = end_date - timedelta(days=90)
+    
+    weekly_counts = OrderedDict()
+    current_week = start_date - timedelta(days=start_date.weekday())
+    
+    while current_week < end_date:
+        weekly_counts[current_week.date()] = 0 
+        current_week += timedelta(weeks=1)
+    
+    orders_in_past_three_months = Order.objects.filter(
+        item__contributor=contributor,
+        status__in=['finish', 'get_item', 'return_item', 'borrower_comment'],
+        end_time__gte=start_date
+    )
+    
+    weekly_order_counts = orders_in_past_three_months.annotate(
+        week=TruncWeek('end_time', output_field=DateField())
+    ).values('week').annotate(
+        count=Count('order_id')
+    ).order_by('week')
+    
+    for entry in weekly_order_counts:
+        weekly_counts[entry['week']] = entry['count']
+    #-----------------------
+    context = {
+        'contributor': contributor,
+        'reviews': reviews,
+        'like_count': like_count,
+        'dislike_count': dislike_count,
+        'deny_percentage': deny_percentage,
+        'not_picked_up_percentage': not_picked_up_percentage,
+        'finish_order_percentage': finish_order_percentage,
+        'average_decision_making_minute': average_decision_making_minute,
+        'weekly_order_counts_in_past_three_months': weekly_counts.items()
+    }
+    return render(request, 'borrow/contributor_history_dashboard.html', context)
+    
+    
+    
+        
+        

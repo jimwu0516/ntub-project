@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from .models import Profile, Review
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'user_email', 'user_place', 'airdrop_wallet_address', 'average_overdue_pick_up_time')
+    list_display = ('user', 'user_email', 'user_place', 'airdrop_wallet_address', 'average_overdue_pick_up_time', 'average_decision_making_minute')
 
     def user_email(self, obj):
         return obj.user.email
