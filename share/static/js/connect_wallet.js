@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var disconnectSelect = document.getElementById("disconnectSelect");
     var logoutBtn = document.getElementById("logoutBtn");
     localStorage.setItem('contract_address', '0xec0888881eFf7040FF4207853F4E2bA28310401B');
-    var rpcUrl = "https://rpc.ankr.com/bsc_testnet_chapel"
+    var rpcUrl = "https://data-seed-prebsc-2-s1.binance.org:8545/"
     const chainId = '0x61'; //mainnet 0x38 testnet 0x61
 
     function switchNetwork() {

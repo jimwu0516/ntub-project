@@ -429,8 +429,8 @@ def borrower_submit_review(request, order_id):
         order.status = 'finish'
         order.save()
         
+        
         messages.success(request, 'Your review has been submitted.')
-
         return JsonResponse({'txn_hash': txn_hash})
         
     return render(request, 'borrow/borrower_submit_review.html', {'order_id': order_id})

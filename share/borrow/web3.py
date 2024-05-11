@@ -3,7 +3,7 @@ import os, json
 from django.conf import settings
 from web3.middleware import geth_poa_middleware
 
-rpc_url = 'https://rpc.ankr.com/bsc_testnet_chapel'
+rpc_url = 'https://data-seed-prebsc-2-s1.binance.org:8545/'
 web3 = Web3(Web3.HTTPProvider(rpc_url))
 web3.middleware_onion.inject(geth_poa_middleware, layer=0)
 
@@ -22,11 +22,11 @@ owner_private_key = settings.PRIVATE_KEY
 owner_account = Account.from_key(owner_private_key)
 
 def returnDepositAndAirdrop(borrower_address, contributor_address, depositAmount, damagePercentage, airdropAmount):
-    nonce = web3.eth.get_transaction_count(owner_account.address)
+    nonce_a = web3.eth.get_transaction_count(owner_account.address)
     transaction = contract.functions.returnDepositAndAirdrop(borrower_address, contributor_address, depositAmount, damagePercentage, airdropAmount).build_transaction({
         'chainId': chain_id, 
         'gas': 2000000,
-        'nonce': nonce,
+        'nonce': nonce_a,
     })
     
     signed_txn = web3.eth.account.sign_transaction(transaction, owner_private_key)
@@ -36,11 +36,11 @@ def returnDepositAndAirdrop(borrower_address, contributor_address, depositAmount
     return txn_hashtxn_hash.hex()
     
 def borrowerNotPickedUpReturnDeposit(borrower_address, contributor_address, depositAmount) :
-    nonce = web3.eth.get_transaction_count(owner_account.address)
+    nonce_b = web3.eth.get_transaction_count(owner_account.address)
     transaction = contract.functions.borrowerNotPickedUpReturnDeposit(borrower_address, contributor_address, depositAmount).build_transaction({
         'chainId': chain_id,  
         'gas': 2000000,
-        'nonce': nonce,
+        'nonce': nonce_b,
     })
     
     signed_txn = web3.eth.account.sign_transaction(transaction, owner_private_key)
@@ -48,11 +48,11 @@ def borrowerNotPickedUpReturnDeposit(borrower_address, contributor_address, depo
     txn_hashtxn_hash = web3.eth.send_raw_transaction(signed_txn_raw)
     
 def cancelOrderReturnDeposit(borrower_address, depositAmount) :
-    nonce = web3.eth.get_transaction_count(owner_account.address)
+    nonce_c = web3.eth.get_transaction_count(owner_account.address)
     transaction = contract.functions.cancelOrderReturnDeposit(borrower_address, depositAmount).build_transaction({
         'chainId': chain_id, 
         'gas': 2000000,
-        'nonce': nonce,
+        'nonce': nonce_c,
     })
     
     signed_txn = web3.eth.account.sign_transaction(transaction, owner_private_key)
