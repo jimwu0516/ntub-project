@@ -94,14 +94,9 @@
       <div class="details">
         <h2>Request Detail</h2>
 
-        <div>
-          <a href="{% url 'contributor_history_dashboard' item.contributor.id %}">
-            <div>{{ item.contributor }}</div>
-          </a>
-         </div>
-
         <p>Deposit Required: {{ item.item_deposit_require }}</p>
         <p>Item Address: {{ item.item_address }}</p>
+        <p><a href="{% url 'contributor_history_dashboard' item.contributor.id %}" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">Contributor: {{ item.contributor }}</a></p>
 
         <form id="borrowForm" action="{% url 'borrow_item' item.pk %}" method="post">
           {% csrf_token %}
