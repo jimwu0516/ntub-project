@@ -203,7 +203,9 @@
         {% for order in user_orders %}
           <div class="order-row" data-end-time="{{ order.end_time|date:'Y-m-d H:i:s' }}" data-status="{{ order.status }}" data-request-time="{{ order.request_time|date:'c' }}" cancel-order-url="{% url 'cancel_order'  order.order_id  %}">
             <div>{{ order.order_id }}</div>
-            <div>{{ order.item.contributor }}</div>
+            <div>
+              <p style="font-weight: bold;"><a href="{% url 'contributor_history_dashboard' order.item.contributor.id %}" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">{{ order.item.contributor }} </a></p>
+            </div>
             <div>{{ order.item.item_name }}</div>
             <div>{{ order.start_time }}</div>
             <div>{{ order.end_time }}</div>

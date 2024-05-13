@@ -455,6 +455,9 @@ def handle_return_deposit_and_airdrop(order):
 #-------------------show borrower history dashboard------------------#
 def borrower_history_dashboard(request, borrower_id):
     borrower = get_object_or_404(User, pk=borrower_id)
+    borrower_profile = get_object_or_404(Profile, user=borrower)
+    borrower_wallet_address = borrower_profile.airdrop_wallet_address
+    
     reviews = Review.objects.filter(username=borrower, review_type='as_borrower')
     
     like_count = Review.objects.filter(
@@ -504,6 +507,7 @@ def borrower_history_dashboard(request, borrower_id):
     
     context = {
         'borrower': borrower,
+        'borrower_wallet_address' : borrower_wallet_address, 
         'reviews': reviews,
         'like_count': like_count,
         'dislike_count': dislike_count,
@@ -518,6 +522,9 @@ def borrower_history_dashboard(request, borrower_id):
 #-------------------show contributor history dashboard------------------#
 def contributor_history_dashboard(request, contributor_id):
     contributor = get_object_or_404(User, pk=contributor_id)
+    contributor_profile = get_object_or_404(Profile, user=contributor)
+    contributor_wallet_address = contributor_profile.airdrop_wallet_address
+    
     reviews = Review.objects.filter(username=contributor, review_type='as_contributor')
     
     like_count = Review.objects.filter(
@@ -568,6 +575,7 @@ def contributor_history_dashboard(request, contributor_id):
     #-----------------------
     context = {
         'contributor': contributor,
+        'contributor_wallet_address':contributor_wallet_address, 
         'reviews': reviews,
         'like_count': like_count,
         'dislike_count': dislike_count,

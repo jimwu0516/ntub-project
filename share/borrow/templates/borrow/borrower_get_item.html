@@ -132,7 +132,9 @@
 
     <div class="get-item-info">
       <div class="get-item-info-left">
-        <p>Contributor: {{ order.item.contributor }}</p>
+        <p>Contributor:</p>
+        <p style="font-weight: bold;"><a href="{% url 'contributor_history_dashboard' order.item.contributor.id %}" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">{{ order.item.contributor }} </a></p>
+        
         <p>Item Address:</p>
         <p>{{ order.item.item_address }}</p>
 

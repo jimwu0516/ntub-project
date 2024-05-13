@@ -7,36 +7,50 @@
 {% block content %}
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.5/d3.layout.cloud.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <h1>------------- {{ contributor.username }}------------- </h1>
-  <div>
-    <ul>
-      <li>Like Count: {{ like_count }}</li>
-      <li>Dislike Count: {{ dislike_count }}</li>
-      <li>Deny Percentage: {{ deny_percentage }}%</li>
-      <li>Not Picked Up Percentage: {{ not_picked_up_percentage }}%</li>
-      <li>Finish Order Percentage: {{finish_order_percentage}}</li>
-      <li>Average Decision Making Minute: {{ average_decision_making_minute }} minutes</li>
-    </ul>
-  </div>
-
-  <ul>
-    {% for week, count in weekly_order_counts_in_past_three_months %}
-        <li>{{ week|date:"Y-m-d" }}: {{ count }} 次貢獻</li>
-    {% endfor %}
-  </ul>
-
-  <h1>----------------------------------------------------</h1>
-
-
-  <div id="word-cloud"></div>
-
-  <!-- Hidden  -->
+  <!-- Get comment (Hidden) -->
   <div id="comments-container" style="display: none;">
     {% for review in reviews %}
       <div class="comment">{{ review.review_comment }}</div>
     {% endfor %}
   </div>
+
+  <div class="user-info">
+    <span style="margin-right: 40px;">Contributor: {{ contributor.username }}</span>
+    <span>Wallet Address: {{ contributor_wallet_address }}</span>
+  </div>
+
+  <section class="user-dashboard">
+    <div id="word-cloud" class="word-cloud"></div>
+
+    <div class="likeDislike-pie-chart">
+      <canvas id="likeDislikeChart"></canvas>
+    </div>
+
+    <div class="weeklyOrder-line-chart">
+      <canvas id="weeklyOrderChart"></canvas>
+    </div>
+
+    <div class="statistics">
+      <div class="stat">
+        <p>Deny Percentage</p>
+        <p>{{ deny_percentage }}%</p>
+      </div>
+      <div class="stat">
+        <p>Borrower Not Picked Up Percentage</p>
+        <p>{{ not_picked_up_percentage }}%</p>
+      </div>
+      <div class="stat">
+        <p>Contribute Percentage</p>
+        <p>{{ finish_order_percentage }}%</p>
+      </div>
+      <div class="stat">
+        <p>Average Decision Time</p>
+        <p>{{ average_decision_making_minute }} min</p>
+      </div>
+    </div>
+  </section>
 
   <script>
     const stopWords = new Set([
@@ -151,12 +165,12 @@
     
     d3.layout
       .cloud()
-      .size([800, 400])
+      .size([800, 300])
       .words(wordArray)
       .padding(5)
       .rotate(() => 0)
       .font('Impact')
-      .fontSize((d) => d.size * 30)
+      .fontSize((d) => d.size * 45)
       .on('end', draw)
       .start()
     
@@ -164,9 +178,9 @@
       d3.select('#word-cloud')
         .append('svg')
         .attr('width', 800)
-        .attr('height', 600)
+        .attr('height', 300)
         .append('g')
-        .attr('transform', 'translate(400, 300)')
+        .attr('transform', 'translate(400, 170)')
         .selectAll('text')
         .data(words)
         .enter()
@@ -178,5 +192,100 @@
         .attr('transform', (d) => 'translate(' + [d.x, d.y] + ')rotate(' + d.rotate + ')')
         .text((d) => d.text)
     }
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var ctx = document.getElementById('likeDislikeChart').getContext('2d');
+        var likeCount = {{ like_count }}; 
+        var dislikeCount = {{ dislike_count }};
+    
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Likes', 'Dislikes'],
+                datasets: [{
+                    label: 'Count',
+                    data: [likeCount, dislikeCount],
+                    backgroundColor: [
+                        'rgba(254,165,0, 0.6)',
+                        'rgba(192,0,0, 0.6)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    title: {
+                      display: true,
+                      text: 'Review',
+                      font: {
+                          size: 25
+                      },
+                      padding: {
+                          top: 10,
+                          bottom: 10
+                      }
+                  }
+                }
+            }
+        });
+    });
+  </script>
+
+  <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          const ctx = document.getElementById('weeklyOrderChart').getContext('2d');
+          const weeks = [];
+          const counts = [];
+      
+          {% for week, count in weekly_order_counts_in_past_three_months %}
+              weeks.push('{{ week|date:"Y-m-d" }}');
+              counts.push({{ count }});
+          {% endfor %}
+      
+          const weeklyOrderChart = new Chart(ctx, {
+              type: 'line',
+              data: {
+                  labels: weeks,
+                  datasets: [{
+                      label: 'Weekly Contributions',
+                      data: counts, 
+                      borderColor: 'rgba(91, 155, 213, 1)',
+                      backgroundColor: 'rgba(91, 155, 213, 0.2)',
+                      fill: true
+                  }]
+              },
+              options: {
+                  scales: {
+                      y: {
+                          beginAtZero: true
+                      }
+                  },
+                  responsive: true,
+                  plugins: {
+                      legend: {
+                          display: false,
+                          position: 'top'
+                      },
+                      title: {
+                        display: true,
+                        text: 'Weekly contributions from the past quarter',
+                        font: {
+                            size: 25
+                        },
+                        padding: {
+                            top: 0,
+                            bottom: 10
+                        }
+                    }
+                  }
+              }
+          });
+      });
   </script>
 {% endblock %}

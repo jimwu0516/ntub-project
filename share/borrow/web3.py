@@ -3,7 +3,7 @@ import os, json
 from django.conf import settings
 from web3.middleware import geth_poa_middleware
 
-rpc_url = 'https://data-seed-prebsc-2-s1.binance.org:8545/'
+rpc_url = 'https://data-seed-prebsc-1-s2.bnbchain.org:8545'
 web3 = Web3(Web3.HTTPProvider(rpc_url))
 web3.middleware_onion.inject(geth_poa_middleware, layer=0)
 
