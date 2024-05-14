@@ -16,9 +16,12 @@
     {% endfor %}
   </div>
 
-  <div class="user-info">
-    <span style="margin-right: 40px;">Borrower: {{ borrower.username }}</span>
-    <span>Wallet Address: {{ borrower_wallet_address }}</span>
+  <div class="user-info-container">
+    <button class="action-button"  onclick="history.back()">Back</button>
+    <div class="user-info">
+      <span>Borrower: {{ borrower.username }}</span>
+      <span>Wallet Address: {{ borrower_wallet_address }}</span>
+    </div>
   </div>
 
   <section class="user-dashboard">
@@ -47,7 +50,7 @@
       </div>
       <div class="stat">
         <p>Average Breakage</p>
-        <p>{{ average_breakage }}%</p>
+        <p>{{ average_breakage }}</p>
       </div>
     </div>
   </section>

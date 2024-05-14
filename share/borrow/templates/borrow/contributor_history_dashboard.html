@@ -16,9 +16,12 @@
     {% endfor %}
   </div>
 
-  <div class="user-info">
-    <span style="margin-right: 40px;">Contributor: {{ contributor.username }}</span>
-    <span>Wallet Address: {{ contributor_wallet_address }}</span>
+  <div class="user-info-container">
+    <button class="action-button"  onclick="history.back()">Back</button>
+    <div class="user-info">
+      <span>Contributor: {{ contributor.username }}</span>
+      <span>Wallet Address: {{ contributor_wallet_address }}</span>
+    </div>
   </div>
 
   <section class="user-dashboard">
