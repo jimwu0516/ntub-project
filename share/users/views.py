@@ -8,7 +8,7 @@ from django.contrib.auth.views import LoginView
 from django.contrib import messages
 
 from .forms import ProfileEditForm, UserEditForm
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import View
 
 from django.contrib.auth.decorators import login_required
@@ -47,8 +47,14 @@ class MyLoginView(LoginView):
     redirect_authenticated_user = True
 
     def get_success_url(self):
-        messages.success(self.request, 'Success Login')
-        return reverse_lazy('items')
+        user = self.request.user
+        if user.is_staff:
+            messages.success(self.request, 'Welcome, admin!')
+            return reverse_lazy('admin_dashboard')
+        else:
+            messages.success(self.request, 'Success Login')
+            return reverse_lazy('items') 
+
 
     def form_invalid(self, form):
         messages.error(self.request, 'Invalid username or password')
@@ -92,3 +98,14 @@ class MyProfile(LoginRequiredMixin, View):
             messages.error(request,'Error updating you profile')
             
             return render(request, 'users/profile.html', context)
+
+class AdminDashboardView(UserPassesTestMixin, View):
+    
+    def test_func(self):
+        return self.request.user.is_superuser 
+
+    def get(self, request):
+        context = {
+            'username': self.request.user.username
+        }
+        return render(request, 'admin/admin_dashboard.html', context)
