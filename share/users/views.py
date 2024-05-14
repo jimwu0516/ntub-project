@@ -49,7 +49,6 @@ class MyLoginView(LoginView):
     def get_success_url(self):
         user = self.request.user
         if user.is_staff:
-            messages.success(self.request, 'Welcome, admin!')
             return reverse_lazy('admin_dashboard')
         else:
             messages.success(self.request, 'Success Login')
