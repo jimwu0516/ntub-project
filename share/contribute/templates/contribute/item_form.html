@@ -5,7 +5,12 @@
     <form method="post" enctype="multipart/form-data" class="card">
       {% csrf_token %}
 
-      <h2 class="text-center">Edit Item</h2>
+      {% if item %}
+        <h2 class="text-center">Edit Item</h2>
+      {% else %}
+        <h2 class="text-center">Add Item</h2>
+      {% endif %}
+
       {% for field in form %}
         {{ field.label_tag }}
         {% if field.name == 'item_image' %}

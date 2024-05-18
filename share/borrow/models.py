@@ -29,7 +29,7 @@ class Order(models.Model):
         ('borrower_comment', 'Borrower Comment'),
         ('finish', 'Finish'),
     ]
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES) 
+    status = models.CharField(max_length=32, choices=STATUS_CHOICES) 
     BREAKAGE_CHOICES = (
             (0, '0'),
             (10, '10'),
