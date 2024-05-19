@@ -14,6 +14,10 @@ from django.views import View
 from django.contrib.auth.decorators import login_required
 from .models import Review
 
+from django.http import JsonResponse
+from borrow.web3 import get_next_unlock, unlock_tokens
+
+
 # Create your views here.
 class RegisterView(FormView):
     template_name = 'users/register.html'
@@ -104,7 +108,14 @@ class AdminDashboardView(UserPassesTestMixin, View):
         return self.request.user.is_superuser 
 
     def get(self, request):
+        next_unlock = get_next_unlock() 
         context = {
-            'username': self.request.user.username
+            'username': self.request.user.username,
+            'days_until_unlock': next_unlock['days'],
+            'hours_until_unlock': next_unlock['hours'] 
         }
         return render(request, 'admin/admin_dashboard.html', context)
+    
+def api_next_unlock(self, request):
+    next_unlock = get_next_unlock()
+    return JsonResponse(next_unlock)

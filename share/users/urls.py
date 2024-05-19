@@ -1,5 +1,5 @@
 from django.urls import path 
-from .views import RegisterView, MyLoginView, MyProfile, AdminDashboardView
+from .views import RegisterView, MyLoginView, MyProfile, AdminDashboardView, api_next_unlock
 from django.contrib.auth.views import LogoutView, PasswordResetView,PasswordResetDoneView,PasswordResetConfirmView,PasswordResetCompleteView
 
 urlpatterns = [
@@ -20,5 +20,5 @@ urlpatterns = [
     path('profile/', MyProfile.as_view(), name='profile'),
     
     path('admin-dashboard/', AdminDashboardView.as_view(), name='admin_dashboard'),
-
+    path('api/next-unlock/', api_next_unlock, name='api_next_unlock'),
 ]

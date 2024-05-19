@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (isConnectedAddress) {
         connectWalletBtn.style.display = 'none';
         disconnectSelect.style.display = 'inline-block';
-        disconnectSelect.innerHTML = `<option value="connect" selected>${isConnectedAddress.substring(0, 9)}...</option><option value="disconnect">中斷連接錢包</option>`;
+        disconnectSelect.innerHTML = `<option value="connect" selected>${isConnectedAddress.substring(0, 9)}...</option><option value="disconnect">Disconnect</option>`;
     }
 
     connectWalletBtn.addEventListener("click", function () {
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             localStorage.setItem('walletConnected', walletAddress);
                             connectWalletBtn.style.display = 'none';
                             disconnectSelect.style.display = 'inline-block';
-                            disconnectSelect.innerHTML = `<option value="connect" selected>${walletAddress.substring(0, 9)}...</option><option value="disconnect">中斷連接錢包</option>`;
+                            disconnectSelect.innerHTML = `<option value="connect" selected>${walletAddress.substring(0, 9)}...</option><option value="disconnect">Disconnect</option>`;
                             switchNetwork();
                         })
                         .catch(function (error) {
@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     console.error(error);
                 });
         } else {
-            alert("Metamask未安裝！！！");
+            alert("MetaMask is not installed!");
         }
     });
 
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
 
         } else {
-            alert("Metamask未安裝！！！");
+            alert("MetaMask is not installed!");
         }
 
 

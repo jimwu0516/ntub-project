@@ -58,3 +58,20 @@ def cancelOrderReturnDeposit(borrower_address, depositAmount) :
     signed_txn = web3.eth.account.sign_transaction(transaction, owner_private_key)
     signed_txn_raw = signed_txn.rawTransaction
     txn_hashtxn_hash = web3.eth.send_raw_transaction(signed_txn_raw)
+
+def get_next_unlock():
+    result = contract.functions.nextUnlock().call()
+    return {'days': result[0], 'hours': result[1]}
+
+def unlock_tokens():
+    nonce = web3.eth.get_transaction_count(owner_account.address)
+    transaction = contract.functions.unlockTokens().build_transaction({
+        'chainId': int(chain_id, 16), 
+        'gas': 2000000,
+        'nonce': nonce,
+    })
+
+    signed_txn = web3.eth.account.sign_transaction(transaction, owner_private_key)
+    signed_txn_raw = signed_txn.rawTransaction
+    txn_hashtxn_hash = web3.eth.send_raw_transaction(signed_txn_raw)
+    return txn_hashtxn_hash.hex()
