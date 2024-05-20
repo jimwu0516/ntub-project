@@ -18,7 +18,7 @@
 
   <div class="user-info-container">
     <button class="action-button"  onclick="history.back()">Back</button>
-    <div class="user-info">
+    <div class="user-info-contributor">
       <span>Contributor: {{ contributor.username }}</span>
       <span>Wallet Address: {{ contributor_wallet_address }}</span>
     </div>
@@ -211,8 +211,8 @@
                     label: 'Count',
                     data: [likeCount, dislikeCount],
                     backgroundColor: [
-                        'rgba(254,165,0, 0.6)',
-                        'rgba(192,0,0, 0.6)'
+                      'rgba(59,178,0, 0.6)',
+                      'rgba(255,0,0, 0.6)'  
                     ],
                     borderWidth: 1
                 }]
@@ -258,8 +258,8 @@
                   datasets: [{
                       label: 'Weekly Contributions',
                       data: counts, 
-                      borderColor: 'rgba(91, 155, 213, 1)',
-                      backgroundColor: 'rgba(91, 155, 213, 0.2)',
+                      borderColor: 'rgba(112, 48, 160, 1)',
+                      backgroundColor: 'rgba(112, 48, 160, 0.2)',
                       fill: true
                   }]
               },
