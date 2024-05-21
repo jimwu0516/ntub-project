@@ -7,10 +7,12 @@ contract ShareToken {
     uint8 public decimals = 18;
     uint256 public totalSupply = 10000000 * 10**uint256(decimals);
     uint256 public remainingUnlockedTokens;
-
+ 
     address public projectWallet = msg.sender;
 
     mapping(address => uint256) public balanceOf;
+    address[] public holders; 
+    mapping(address => bool) public isHolder;
 
     uint256 public teamAllocation = (totalSupply * 30) / 100;
     uint256 public initialMint = (totalSupply * 20) / 100;
@@ -22,6 +24,24 @@ contract ShareToken {
     address public owner;
 
     event Transfer(address indexed from, address indexed to, uint256 value);
+    event ProposalCreated(uint256 id, string title, uint256 snapshotId);
+    event Voted(address indexed voter, uint256 proposalId, bool vote);
+
+    struct Proposal {
+        uint256 id;
+        string title;
+        string description;
+        uint256 deadline;
+        uint256 snapshotId;
+        mapping(address => bool) hasVoted;
+        mapping(address => bool) vote;
+        mapping(address => uint256) votingPowers;
+        uint256 totalYes;
+        uint256 totalNo;
+    }
+
+    uint256 public nextProposalId;
+    mapping(uint256 => Proposal) public proposals;
 
     constructor() {
         owner = msg.sender;
@@ -29,13 +49,13 @@ contract ShareToken {
         balanceOf[address(this)] = 0;
         unlockStart = block.timestamp;
         remainingUnlockedTokens = teamAllocation;
+        nextProposalId = 0;
+        holders.push(msg.sender);
+        isHolder[msg.sender] = true;
     }
 
     modifier onlyOwner() {
-        require(
-            msg.sender == owner,
-            "Only contract owner can call this function"
-        );
+        require(msg.sender == owner, "Only contract owner can call this function");
         _;
     }
 
@@ -55,11 +75,157 @@ contract ShareToken {
         require(balanceOf[msg.sender] >= _value, "Insufficient balance");
         balanceOf[msg.sender] -= _value;
         balanceOf[_to] += _value;
+
+        if (!isHolder[_to]) {
+            holders.push(_to);
+            isHolder[_to] = true;
+        }
+        if (balanceOf[msg.sender] == 0) {
+            isHolder[msg.sender] = false;
+        }
+
         emit Transfer(msg.sender, _to, _value);
         return true;
     }
 
-    //unlocktoken-----------------------------------------------------------------------------------------------------------------------------------
+    // vote  ------------------------------------------------------------------------------------------------------------
+    function createProposal(string memory _title, string memory _description, uint256 _deadline) public onlyOwner {
+        Proposal storage proposal = proposals[nextProposalId];
+        proposal.id = nextProposalId;
+        proposal.title = _title;
+        proposal.description = _description;
+        proposal.deadline = block.timestamp + _deadline;
+        proposal.snapshotId = nextProposalId;
+
+        for (uint256 i = 0; i < holders.length; i++) {
+            address voter = holders[i];
+            if (isHolder[voter]) { 
+                proposal.votingPowers[voter] = balanceOf[voter]/10**uint256(decimals);
+            }
+        }
+
+        emit ProposalCreated(nextProposalId, _title, nextProposalId);
+        nextProposalId++;
+    }
+
+    function vote(uint256 _proposalId, bool _vote) public {
+        Proposal storage proposal = proposals[_proposalId];
+        require(block.timestamp < proposal.deadline, "Voting period has ended");
+        require(!proposal.hasVoted[msg.sender], "Already voted");
+
+        proposal.hasVoted[msg.sender] = true;
+        proposal.vote[msg.sender] = _vote;
+        if (_vote) {
+            proposal.totalYes += proposal.votingPowers[msg.sender];
+        } else {
+            proposal.totalNo += proposal.votingPowers[msg.sender];
+        }
+
+        emit Voted(msg.sender, _proposalId, _vote);
+    }
+
+    function getProposal(uint256 _proposalId) public view returns (string memory title, string memory description, uint256 totalYes, uint256 totalNo) {
+        Proposal storage proposal = proposals[_proposalId];
+        return (proposal.title, proposal.description, proposal.totalYes, proposal.totalNo);
+    }
+
+    function listActiveProposals() public view returns (uint256[] memory, string[] memory, string[]memory, uint256[]memory, uint256[]memory, uint256[]memory ) {
+        uint256 activeCount = 0;
+
+        for (uint256 i = 0; i < nextProposalId; i++) {
+            if (block.timestamp < proposals[i].deadline) {
+                activeCount++;
+            }
+        }
+
+        uint256[] memory ids = new uint256[](activeCount);
+        string[] memory titles = new string[](activeCount);
+        string[] memory descriptions = new  string[](activeCount);
+        uint256[] memory totalYess = new uint256[](activeCount); 
+        uint256[] memory totalNos = new uint256[](activeCount); 
+        uint256[] memory remainingMinute = new uint256[](activeCount);
+
+        uint256 currentIndex = 0;
+        for (uint256 i = 0; i < nextProposalId; i++) {
+            if (block.timestamp < proposals[i].deadline) {
+                ids[currentIndex] = proposals[i].id;
+                titles[currentIndex] = proposals[i].title;
+                descriptions[currentIndex] = proposals[i].description;
+                totalYess[currentIndex] = proposals[i].totalYes;
+                totalNos[currentIndex] = proposals[i].totalNo;
+                remainingMinute[currentIndex]=  (proposals[i].deadline - block.timestamp) / 60 ;
+                currentIndex++;
+            }
+        }
+
+        return (ids, titles, descriptions,  totalYess,  totalNos, remainingMinute);
+    }
+
+    function listEndProposals() public view returns (uint256[] memory, string[] memory, string[]memory, uint256[]memory, uint256[]memory ) {
+        uint256 endCount = 0;
+
+        for (uint256 i = 0; i < nextProposalId; i++) {
+            if (block.timestamp > proposals[i].deadline) {
+                endCount++;
+            }
+        }
+
+        uint256[] memory ids = new uint256[](endCount);
+        string[] memory titles = new string[](endCount);
+        string[] memory descriptions = new  string[](endCount);
+        uint256[] memory totalYess = new uint256[](endCount); 
+        uint256[] memory totalNos = new uint256[](endCount); 
+
+        uint256 currentIndex = 0;
+        for (uint256 i = 0; i < nextProposalId; i++) {
+            if (block.timestamp > proposals[i].deadline) {
+                ids[currentIndex] = proposals[i].id;
+                titles[currentIndex] = proposals[i].title;
+                descriptions[currentIndex] = proposals[i].description;
+                totalYess[currentIndex] = proposals[i].totalYes;
+                totalNos[currentIndex] = proposals[i].totalNo;
+                currentIndex++;
+            }
+        }
+
+        return (ids, titles, descriptions,  totalYess,  totalNos);
+    }
+
+    function getVotersDetails(uint256 _proposalId) 
+        public 
+        view 
+        returns (
+            address[] memory, 
+            uint256[] memory, 
+            bool[] memory
+        ) 
+    {
+        uint256 voterCount = 0;
+
+        for (uint256 i = 0; i < holders.length; i++) {
+            if (proposals[_proposalId].hasVoted[holders[i]]) {
+                voterCount++;
+            }
+        }
+
+        address[] memory voters = new address[](voterCount);
+        uint256[] memory votingPowers = new uint256[](voterCount);
+        bool[] memory votes = new bool[](voterCount);
+
+        uint256 index = 0;
+        for (uint256 i = 0; i < holders.length; i++) {
+            if (proposals[_proposalId].hasVoted[holders[i]]) {
+                voters[index] = holders[i];
+                votingPowers[index] = proposals[_proposalId].votingPowers[holders[i]];
+                votes[index] = proposals[_proposalId].vote[holders[i]];
+                index++;
+            }
+        }
+
+        return (voters, votingPowers, votes);
+    }
+
+   //unlocktoken-----------------------------------------------------------------------------------------------------------------------------------
     function unlockTokens() external onlyOwner {
         require(block.timestamp >= unlockStart, "Tokens are still locked");
         require(unlockedTokens < teamAllocation, "All tokens unlocked");
@@ -96,13 +262,13 @@ contract ShareToken {
         require(block.timestamp >= unlockStart, "Tokens are still locked");
 
         uint256 currentTime = block.timestamp;
-        uint256 timePassed = currentTime - unlockStart; //How long has it been since the deployment of the contract
-        uint256 intervalsPassed = timePassed / (365 days / 2); //How many half-years have passed
+        uint256 timePassed = currentTime - unlockStart; //距離部署合約之後過了多久
+        uint256 intervalsPassed = timePassed / (365 days / 2); //過了幾個半年
 
         if (intervalsPassed >= 10) {
             return (0, 0);
         } else {
-            //Calculate how much time is left until the next unlock
+            //計算距離下一次解鎖還有多久
             uint256 timeUntilUnlock = (intervalsPassed + 1) *
                 (365 days / 2) -
                 timePassed;
@@ -114,9 +280,8 @@ contract ShareToken {
 
     //paydeposit tackle -----------------------------------------------------------------------------------------------------------------------------------
     function payDeposit(uint256 amount) public returns (bool success) {
-        require(balanceOf[msg.sender] >= amount, "Insufficient balance");
-
         uint256 amountInWei = amount * 10**uint256(decimals);
+        require(balanceOf[msg.sender] >= amountInWei, "Insufficient balance");
 
         balanceOf[msg.sender] -= amountInWei;
         balanceOf[projectWallet] += amountInWei;
@@ -125,6 +290,7 @@ contract ShareToken {
 
         return true;
     }
+
     
     //return deposit and airdrop token ---------------------------------
     function returnDepositAndAirdrop(
@@ -228,5 +394,4 @@ contract ShareToken {
 
         emit Transfer(projectWallet, borrower_address, depositAamountInWei);
     }     
-
 }
