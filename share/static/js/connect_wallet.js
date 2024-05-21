@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
     var connectWalletBtn = document.getElementById("connectWalletBtn");
     var disconnectSelect = document.getElementById("disconnectSelect");
     var logoutBtn = document.getElementById("logoutBtn");
-    localStorage.setItem('contract_address', '0xF7c76d6458f8792Fd8514aBAF12dcD6952488da0');
+    localStorage.setItem('contract_address', '0x27ab1897F2649b84d10AC4cDBcdAed8C3Fb5edB0');
     var rpcUrl = "https://data-seed-prebsc-1-s2.bnbchain.org:8545"
     const chainId = '0x61'; //mainnet 0x38 testnet 0x61
 

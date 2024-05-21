@@ -13,7 +13,7 @@ def load_contract_abi():
         contract_abi = json.load(file)
     return contract_abi
 
-contract_address = '0xF7c76d6458f8792Fd8514aBAF12dcD6952488da0'
+contract_address = '0x27ab1897F2649b84d10AC4cDBcdAed8C3Fb5edB0'
 chain_id = '0x61'; #mainnet 0x38 testnet 0x61
 abi = load_contract_abi()
 contract = web3.eth.contract(address=contract_address, abi=abi)
