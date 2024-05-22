@@ -115,7 +115,7 @@ def calculate_airdrop_amount(contributor, base_amount=10):
 
     airdrop_amount = base_amount + 10 * (100 - avg_breakage) / 100 + 10 * (like_count)/(like_count + dislike_count)+ 10 * ( 1 - ( available_item_count / total_item_count ))
     
-    n = Order.objects.count()
+    n = Order.objects.filter(status='finish').count()
     
     airdrop_amount = airdrop_amount * pow(0.95, n)
 
