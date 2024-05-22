@@ -112,14 +112,36 @@ def calculate_airdrop_amount(contributor, base_amount=10):
     
     total_item_count = Item.objects.count()
     available_item_count = Item.objects.filter(item_available=True).count()
-
-    airdrop_amount = base_amount + 10 * (100 - avg_breakage) / 100 + 10 * (like_count)/(like_count + dislike_count)+ 10 * ( 1 - ( available_item_count / total_item_count ))
+    
+    if like_count + dislike_count == 0:
+        like_ratio = 0  
+    else:
+        like_ratio = 10 * (like_count) / (like_count + dislike_count)
+    
+    if total_item_count == 0:
+        availability_ratio = 0 
+    else:
+        availability_ratio = 10 * (1 - (available_item_count / total_item_count))
+    
+    airdrop_amount = base_amount + 10 * (100 - avg_breakage) / 100 + like_ratio + availability_ratio
     
     n = Order.objects.filter(status='finish').count()
     
     airdrop_amount = airdrop_amount * pow(0.95, n)
 
-    return round(airdrop_amount)
+    return round(airdrop_amount) 
+
+
+def airdrop_amount_processor(request):
+    if request.user.is_authenticated:
+        contributor = request.user
+        airdrop_amount = calculate_airdrop_amount(contributor)
+    else:
+        airdrop_amount = 0 
+
+    return {
+        'airdrop_amount': airdrop_amount,
+    }
 
 @login_required
 def borrow_item(request, pk):

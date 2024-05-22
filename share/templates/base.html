@@ -16,6 +16,8 @@
 
     <script src="{% static 'js/web3.min.js' %}"></script>
     <script src="{% static 'js/connect_wallet.js' %}"></script>
+    <script src="https://unpkg.com/chart.js@2.8.0/dist/Chart.bundle.js"></script>
+    <script src="https://unpkg.com/chartjs-gauge@0.3.0/dist/chartjs-gauge.js"></script>
   </head>
 
   <body>
@@ -24,20 +26,17 @@
         {% if request.user.is_authenticated %}
           <nav class="login-nav">
             <div class="navbar-left">
+              <a href="{% url 'home' %}" class="navbar-logo"><img src="{% static 'images/logo.PNG' %}" alt="Logo" style="width:auto; max-width: 250px;" /></a>
 
-              <a href="{% url 'home' %}" class="navbar-logo">
-                <img src="{% static 'images/logo.PNG' %}" alt="Logo" style="width:auto; max-width: 250px;" />
-              </a>
-            
               <a href="{% url 'available_borrow_items' %}" class="menu-item">Borrow</a>
               <a href="{% url 'latest_status_user_orders' %}" class="menu-item">Order</a>
             </div>
 
             <div class="navbar-right">
-                <div class="connect-wallet-btn">
-                  <button id="connectWalletBtn" class="connectWalletBtn" style="background-color: green; color: white; border: 0px; padding: 10px; border-radius: 5px;">Connect Wallet</button>
-                  <select id="disconnectSelect" class="disconnectSelect" style="display: none;"></select>
-                </div>
+              <div class="connect-wallet-btn">
+                <button id="connectWalletBtn" class="connectWalletBtn" style="background-color: green; color: white; border: 0px; padding: 10px; border-radius: 5px;">Connect Wallet</button>
+                <select id="disconnectSelect" class="disconnectSelect" style="display: none;"></select>
+              </div>
               <div class="dropdown">
                 <a href="#" class="dropbtn">Hi {{ request.user }}</a>
 
@@ -52,9 +51,7 @@
           </nav>
         {% else %}
           <nav class="logout-nav">
-            <a href="{% url 'home' %}" class="navbar-logo">
-              <img src="{% static 'images/logo.PNG' %}" alt="Logo" style="width:auto; max-width: 250px;" />
-            </a>
+            <a href="{% url 'home' %}" class="navbar-logo"><img src="{% static 'images/logo.PNG' %}" alt="Logo" style="width:auto; max-width: 250px;" /></a>
             <a href="{% url 'login' %}" class="login">Login</a>
           </nav>
         {% endif %}
@@ -66,15 +63,91 @@
               <div class="alert alert-{{ message.tags }}">{{ message }}</div>
             {% endfor %}
           {% endif %}
+
           {% block content %}
 
           {% endblock %}
         </div>
       </main>
     </div>
+
+    <script>
+      var data = [10, 20, 30, 40]
+      var value = {{airdrop_amount}}
+      
+      var createGradient = function (ctx) {
+        var gradient = ctx.createLinearGradient(0, 0, ctx.canvas.width, 0)
+        gradient.addColorStop(0, 'red')
+        gradient.addColorStop(0.33, 'orange')
+        gradient.addColorStop(0.66, 'yellow')
+        gradient.addColorStop(1, 'green')
+        return gradient
+      }
+      
+      var config = {
+        type: 'gauge',
+        data: {
+          labels: ['Success', 'Warning', 'Warning', 'Error'],
+          datasets: [
+            {
+              data: data,
+              value: value,
+              backgroundColor: function (ctx) {
+                return createGradient(ctx.chart.ctx)
+              },
+              borderWidth: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          title: {
+            display: false,
+            text: 'Gauge chart'
+          },
+          layout: {
+            padding: {
+              bottom: 30
+            }
+          },
+          needle: {
+            radiusPercentage: 2,
+            widthPercentage: 3.2,
+            lengthPercentage: 80,
+            color: 'rgba(0, 0, 0, 1)'
+          },
+          valueLabel: {
+            display: false
+          },
+          animation: {
+            duration: 0
+          }
+        }
+      }
+      
+      window.onload = function () {
+        var ctx = document.getElementById('gauge-chart').getContext('2d')
+        window.myGauge = new Chart(ctx, config)
+      }
+    </script>
+
     <footer class="footer">
       <div class="footer-container">
-        <button id="addNetworkBtn" class="addNetworkBtn"><img src="{% static 'images/metamask-icon.svg' %}" alt="Metamask" style="width:20px; margin-right: 10px;" />Add BSC Testnet Network</button>
+        <div class="left-content">
+          <button id="addNetworkBtn" class="addNetworkBtn">
+            <img src="{% static 'images/metamask-icon.svg' %}" alt="Metamask" style="width:20px; margin-right: 10px;" />
+            Add BSC Testnet Network
+          </button>
+        </div>
+
+        {% if request.user.is_authenticated %}
+          <div class="right-content">
+            <span style="margin-right: 0px; color: #45494d;">Airdrop Amount:<span style="font-weight: bold;">{{ airdrop_amount }}</span></span>
+            <div id="gauge-chart-container" style="height: 60px; width: 130px;">
+              <canvas id="gauge-chart" style="height: 60px; width: 150px;"></canvas>
+            </div>
+          </div>
+        {% endif %}
       </div>
     </footer>
   </body>
