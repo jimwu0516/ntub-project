@@ -24,6 +24,24 @@
 
     <button id="unlockTokensBtn">Unlock Tokens</button>
 
+    <p>Number of users:{{ user_count }}</p>
+    <p>like count {{like_count}}</p> 
+    <p>dislike count {{dislike_count}}</p>
+    <p>average_breakage: {{average_breakage}}</p>
+
+    <hr>
+    {% for week, count in weekly_order_counts_in_past_three_months %}
+      <p>{{week}}</p>
+      <p>{{count}}</p>
+    {% endfor %}
+
+
+    <hr>
+    {% for category in category_proportions %}
+      <p> {{ category.category }}</p>
+      <p> {{ category.count }}</p>
+    {% endfor %}
+
     <script>
       function fetchNextUnlock() {
         $.ajax({

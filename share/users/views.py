@@ -12,10 +12,18 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import View
 
 from django.contrib.auth.decorators import login_required
-from .models import Review
+from .models import Review, Profile
+from borrow.models import Order
+from contribute.models import Item
 
 from django.http import JsonResponse
 from borrow.web3 import get_next_unlock, unlock_tokens
+
+
+from django.db.models import Avg, Count,  F, Q, DateField
+from django.utils.timezone import now, timedelta
+from django.db.models.functions import TruncWeek
+from collections import OrderedDict
 
 
 # Create your views here.
@@ -109,10 +117,62 @@ class AdminDashboardView(UserPassesTestMixin, View):
 
     def get(self, request):
         next_unlock = get_next_unlock() 
+        user_count = Profile.objects.count()
+        average_breakage = round(Order.objects.filter(status='finish').aggregate(Avg('breakage'))['breakage__avg'], 2)
+
+        like_count = Review.objects.filter(review_result='like').count()
+        dislike_count =  Review.objects.filter(review_result='dislike').count()
+        
+        
+        
+        #-----------------------------------------------------------------
+        end_date = now()
+        start_date = end_date - timedelta(days=90)
+        
+        weekly_counts = OrderedDict()
+        current_week = start_date - timedelta(days=start_date.weekday())
+        
+        while current_week < end_date:
+            weekly_counts[current_week.date()] = 0 
+            current_week += timedelta(weeks=1)
+        
+        orders_in_past_three_months = Order.objects.filter(
+            status__in=['finish'],
+            end_time__gte=start_date
+        )
+        
+        weekly_order_counts = orders_in_past_three_months.annotate(
+            week=TruncWeek('end_time', output_field=DateField())
+        ).values('week').annotate(
+            count=Count('order_id')
+        ).order_by('week')
+        
+        for entry in weekly_order_counts:
+            weekly_counts[entry['week']] = entry['count']
+        #-----------------------------------------------------------------
+        category_counts = Item.objects.values('item_category').annotate(count=Count('item_category'))
+        
+        category_proportions = []
+        for category in category_counts:
+            
+            category_proportions.append({
+                'category': category['item_category'],
+                'count': category['count'],
+            })
+        #-----------------------------------------------------------------
+        
+        
         context = {
             'username': self.request.user.username,
             'days_until_unlock': next_unlock['days'],
-            'hours_until_unlock': next_unlock['hours'] 
+            'hours_until_unlock': next_unlock['hours'],
+            'user_count' : user_count,
+            'like_count' : like_count,
+            'dislike_count' : dislike_count,
+            'weekly_order_counts_in_past_three_months': weekly_counts.items(),
+            'average_breakage' : average_breakage,
+            'category_proportions' :category_proportions
+            
         }
         return render(request, 'admin/admin_dashboard.html', context)
     
