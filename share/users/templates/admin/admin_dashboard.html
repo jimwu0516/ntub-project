@@ -25,21 +25,30 @@
     <button id="unlockTokensBtn">Unlock Tokens</button>
 
     <p>Number of users:{{ user_count }}</p>
-    <p>like count {{like_count}}</p> 
-    <p>dislike count {{dislike_count}}</p>
-    <p>average_breakage: {{average_breakage}}</p>
+    <p>like count {{ like_count }}</p>
+    <p>dislike count {{ dislike_count }}</p>
+    <p>average_breakage: {{ average_breakage }}</p>
+    <p>average_overdue_pick_up_time: {{ average_overdue_pick_up_time }}</p>
+    <p>average_decision_making_minute: {{ average_decision_making_minute }}</p>
+    <p>airdrop mint remaining : {{ airdrop_mint }}</p>
+    <hr />
 
-    <hr>
+    <ul>
+      {% for holder in top_token_holders %}
+      <li>{{ holder.0 }} ---------- Holds: {{ holder.1}} Tokens</li>
+      {% endfor %}
+    </ul>
+
+    <hr />
     {% for week, count in weekly_order_counts_in_past_three_months %}
-      <p>{{week}}</p>
-      <p>{{count}}</p>
+      <p>{{ week }}</p>
+      <p>{{ count }}</p>
     {% endfor %}
 
-
-    <hr>
+    <hr />
     {% for category in category_proportions %}
-      <p> {{ category.category }}</p>
-      <p> {{ category.count }}</p>
+      <p>{{ category.category }}</p>
+      <p>{{ category.count }}</p>
     {% endfor %}
 
     <script>
@@ -100,7 +109,7 @@
                   .send({ from: userAddress })
                   .then((receipt) => {
                     console.log('Tokens unlocked:', receipt)
-                    alert('Transaction Hash: ' + receipt.transactionHash);
+                    alert('Transaction Hash: ' + receipt.transactionHash)
                   })
                   .catch((error) => {
                     console.error('Failed to unlock tokens:', error)

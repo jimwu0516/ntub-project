@@ -2,6 +2,8 @@ from web3 import Web3, Account
 import os, json
 from django.conf import settings
 from web3.middleware import geth_poa_middleware
+import requests
+from users.models import Profile
 
 rpc_url = 'https://data-seed-prebsc-1-s2.bnbchain.org:8545'
 web3 = Web3(Web3.HTTPProvider(rpc_url))
@@ -75,3 +77,23 @@ def unlock_tokens():
     signed_txn_raw = signed_txn.rawTransaction
     txn_hashtxn_hash = web3.eth.send_raw_transaction(signed_txn_raw)
     return txn_hashtxn_hash.hex()
+
+def get_airdrop_mint():
+    airdrop_mint = contract.functions.airdropMint().call()
+    return airdrop_mint
+
+def get_top_token_holders():
+    profiles = Profile.objects.all()
+
+    balances = {}
+
+    for profile in profiles:
+        address = profile.airdrop_wallet_address
+        balance = contract.functions.balanceOf(address).call() / 10**18
+        balances[address] = balance
+
+    sorted_balances = sorted(balances.items(), key=lambda item: item[1], reverse=True)
+
+    top_token_holders = sorted_balances[:5]
+    
+    return top_token_holders

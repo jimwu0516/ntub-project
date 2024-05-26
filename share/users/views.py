@@ -17,7 +17,7 @@ from borrow.models import Order
 from contribute.models import Item
 
 from django.http import JsonResponse
-from borrow.web3 import get_next_unlock, unlock_tokens
+from borrow.web3 import get_next_unlock, unlock_tokens, get_airdrop_mint, get_top_token_holders
 
 
 from django.db.models import Avg, Count,  F, Q, DateField
@@ -117,12 +117,17 @@ class AdminDashboardView(UserPassesTestMixin, View):
 
     def get(self, request):
         next_unlock = get_next_unlock() 
+        airdrop_mint = get_airdrop_mint() / 10**18
         user_count = Profile.objects.count()
         average_breakage = round(Order.objects.filter(status='finish').aggregate(Avg('breakage'))['breakage__avg'], 2)
 
         like_count = Review.objects.filter(review_result='like').count()
         dislike_count =  Review.objects.filter(review_result='dislike').count()
         
+        average_overdue_pick_up_time = round(Profile.objects.filter(average_overdue_pick_up_time__gt=0).aggregate(Avg('average_overdue_pick_up_time'))['average_overdue_pick_up_time__avg'], 2)
+        average_decision_making_minute = round(Profile.objects.filter(average_decision_making_minute__gt=0).aggregate(Avg('average_decision_making_minute'))['average_decision_making_minute__avg'], 2)
+
+        top_token_holders = get_top_token_holders()
         
         
         #-----------------------------------------------------------------
@@ -166,12 +171,16 @@ class AdminDashboardView(UserPassesTestMixin, View):
             'username': self.request.user.username,
             'days_until_unlock': next_unlock['days'],
             'hours_until_unlock': next_unlock['hours'],
+            'airdrop_mint': airdrop_mint , 
             'user_count' : user_count,
             'like_count' : like_count,
             'dislike_count' : dislike_count,
             'weekly_order_counts_in_past_three_months': weekly_counts.items(),
             'average_breakage' : average_breakage,
-            'category_proportions' :category_proportions
+            'category_proportions' : category_proportions,
+            'average_overdue_pick_up_time' : average_overdue_pick_up_time,
+            'average_decision_making_minute' : average_decision_making_minute,
+            'top_token_holders' : top_token_holders
             
         }
         return render(request, 'admin/admin_dashboard.html', context)
