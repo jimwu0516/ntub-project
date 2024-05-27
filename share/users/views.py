@@ -20,7 +20,7 @@ from django.http import JsonResponse
 from borrow.web3 import get_next_unlock, unlock_tokens, get_airdrop_mint, get_top_token_holders
 
 
-from django.db.models import Avg, Count,  F, Q, DateField
+from django.db.models import Avg, Count,  F, Q, DateField, Sum
 from django.utils.timezone import now, timedelta
 from django.db.models.functions import TruncWeek
 from collections import OrderedDict
@@ -129,6 +129,8 @@ class AdminDashboardView(UserPassesTestMixin, View):
 
         top_token_holders = get_top_token_holders()
         
+        place_counts = Profile.objects.values('user_place').annotate(total=Count('user_place')).order_by('user_place')
+        
         
         #-----------------------------------------------------------------
         end_date = now()
@@ -166,6 +168,17 @@ class AdminDashboardView(UserPassesTestMixin, View):
             })
         #-----------------------------------------------------------------
         
+        three_months_ago = now() - timedelta(days=90)
+
+        top_get_airdrop_contributors = Order.objects \
+            .filter(end_time__gte=three_months_ago, status='finish') \
+            .values('item__contributor__username') \
+            .annotate(total_airdrop=Sum('airdropAmount')) \
+            .order_by('-total_airdrop')[:5]
+
+        for contributor in top_get_airdrop_contributors:
+            print(contributor['item__contributor__username'], contributor['total_airdrop'])
+        
         
         context = {
             'username': self.request.user.username,
@@ -180,7 +193,9 @@ class AdminDashboardView(UserPassesTestMixin, View):
             'category_proportions' : category_proportions,
             'average_overdue_pick_up_time' : average_overdue_pick_up_time,
             'average_decision_making_minute' : average_decision_making_minute,
-            'top_token_holders' : top_token_holders
+            'top_token_holders' : top_token_holders,
+            'place_counts' : place_counts,
+            'top_get_airdrop_contributors': top_get_airdrop_contributors
             
         }
         return render(request, 'admin/admin_dashboard.html', context)

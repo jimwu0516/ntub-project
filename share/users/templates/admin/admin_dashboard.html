@@ -6,50 +6,272 @@
     <title>Admin Dashboard</title>
     <script src="{% static 'js/web3.min.js' %}"></script>
     <script src="{% static 'js/connect_wallet.js' %}"></script>
+    <script src="https://unpkg.com/chart.js@2.8.0/dist/Chart.bundle.js"></script>
+    <script src="https://unpkg.com/chartjs-gauge@0.3.0/dist/chartjs-gauge.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 10px 10px;
+        padding: 0;
+        padding-top: 75px;
+      
+        display: flex;
+        flex-direction: column;
+        background-color: #16113a;
+        color: #f5e5a7;
+      }
+      
+      .header {
+        height: 75px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background-color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 100%;
+        padding: 0 255px;
+        border: 1px solid black;
+        margin: 0px 15px;
+      }
+      
+      .navbar-left {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+      
+      .navbar-left img {
+        max-height: 75px;
+      }
+      
+      .navbar-right {
+        display: flex;
+        align-items: center;
+      }
+      
+      .connect-wallet-btn {
+        margin-right: 20px;
+      }
+      
+      .disconnectSelect {
+        background-color: #ffffff;
+        color: #000000;
+        border: 1px solid #999999;
+        padding: 5px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        outline: none;
+      }
+      
+      .disconnectSelect option {
+        background-color: #ffffff;
+        color: #000000;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      
+      h4 {
+        text-align: center;
+        color: white;
+      }
+      
+      .grid-container {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      .row {
+        display: grid;
+        width: 100%;
+        height: 285px;
+      }
+      
+      .row1 {
+        grid-template-columns: 35% 15% 35% 15%;
+      }
+      
+      .row2 {
+        grid-template-columns: 40% 20% 40%;
+      }
+      
+      .row3 {
+        grid-template-columns: 16% 28% 34% 22%;
+      }
+      
+      .column {
+        padding: 10px;
+        border: 1px solid black;
+        margin: 5px;
+        border-radius: 10px;
+        color: #f5e5a7;
+        border-color: #f5e5a7;
+        background-color: #272952;
+      }
+      
+      .gauge-chart-container {
+        height: 160px;
+        width: 150px;
+        justify-content: center;
+        align-items: center;
+        display: flex;
+      }
+      
+      #unlockTokensBtn {
+        background-color: #4caf50;
+        color: white;
+        padding: 14px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        text-align: center;
+        margin-top: 40px;
+      }
+      
+      .column table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .column th,
+      .column td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+      }
+
+    </style>
   </head>
+
   <body>
-    <p>Hello, {{ username }}! admin admin admin admin</p>
-    <a href="{% url 'logout' %}" id="logoutBtn" style="color: red; font-weight: bold;">Logout</a>
+    <header class="header">
+      <div class="navbar-left">
+        <img src="{% static 'images/logo.PNG' %}" alt="Logo" />
+      </div>
 
-    <div>
-      <p>
-        Next unlock in: <span id="days">{{ days_until_unlock }}</span> days and <span id="hours">{{ hours_until_unlock }}</span> hours.
-      </p>
-    </div>
+      <div class="navbar-right">
+        <div class="connect-wallet-btn">
+          <button id="connectWalletBtn" class="connectWalletBtn" style="background-color: green; color: white; border: 0px; padding: 10px; border-radius: 5px;">Connect Wallet</button>
+          <select id="disconnectSelect" class="disconnectSelect" style="display: none;"></select>
+        </div>
 
-    <div class="connect-wallet-btn">
-      <button id="connectWalletBtn" class="connectWalletBtn" style="background-color: green; color: white; border: 0px; padding: 10px; border-radius: 5px;">Connect Wallet</button>
-      <select id="disconnectSelect" class="disconnectSelect" style="display: none;"></select>
-    </div>
+        <a href="{% url 'logout' %}" id="logoutBtn" style="color: red; font-weight: bold;">Logout</a>
+      </div>
+    </header>
+    <main>
+      <div class="grid-container">
+        <div class="row row1">
+          <div class="column" style="display: flex; justify-content: space-between;">
+            <div style="display: flex; flex-direction: column; width: 48%;">
+              <h4>Averag overdue pick up time</h4>
+              <div class="chart-container">
+                <canvas id="average-overdue-pick-up-time-doughnutChart" style="width: 100%; height: 100%;"></canvas>
+              </div>
+            </div>
 
-    <button id="unlockTokensBtn">Unlock Tokens</button>
+            <div style="display: flex; flex-direction: column; width: 48%;">
+              <h4>Average decision making minute</h4>
+              <div class="chart-container">
+                <canvas id="average-decision-making-minute-doughnutChart" style="width: 100%; height: 100%;"></canvas>
+              </div>
+            </div>
+          </div>
 
-    <p>Number of users:{{ user_count }}</p>
-    <p>like count {{ like_count }}</p>
-    <p>dislike count {{ dislike_count }}</p>
-    <p>average_breakage: {{ average_breakage }}</p>
-    <p>average_overdue_pick_up_time: {{ average_overdue_pick_up_time }}</p>
-    <p>average_decision_making_minute: {{ average_decision_making_minute }}</p>
-    <p>airdrop mint remaining : {{ airdrop_mint }}</p>
-    <hr />
+          <div class="column">
+            <h4>Averag breakage</h4>
+            <div class="chart-container">
+              <canvas id="average-breakage-doughnutChart" style="width: 100%; height: 100%;"></canvas>
+            </div>
+          </div>
 
-    <ul>
-      {% for holder in top_token_holders %}
-      <li>{{ holder.0 }} ---------- Holds: {{ holder.1}} Tokens</li>
-      {% endfor %}
-    </ul>
+          <div class="column">
+            <h4>User place distribution</h4>
+            <div class="chart-container">
+              <canvas id="place-bar-chart" style="width: 100%; height: 100%; "></canvas>
+            </div>
+          </div>
 
-    <hr />
-    {% for week, count in weekly_order_counts_in_past_three_months %}
-      <p>{{ week }}</p>
-      <p>{{ count }}</p>
-    {% endfor %}
+          <div class="column">
+            <h4>like and dislike ratio</h4>
+            <div class="chart-container">
+              <canvas id="likeDislike-pie-chart" style="width: 100%; height: 100%; "></canvas>
+            </div>
+          </div>
+        </div>
 
-    <hr />
-    {% for category in category_proportions %}
-      <p>{{ category.category }}</p>
-      <p>{{ category.count }}</p>
-    {% endfor %}
+        <div class="row row2">
+          <div class="column" style="background-color: #272952;">
+            <h4>Item category</h4>
+            <div class="chart-container">
+              <canvas id="category-bar-chart" style="width: 100%; height: 100%; "></canvas>
+            </div>
+          </div>
+
+          <div class="column">
+            <h4>Total user</h4>
+            <h1 style="text-align: center; font-size: 85px;">{{ user_count }}</h1>
+          </div>
+
+          <div class="column">
+            <h4>weeklyOrderChart</h4>
+            <div class="chart-container">
+              <canvas id="weeklyOrderChart" style="width: 100%; height: 100%; "></canvas>
+            </div>
+          </div>
+        </div>
+
+        <div class="row row3">
+          <div class="column">
+            <h4>Next Unlock</h4>
+            <p style="text-align: center;">
+              <span id="days">{{ days_until_unlock }}</span> days and <span id="hours">{{ hours_until_unlock }}</span> hours.
+            </p>
+            <p id="unlockTokensBtn">Unlock Tokens</p>
+          </div>
+
+          <div class="column">
+            <h4>Top users who received the most tokens in the past three months</h4>
+            <div class="chart-container">
+              <canvas id="top-get-airdrop-contributors-bar-chart" style="width: 100%; height: 100%;"></canvas>
+            </div>
+          </div>
+
+          <div class="column">
+            <h4>Top 5 token holders</h4>
+            <table>
+              <thead>
+                <tr>
+                  <th>Holder Address</th>
+                  <th>Token Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for holder in top_token_holders %}
+                  <tr>
+                    <td>{{ holder.0 }}</td>
+                    <td>{{ holder.1 }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+
+          <div class="column" style="align-items: center; display: flex; flex-direction: column;">
+            <h4>Airdrop Mint Remaining</h4>
+            <div id="gauge-chart-container" style="max-height: 200px; width: 80%; align-items: center; ">
+              <canvas id="airdrop-mint-gauge-chart" style="height: 160px; width: 150px;"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
 
     <script>
       function fetchNextUnlock() {
@@ -64,6 +286,345 @@
       }
       
       setInterval(fetchNextUnlock, 3600000)
+    </script>
+
+    <script>
+      var average_overdue_pick_up_time = {{ average_overdue_pick_up_time }};
+      var inverse_average_overdue_pick_up_time = 60 - average_overdue_pick_up_time; 
+
+      var ctx2 = document.getElementById('average-overdue-pick-up-time-doughnutChart').getContext('2d');
+
+      var average_overdue_pick_up_time_plugin = {
+          beforeDraw: function(chart) {
+              var width = chart.width,
+                  height = chart.height,
+                  ctx = chart.ctx;
+
+              ctx.restore();
+              var fontSize = (height / 60).toFixed(2);
+              ctx.font = fontSize + "em sans-serif";
+              ctx.textBaseline = "middle";
+              ctx.fillStyle = "#FFFFFF";
+
+              var text = average_overdue_pick_up_time + "min",
+                  textX = Math.round((width - ctx.measureText(text).width) / 2),
+                  textY = height / 2;
+
+              ctx.fillText(text, textX, textY);
+              ctx.save();
+          }
+      };
+
+      var doughnutChart2 = new Chart(ctx2, {
+          type: 'doughnut',
+          plugins: [average_overdue_pick_up_time_plugin],
+          data: {
+              labels: ['Average Overdue Pick Up Time', '60 - Average Overdue Pick Up Time'],
+              datasets: [{
+                  label: 'Average Overdue Pick Up Time',
+                  data: [average_overdue_pick_up_time, inverse_average_overdue_pick_up_time],
+                  backgroundColor: ['#99e6eb', '#fdfdff'], 
+              }]
+          },
+          options: {
+              legend: {
+                  display: false
+              },
+              title: {
+                  display: false,
+                  text: 'Average Overdue Pick Up Time'
+              },
+              cutoutPercentage: 85,
+          }
+      });
+    </script>
+
+    <script>
+      var average_decision_making_minute ={{ average_decision_making_minute }};
+      var inverse_average_decision_making_minute = 480 - average_decision_making_minute; 
+
+      var ctx3 = document.getElementById('average-decision-making-minute-doughnutChart').getContext('2d');
+
+      var average_decision_making_minute_plugin = {
+          beforeDraw: function(chart) {
+              var width = chart.width,
+                height = chart.height,
+                ctx = chart.ctx;
+
+              ctx.restore();
+              var fontSize = (height / 60).toFixed(2);
+              ctx.font = fontSize + "em sans-serif";
+              ctx.textBaseline = "middle";
+              ctx.fillStyle = "#FFFFFF";
+
+              var text = average_decision_making_minute + "min",
+                  textX = Math.round((width - ctx.measureText(text).width) / 2),
+                  textY = height / 2;
+
+              ctx.fillText(text, textX, textY);
+              ctx.save();
+          }
+      };
+
+      var doughnutChart3 = new Chart(ctx3, {
+          type: 'doughnut',
+          plugins: [average_decision_making_minute_plugin],
+          data: {
+              labels: ['Average decision making minute', '60 - Average decision making minute'],
+              datasets: [{
+                  label: 'Average decision making minute',
+                  data: [average_decision_making_minute, inverse_average_decision_making_minute],
+                  backgroundColor: ['#99e6eb', '#fdfdff'], 
+              }]
+          },
+          options: {
+              legend: {
+                  display: false
+              },
+              title: {
+                  display: false,
+                  text: 'Average decision making minute'
+              },
+              cutoutPercentage: 85,
+          }
+      });
+    </script>
+
+    <script>
+      var average_breakage = {{ average_breakage }}; 
+      var inverse_breakage = 100 - average_breakage;
+  
+      var ctx = document.getElementById('average-breakage-doughnutChart').getContext('2d');
+  
+      var average_breakage_doughnut_Chart = {
+          beforeDraw: function(chart) {
+              var width = chart.width,
+                  height = chart.height,
+                  ctx = chart.ctx;
+  
+              ctx.restore();
+              var fontSize = (height / 60).toFixed(2);
+              ctx.font = fontSize + "em sans-serif";
+              ctx.textBaseline = "middle";
+              ctx.fillStyle = "#FFFFFF";
+  
+              var text = average_breakage + "%",
+                  textX = Math.round((width - ctx.measureText(text).width) / 2),
+                  textY = height / 2;
+  
+              ctx.fillText(text, textX, textY);
+              ctx.save();
+          }
+      };
+  
+      var doughnutChart = new Chart(ctx, {
+          type: 'doughnut',
+          plugins: [average_breakage_doughnut_Chart],
+          data: {
+              labels: ['Average Breakage', '100 - Average Breakage'],
+              datasets: [{
+                  label: 'Breakage Distribution',
+                  data: [average_breakage, inverse_breakage],
+                  backgroundColor: ['#99e6eb', '#fdfdff'], 
+              }]
+          },
+          options: {
+              legend: {
+                  display: false
+              },
+              title: {
+                  display: false,
+                  text: 'Breakage Distribution'
+              },
+              cutoutPercentage: 85,
+          }
+      });
+    </script>
+
+    <script>
+      var places = [];
+      var totals = [];
+    
+      {% for place in place_counts %}
+        places.push('{{ place.user_place }}');
+        totals.push({{ place.total }});
+      {% endfor %}
+    
+      var totalCount = totals.reduce((a, b) => a + b, 0);
+      var percentages = totals.map(total => (total / totalCount * 100).toFixed(2));
+    
+      var ctx = document.getElementById('place-bar-chart').getContext('2d');
+      var myChart = new Chart(ctx, {
+        type: 'horizontalBar',
+        data: {
+          labels: ['Places'],
+          datasets: places.map((place, index) => ({
+            label: place,
+            data: [percentages[index]],
+            backgroundColor: index % 2 === 0 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)',
+            borderColor: index % 2 === 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)',
+            borderWidth: 1
+          }))
+        },
+        options: {
+          legend: {
+            display: true
+          },
+          scales: {
+            xAxes: [{
+              stacked: true,
+              ticks: {
+                beginAtZero: true
+              },
+              display: true 
+            }],
+            yAxes: [{
+              stacked: true,
+              display: true 
+            }]
+          },
+        }
+      });
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          var ctx = document.getElementById('likeDislike-pie-chart').getContext('2d');
+          var likeCount = {{ like_count }}; 
+          var dislikeCount = {{ dislike_count }};
+      
+          var myPieChart = new Chart(ctx, {
+              type: 'pie',
+              data: {
+                  labels: ['Likes', 'Dislikes'],
+                  datasets: [{
+                      label: 'Count',
+                      data: [likeCount, dislikeCount],
+                      backgroundColor: [
+                        'rgba(59,178,0, 0.6)',
+                        'rgba(255,0,0, 0.6)'
+                      ],
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                  legend: {
+                    display: false
+                  },
+                  responsive: true,
+                  plugins: {
+                      legend: {
+                          position: 'bottom',
+                      },
+                      title: {
+                        display: false,
+                    }
+                  }
+              }
+          });
+      });
+    </script>
+
+    <script>
+      var categories = [];
+      var counts = [];
+  
+      {% for category in category_proportions %}
+      categories.push("{{ category.category }}");
+      counts.push({{ category.count }});
+      {% endfor %}
+  
+      var ctx = document.getElementById('category-bar-chart').getContext('2d');
+      var myChart = new Chart(ctx, {
+          type: 'horizontalBar',
+          data: {
+              labels: categories,
+              datasets: [{
+                  label: 'Count',
+                  data: counts,
+                  backgroundColor:[
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(255, 159, 64, 0.2)',
+                  'rgba(255, 205, 86, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(54, 162, 235, 0.2)'
+                  ],
+                  borderColor:[
+                  'rgb(255, 99, 132)',
+                  'rgb(255, 159, 64)',
+                  'rgb(255, 205, 86)',
+                  'rgb(75, 192, 192)',
+                  'rgb(54, 162, 235)'
+                  ],
+                  borderWidth: 1,
+                  barThickness: 30
+              }]
+          },
+          options: {
+              scales: {
+                  xAxes: [{
+                      ticks: {
+                          beginAtZero: true
+                      }
+                  }]
+              },
+              legend: {
+                display: false
+              }
+          }
+      });
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          const ctx = document.getElementById('weeklyOrderChart').getContext('2d');
+          const weeks = [];
+          const counts = [];
+      
+          {% for week, count in weekly_order_counts_in_past_three_months %}
+              weeks.push('{{ week|date:"Y-m-d" }}');
+              counts.push({{ count }});
+          {% endfor %}
+      
+          const weeklyOrderChart = new Chart(ctx, {
+              type: 'line',
+              data: {
+                  labels: weeks,
+                  datasets: [{
+                      label: 'Weekly Contributions',
+                      data: counts, 
+                      borderColor: 'rgba(112, 48, 160, 1)',
+                      backgroundColor: 'rgba(112, 48, 160, 0.2)',
+                      fill: true
+                  }]
+              },
+              options: {
+                  scales: {
+                      y: {
+                          beginAtZero: true
+                      }
+                  },
+                  responsive: true,
+                  plugins: {
+                      legend: {
+                          display: false,
+                          position: 'top'
+                      },
+                      title: {
+                        display: true,
+                        text: 'Weekly contributions from the past quarter',
+                        font: {
+                            size: 25
+                        },
+                        padding: {
+                            top: 0,
+                            bottom: 10
+                        }
+                    }
+                  }
+              }
+          });
+      });
     </script>
 
     <script>
@@ -123,6 +684,109 @@
             })
         })
       })
+    </script>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          const labels = [];
+          const data = [];
+  
+          {% for contributor in top_get_airdrop_contributors %}
+            labels.push('{{ contributor.item__contributor__username }}');
+            data.push({{ contributor.total_airdrop }});
+          {% endfor %}
+  
+          const ctx = document.getElementById('top-get-airdrop-contributors-bar-chart').getContext('2d');
+          const airdropChart = new Chart(ctx, {
+              type: 'bar',
+              data: {
+                  labels: labels,
+                  datasets: [{
+                      label: 'Total Airdrop',
+                      data: data,
+                      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                      borderColor: 'rgba(75, 192, 192, 1)',
+                      borderWidth: 1
+                  }]
+              },
+              options: {
+                  legend: {
+                    display: false
+                  },
+                  scales: {
+                      y: {
+                          beginAtZero: true
+                      }
+                  }
+              }
+          });
+      });
+    </script>
+
+    <script>
+      var data = [0,1500000,3000000, 5000000]
+      var value = {{ airdrop_mint }}
+      
+      var createGradient = function (ctx) {
+        var gradient = ctx.createLinearGradient(0, 0, ctx.canvas.width, 0)
+        gradient.addColorStop(0, 'red')
+        gradient.addColorStop(0.33, 'orange')
+        gradient.addColorStop(0.66, 'yellow')
+        gradient.addColorStop(1, 'green')
+        return gradient
+      }
+      
+      var config = {
+        type: 'gauge',
+        data: {
+          datasets: [
+            {
+              data: data,
+              value: value,
+              backgroundColor: function (ctx) {
+                return createGradient(ctx.chart.ctx)
+              },
+              borderWidth: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          title: {
+            display: false,
+            text: 'Gauge chart'
+          },
+          layout: {
+            padding: {
+              bottom: 30
+            }
+          },
+          needle: {
+            radiusPercentage: 2,
+            widthPercentage: 3.2,
+            lengthPercentage: 80,
+            color: 'rgba(255, 255, 255, 1)' 
+          },
+          valueLabel: {
+            display: false,
+            color: 'rgba(255, 255, 255, 0.9)', 
+            backgroundColor: 'rgba(0, 0, 0, 0)', 
+            borderRadius: 4, 
+            font: {
+              size: 50, 
+              family: 'Arial, sans-serif', 
+            }
+          },
+          animation: {
+            duration: 0
+          }
+        }
+      }
+      
+      window.onload = function () {
+        var ctx = document.getElementById('airdrop-mint-gauge-chart').getContext('2d')
+        window.myGauge = new Chart(ctx, config)
+      }
     </script>
   </body>
 </html>
