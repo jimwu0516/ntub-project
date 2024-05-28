@@ -101,7 +101,7 @@ class MyProfile(LoginRequiredMixin, View):
             messages.success(request,'Your profile has been updated successfully')
             
             return redirect('profile')
-        else:
+        else:            
             context = {
                 'user_form': user_form,
                 'profile_form': profile_form
@@ -119,13 +119,17 @@ class AdminDashboardView(UserPassesTestMixin, View):
         next_unlock = get_next_unlock() 
         airdrop_mint = get_airdrop_mint() / 10**18
         user_count = Profile.objects.count()
-        average_breakage = round(Order.objects.filter(status='finish').aggregate(Avg('breakage'))['breakage__avg'], 2)
+        average_breakage = int(Order.objects.filter(status='finish').aggregate(Avg('breakage'))['breakage__avg'])
 
         like_count = Review.objects.filter(review_result='like').count()
         dislike_count =  Review.objects.filter(review_result='dislike').count()
         
-        average_overdue_pick_up_time = round(Profile.objects.filter(average_overdue_pick_up_time__gt=0).aggregate(Avg('average_overdue_pick_up_time'))['average_overdue_pick_up_time__avg'], 2)
-        average_decision_making_minute = round(Profile.objects.filter(average_decision_making_minute__gt=0).aggregate(Avg('average_decision_making_minute'))['average_decision_making_minute__avg'], 2)
+        average_overdue_pick_up_time = Profile.objects.filter(average_overdue_pick_up_time__gt=0).aggregate(Avg('average_overdue_pick_up_time'))['average_overdue_pick_up_time__avg']
+        average_overdue_pick_up_time = round(average_overdue_pick_up_time, 2) if average_overdue_pick_up_time is not None else 0
+
+        average_decision_making_minute = Profile.objects.filter(average_decision_making_minute__gt=0).aggregate(Avg('average_decision_making_minute'))['average_decision_making_minute__avg']
+        average_decision_making_minute = round(average_decision_making_minute, 2) if average_decision_making_minute is not None else 0
+
 
         top_token_holders = get_top_token_holders()
         

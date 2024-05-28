@@ -18,7 +18,7 @@
       
         display: flex;
         flex-direction: column;
-        background-color: #16113a;
+        background-color: #161131;
         color: #f5e5a7;
       }
       
@@ -29,14 +29,14 @@
         left: 0;
         right: 0;
         z-index: 1000;
-        background-color: white;
+        background-color: #161131;
         display: flex;
         justify-content: space-between;
         align-items: center;
         max-width: 100%;
         padding: 0 255px;
-        border: 1px solid black;
         margin: 0px 15px;
+
       }
       
       .navbar-left {
@@ -80,6 +80,7 @@
       h4 {
         text-align: center;
         color: white;
+        font-size: 18px;
       }
       
       .grid-container {
@@ -112,10 +113,9 @@
         margin: 5px;
         border-radius: 10px;
         color: #f5e5a7;
-        border-color: #f5e5a7;
-        background-color: #272952;
+        background-color: #272953;
       }
-      
+    
       .gauge-chart-container {
         height: 160px;
         width: 150px;
@@ -135,7 +135,7 @@
         text-align: center;
         margin-top: 40px;
       }
-      
+
       .column table {
         width: 100%;
         border-collapse: collapse;
@@ -153,7 +153,7 @@
   <body>
     <header class="header">
       <div class="navbar-left">
-        <img src="{% static 'images/logo.PNG' %}" alt="Logo" />
+        <img src="{% static 'images/logo-admin.PNG' %}" alt="Logo" />
       </div>
 
       <div class="navbar-right">
@@ -170,14 +170,14 @@
         <div class="row row1">
           <div class="column" style="display: flex; justify-content: space-between;">
             <div style="display: flex; flex-direction: column; width: 48%;">
-              <h4>Averag overdue pick up time</h4>
+              <h4>Overdue pick up time</h4>
               <div class="chart-container">
                 <canvas id="average-overdue-pick-up-time-doughnutChart" style="width: 100%; height: 100%;"></canvas>
               </div>
             </div>
 
             <div style="display: flex; flex-direction: column; width: 48%;">
-              <h4>Average decision making minute</h4>
+              <h4>Decision making minute</h4>
               <div class="chart-container">
                 <canvas id="average-decision-making-minute-doughnutChart" style="width: 100%; height: 100%;"></canvas>
               </div>
@@ -192,14 +192,14 @@
           </div>
 
           <div class="column">
-            <h4>User place distribution</h4>
+            <h4>Place distribution</h4>
             <div class="chart-container">
               <canvas id="place-bar-chart" style="width: 100%; height: 100%; "></canvas>
             </div>
           </div>
 
           <div class="column">
-            <h4>like and dislike ratio</h4>
+            <h4>Review</h4>
             <div class="chart-container">
               <canvas id="likeDislike-pie-chart" style="width: 100%; height: 100%; "></canvas>
             </div>
@@ -216,7 +216,7 @@
 
           <div class="column">
             <h4>Total user</h4>
-            <h1 style="text-align: center; font-size: 85px;">{{ user_count }}</h1>
+            <h1 style="text-align: center; font-size: 85px; color: #2fdd84;">{{ user_count }}</h1>
           </div>
 
           <div class="column">
@@ -228,16 +228,16 @@
         </div>
 
         <div class="row row3">
-          <div class="column">
+          <div class="column" style="justify-content: space-between;  display: flex; flex-direction: column;">
             <h4>Next Unlock</h4>
-            <p style="text-align: center;">
+            <p style="text-align: center; font-size: 20px;" >
               <span id="days">{{ days_until_unlock }}</span> days and <span id="hours">{{ hours_until_unlock }}</span> hours.
             </p>
             <p id="unlockTokensBtn">Unlock Tokens</p>
           </div>
 
           <div class="column">
-            <h4>Top users who received the most tokens in the past three months</h4>
+            <h4>Most token receiver</h4>
             <div class="chart-container">
               <canvas id="top-get-airdrop-contributors-bar-chart" style="width: 100%; height: 100%;"></canvas>
             </div>
@@ -301,7 +301,7 @@
                   ctx = chart.ctx;
 
               ctx.restore();
-              var fontSize = (height / 60).toFixed(2);
+              var fontSize = (height / 80).toFixed(2);
               ctx.font = fontSize + "em sans-serif";
               ctx.textBaseline = "middle";
               ctx.fillStyle = "#FFFFFF";
@@ -323,7 +323,8 @@
               datasets: [{
                   label: 'Average Overdue Pick Up Time',
                   data: [average_overdue_pick_up_time, inverse_average_overdue_pick_up_time],
-                  backgroundColor: ['#99e6eb', '#fdfdff'], 
+                  backgroundColor: ['#fbbe83', '#616060'], 
+                  borderWidth: 0 
               }]
           },
           options: {
@@ -352,7 +353,7 @@
                 ctx = chart.ctx;
 
               ctx.restore();
-              var fontSize = (height / 60).toFixed(2);
+              var fontSize = (height / 80).toFixed(2);
               ctx.font = fontSize + "em sans-serif";
               ctx.textBaseline = "middle";
               ctx.fillStyle = "#FFFFFF";
@@ -374,7 +375,8 @@
               datasets: [{
                   label: 'Average decision making minute',
                   data: [average_decision_making_minute, inverse_average_decision_making_minute],
-                  backgroundColor: ['#99e6eb', '#fdfdff'], 
+                  backgroundColor: ['#ff8989', '#616060'], 
+                  borderWidth: 0 
               }]
           },
           options: {
@@ -425,7 +427,8 @@
               datasets: [{
                   label: 'Breakage Distribution',
                   data: [average_breakage, inverse_breakage],
-                  backgroundColor: ['#99e6eb', '#fdfdff'], 
+                  backgroundColor: ['#c00000', '#616060'], 
+                  borderWidth: 0 
               }]
           },
           options: {
@@ -461,14 +464,17 @@
           datasets: places.map((place, index) => ({
             label: place,
             data: [percentages[index]],
-            backgroundColor: index % 2 === 0 ? 'rgba(255, 99, 132, 0.2)' : 'rgba(75, 192, 192, 0.2)',
-            borderColor: index % 2 === 0 ? 'rgba(255, 99, 132, 1)' : 'rgba(75, 192, 192, 1)',
+            backgroundColor: index % 2 === 0 ? 'rgba(240, 117, 117, 0.8)' : 'rgba(4, 177, 193, 0.8)',
+            borderColor: index % 2 === 0 ? 'rgba(240, 117, 117, 0.8)' : 'rgba(4, 177, 193, 0.8)',
             borderWidth: 1
           }))
         },
         options: {
           legend: {
-            display: true
+            display: true,
+            labels: {
+              fontColor: 'rgba(255, 255, 255, 1)'
+            }
           },
           scales: {
             xAxes: [{
@@ -476,11 +482,11 @@
               ticks: {
                 beginAtZero: true
               },
-              display: true 
+              display: false 
             }],
             yAxes: [{
               stacked: true,
-              display: true 
+              display: false 
             }]
           },
         }
@@ -501,15 +507,18 @@
                       label: 'Count',
                       data: [likeCount, dislikeCount],
                       backgroundColor: [
-                        'rgba(59,178,0, 0.6)',
-                        'rgba(255,0,0, 0.6)'
+                        'rgba(51,155,216, 1)',
+                        'rgba(230,64,100, 1)'
                       ],
-                      borderWidth: 1
+                      borderWidth: 0
                   }]
               },
               options: {
                   legend: {
-                    display: false
+                    display: true,
+                    labels: {
+                      fontColor: 'rgba(255, 255, 255, 1)'
+                    }
                   },
                   responsive: true,
                   plugins: {
@@ -543,11 +552,11 @@
                   label: 'Count',
                   data: counts,
                   backgroundColor:[
-                  'rgba(255, 99, 132, 0.2)',
-                  'rgba(255, 159, 64, 0.2)',
-                  'rgba(255, 205, 86, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(54, 162, 235, 0.2)'
+                  'rgba(243, 125, 121, 0.8)',
+                  'rgba(241, 163, 78, 0.8)',
+                  'rgba(240, 229, 107, 0.8)',
+                  'rgba(133, 211, 205, 0.8)',
+                  'rgba(23, 152, 250, 0.8)'
                   ],
                   borderColor:[
                   'rgb(255, 99, 132)',
@@ -556,7 +565,7 @@
                   'rgb(75, 192, 192)',
                   'rgb(54, 162, 235)'
                   ],
-                  borderWidth: 1,
+                  borderWidth: 0,
                   barThickness: 30
               }]
           },
@@ -564,8 +573,16 @@
               scales: {
                   xAxes: [{
                       ticks: {
-                          beginAtZero: true
+                          beginAtZero: true,
+                          fontColor: 'rgba(255, 255, 255, 1)'
                       }
+                  }],
+                  yAxes: [{
+                    stacked: true,
+                    ticks: {
+                      fontColor: 'rgba(255, 255, 255, 1)'
+                    },
+                    display: true
                   }]
               },
               legend: {
@@ -593,16 +610,29 @@
                   datasets: [{
                       label: 'Weekly Contributions',
                       data: counts, 
-                      borderColor: 'rgba(112, 48, 160, 1)',
-                      backgroundColor: 'rgba(112, 48, 160, 0.2)',
+                      borderColor: 'rgba(105, 112, 213, 1)',
+                      backgroundColor: 'rgba(105, 112, 213, 0.4)',
                       fill: true
                   }]
               },
               options: {
+                  legend: {
+                    display: false
+                  },
                   scales: {
-                      y: {
-                          beginAtZero: true
-                      }
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            fontColor: 'rgba(255, 255, 255, 1)'
+                        }
+                    }],
+                    yAxes: [{
+                      stacked: true,
+                      ticks: {
+                        fontColor: 'rgba(255, 255, 255, 1)'
+                      },
+                      display: true
+                    }]
                   },
                   responsive: true,
                   plugins: {
@@ -704,8 +734,8 @@
                   datasets: [{
                       label: 'Total Airdrop',
                       data: data,
-                      backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                      borderColor: 'rgba(75, 192, 192, 1)',
+                      backgroundColor: 'rgba(192, 210, 55, 1)',
+                      borderColor: 'rgba(192, 210, 55, 1)',
                       borderWidth: 1
                   }]
               },
@@ -714,10 +744,20 @@
                     display: false
                   },
                   scales: {
-                      y: {
-                          beginAtZero: true
-                      }
-                  }
+                    xAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            fontColor: 'rgba(255, 255, 255, 1)'
+                        }
+                    }],
+                    yAxes: [{
+                      stacked: true,
+                      ticks: {
+                        fontColor: 'rgba(255, 255, 255, 1)'
+                      },
+                      display: true
+                    }]
+                  },
               }
           });
       });
