@@ -6,7 +6,7 @@ from django.core.validators import MinValueValidator
 class Item(models.Model):
     item_id = models.AutoField(primary_key=True)
     contributor = models.ForeignKey(
-        User, on_delete=models.CASCADE, to_field='username')
+        User, on_delete=models.CASCADE)
     item_name = models.CharField(max_length=255)
     item_description = models.TextField()
     USER_ITEM_CATEGORY= [
@@ -26,8 +26,3 @@ class Item(models.Model):
     item_available = models.BooleanField(default=True)
     
     objects = models.Manager() 
-    
-
-
-    
-
