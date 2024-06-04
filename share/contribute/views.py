@@ -7,6 +7,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from django.views.generic.detail import DetailView
 from borrow.models import Order
+from django.core.files.storage import default_storage
 import os 
 # Create your views here.
 
@@ -43,7 +44,7 @@ class ItemDetail(LoginRequiredMixin, DetailView):
     def get_queryset(self):
         base_qs = super(ItemDetail, self).get_queryset()
         return base_qs.filter(contributor=self.request.user)
-
+"""
 class ItemUpdate(LoginRequiredMixin, UpdateView):
     model = Item
     fields = ['item_name', 'item_description', 'item_category', 'item_address', 'item_deposit_require', 'item_image']
@@ -64,6 +65,32 @@ class ItemUpdate(LoginRequiredMixin, UpdateView):
         messages.success(self.request, "The item was updated successfully.")
         return super(ItemUpdate, self).form_valid(form)
     
+    def get_queryset(self):
+        base_qs = super(ItemUpdate, self).get_queryset()
+        return base_qs.filter(contributor=self.request.user)
+"""
+
+class ItemUpdate(LoginRequiredMixin, UpdateView):
+    model = Item
+    fields = ['item_name', 'item_description', 'item_category', 'item_address', 'item_deposit_require', 'item_image']
+    success_url = reverse_lazy('items')
+
+    def form_valid(self, form):
+        item_instance = form.instance
+
+        if not item_instance.item_available:
+            messages.error(self.request, "This item is currently being borrowed!!")
+            return super(ItemUpdate, self).form_invalid(form)
+
+        if 'item_image' in form.changed_data and item_instance.item_image:
+            old_image_path = item_instance.__class__.objects.get(pk=item_instance.pk).item_image.path
+            
+            if default_storage.exists(old_image_path):
+                default_storage.delete(old_image_path)
+
+        messages.success(self.request, "The item was updated successfully.")
+        return super(ItemUpdate, self).form_valid(form)
+
     def get_queryset(self):
         base_qs = super(ItemUpdate, self).get_queryset()
         return base_qs.filter(contributor=self.request.user)
