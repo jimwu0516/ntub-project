@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -18,6 +19,12 @@
     <script src="{% static 'js/connect_wallet.js' %}"></script>
     <script src="https://unpkg.com/chart.js@2.8.0/dist/Chart.bundle.js"></script>
     <script src="https://unpkg.com/chartjs-gauge@0.3.0/dist/chartjs-gauge.js"></script>
+    <script>
+      function changeLanguage(languageCode, languageName) {
+          document.getElementById('languageInput').value = languageCode;
+          document.getElementById('languageForm').submit();
+      }
+    </script>
   </head>
 
   <body>
@@ -28,15 +35,53 @@
             <div class="navbar-left">
               <a href="{% url 'home' %}" class="navbar-logo"><img src="{% static 'images/logo.PNG' %}" alt="Logo" style="width:auto; max-width: 250px;" /></a>
 
-              <a href="{% url 'available_borrow_items' %}" class="menu-item">Borrow</a>
-              <a href="{% url 'latest_status_user_orders' %}" class="menu-item">Order</a>
+              <a href="{% url 'available_borrow_items' %}" class="menu-item">{% trans "Borrow" %}</a>
+              <a href="{% url 'latest_status_user_orders' %}" class="menu-item">{% trans "Order" %}</a>
             </div>
 
             <div class="navbar-right">
+            
               <div class="connect-wallet-btn">
                 <button id="connectWalletBtn" class="connectWalletBtn" style="background-color: green; color: white; border: 0px; padding: 10px; border-radius: 5px;">Connect Wallet</button>
                 <select id="disconnectSelect" class="disconnectSelect" style="display: none;"></select>
               </div>
+            
+              
+              <div class="language-dropdown">
+                <button class="language-dropbtn">🌏</button>
+                <div class="language-dropdown-content">
+                  <form id="languageForm" action="{% url 'set_language' %}" method="post">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.path }}">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for language in languages %}
+                      <a href="#" onclick="changeLanguage('{{ language.code }}')">{{ language.name_local }} ({{ language.code }})</a>
+                    {% endfor %}
+                    <input type="hidden" name="language" id="languageInput" value="{{ LANGUAGE_CODE }}">
+                  </form>
+                </div>
+              </div>
+            
+              {% comment %}
+              <form id="languageForm" action="{% url 'set_language' %}" method="post">
+                {% csrf_token %}
+                <input name="next" type="hidden" value="{{ request.path }}" />
+                <select name="language" onchange="document.getElementById('languageForm').submit()">
+                  {% get_current_language as LANGUAGE_CODE %}
+                  {% get_available_languages as LANGUAGES %}
+                  {% get_language_info_list for LANGUAGES as languages %}
+                  {% for language in languages %}
+                    <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
+                      {{ language.name_local }} ({{ language.code }})
+                    </option>
+                  {% endfor %}
+                </select>
+              </form>
+              {% endcomment %}
+              
+
               <div class="dropdown">
                 <a href="#" class="dropbtn">Hi {{ request.user }}</a>
 
@@ -52,7 +97,26 @@
         {% else %}
           <nav class="logout-nav">
             <a href="{% url 'home' %}" class="navbar-logo"><img src="{% static 'images/logo.PNG' %}" alt="Logo" style="width:auto; max-width: 250px;" /></a>
-            <a href="{% url 'login' %}" class="login">Login</a>
+
+            <div class="navbar-right">
+              <div class="language-dropdown">
+                <button class="language-dropbtn">🌏</button>
+                <div class="language-dropdown-content">
+                  <form id="languageForm" action="{% url 'set_language' %}" method="post">
+                    {% csrf_token %}
+                    <input name="next" type="hidden" value="{{ request.path }}">
+                    {% get_current_language as LANGUAGE_CODE %}
+                    {% get_available_languages as LANGUAGES %}
+                    {% get_language_info_list for LANGUAGES as languages %}
+                    {% for language in languages %}
+                      <a href="#" onclick="changeLanguage('{{ language.code }}')">{{ language.name_local }} ({{ language.code }})</a>
+                    {% endfor %}
+                    <input type="hidden" name="language" id="languageInput" value="{{ LANGUAGE_CODE }}">
+                  </form>
+                </div>
+              </div>
+              <a href="{% url 'login' %}" class="login">Login</a>
+            </div>
           </nav>
         {% endif %}
       </header>
@@ -63,7 +127,7 @@
               <div class="alert alert-{{ message.tags }}">{{ message }}</div>
             {% endfor %}
           {% endif %}
-
+          
           {% block content %}
 
           {% endblock %}
