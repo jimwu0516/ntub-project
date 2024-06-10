@@ -23,6 +23,7 @@ contract = web3.eth.contract(address=contract_address, abi=abi)
 owner_private_key = settings.PRIVATE_KEY
 owner_account = Account.from_key(owner_private_key)
 
+
 def returnDepositAndAirdrop(borrower_address, contributor_address, depositAmount, damagePercentage, airdropAmount):
     nonce = web3.eth.get_transaction_count(owner_account.address)
     transaction = contract.functions.returnDepositAndAirdrop(borrower_address, contributor_address, depositAmount, damagePercentage, airdropAmount).build_transaction({

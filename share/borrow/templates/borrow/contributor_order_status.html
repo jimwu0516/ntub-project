@@ -70,7 +70,7 @@
     const remainingSeconds = Math.floor((remainingDiffInSeconds % 3600) % 60)
 
     remainingTimeSpan.innerHTML = remainingHours + ' h ' + remainingMinutes + ' m ' + remainingSeconds + ' s'
-    document.getElementById('decision_minutes').value = (8-remainingHours)*60 + (60 -remainingMinutes)  ;
+    document.getElementById('decision_minutes').value = (7-remainingHours)*60 + (60 -remainingMinutes)  ;
 
     if (currentTime > endTime) {
       var xhr = new XMLHttpRequest()

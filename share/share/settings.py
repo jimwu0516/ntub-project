@@ -16,7 +16,7 @@ from web3 import Web3
 
 from django.utils.translation import gettext_lazy as _
 
-
+"""
 config=configparser.ConfigParser()
 path = '/'.join((os.path.abspath(__file__).replace('\\', '/')).split('/')[:-1])
 config.read(os.path.join(path, 'config.ini'))
@@ -25,6 +25,7 @@ google_maps_api_key = config['credentials']['google_maps_api_key']
 email_host_password = config['credentials']['email_host_password']
 database_password = config['credentials']['database_password']
 private_key = config['credentials']['private_key']
+"""
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -39,7 +40,7 @@ SECRET_KEY = 'django-insecure-i9v3x)_xkl2ptnh=k2nk!0tm%xu5j&&&yqz#+l4^xenm0*za(3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -65,7 +66,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
-
 ]
 
 ROOT_URLCONF = 'share.urls'
@@ -99,8 +99,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ntub_project_share_db',
         'USER': 'postgres',
-        'PASSWORD': database_password,
-        'HOST': 'localhost',
+        'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+        'HOST': 'db',
         'PORT': '5432'
     }
 }
@@ -130,25 +130,29 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 LANGUAGES = [
-    ('en', _('English')),
-    ('zh-hant', _('Traditional Chinese')),
+    ('en', 'English'),
+    ('zh-hant', 'Traditional Chinese'),
 ]
+
 LOCALE_PATHS = [
-    BASE_DIR / 'locale',
+    os.path.join(BASE_DIR, 'locale'),
 ]
 
 TIME_ZONE = 'Asia/Taipei'
 
-USE_I18N = True
+USE_I18N = True  
+USE_L10N = True
+USE_TZ = True  
 
-USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -161,16 +165,17 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'sharetoearn999@gmail.com'
-EMAIL_HOST_PASSWORD = email_host_password
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-GOOGLE_MAPS_API_KEY = google_maps_api_key
+GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-PRIVATE_KEY = private_key
+PRIVATE_KEY = os.getenv('PRIVATE_KEY')
+
 
 
 

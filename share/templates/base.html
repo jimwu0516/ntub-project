@@ -20,10 +20,14 @@
     <script src="https://unpkg.com/chart.js@2.8.0/dist/Chart.bundle.js"></script>
     <script src="https://unpkg.com/chartjs-gauge@0.3.0/dist/chartjs-gauge.js"></script>
     <script>
-      function changeLanguage(languageCode, languageName) {
-          document.getElementById('languageInput').value = languageCode;
-          document.getElementById('languageForm').submit();
-      }
+      function changeLanguage(languageCode, event) {
+        event.preventDefault();  
+        var form = document.getElementById('languageForm');
+        var input = document.getElementById('languageInput');
+        input.value = languageCode; 
+        form.submit(); 
+    }
+    
     </script>
   </head>
 
@@ -50,19 +54,20 @@
               <div class="language-dropdown">
                 <button class="language-dropbtn">🌏</button>
                 <div class="language-dropdown-content">
-                  <form id="languageForm" action="{% url 'set_language' %}" method="post">
-                    {% csrf_token %}
-                    <input name="next" type="hidden" value="{{ request.path }}">
-                    {% get_current_language as LANGUAGE_CODE %}
-                    {% get_available_languages as LANGUAGES %}
-                    {% get_language_info_list for LANGUAGES as languages %}
-                    {% for language in languages %}
-                      <a href="#" onclick="changeLanguage('{{ language.code }}')">{{ language.name_local }} ({{ language.code }})</a>
-                    {% endfor %}
-                    <input type="hidden" name="language" id="languageInput" value="{{ LANGUAGE_CODE }}">
-                  </form>
+                    <form id="languageForm" action="{% url 'set_language' %}" method="post">
+                        {% csrf_token %}
+                        <input name="next" type="hidden" value="{{ request.path }}">
+                        {% get_current_language as LANGUAGE_CODE %}
+                        {% get_available_languages as LANGUAGES %}
+                        {% get_language_info_list for LANGUAGES as languages %}
+                        {% for language in languages %}
+                            <a href="#" onclick="changeLanguage('{{ language.code }}', event)">{{ language.name_local }} ({{ language.code }})</a>
+                        {% endfor %}
+                        <input type="hidden" name="language" id="languageInput" value="{{ LANGUAGE_CODE }}">
+                    </form>
                 </div>
               </div>
+              
             
               {% comment %}
               <form id="languageForm" action="{% url 'set_language' %}" method="post">
