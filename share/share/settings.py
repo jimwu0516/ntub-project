@@ -40,7 +40,8 @@ SECRET_KEY = 'django-insecure-i9v3x)_xkl2ptnh=k2nk!0tm%xu5j&&&yqz#+l4^xenm0*za(3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1', '172.20.10.2']
+
 
 
 # Application definition
@@ -143,8 +144,6 @@ TIME_ZONE = 'Asia/Taipei'
 USE_I18N = True  
 USE_L10N = True
 USE_TZ = True  
-
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
