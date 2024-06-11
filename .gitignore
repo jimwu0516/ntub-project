@@ -1,3 +1,16 @@
 .env
 *.ini
 __pycache__/
+
+cache/
+out/
+
+!/broadcast
+/broadcast/*/31337/
+/broadcast/**/dry-run/
+
+docs/
+
+.vscode
+.idea
+
