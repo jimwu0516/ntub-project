@@ -11,6 +11,8 @@ pillow = "*"
 python-dotenv = "*"
 google-cloud-storage = "*"
 configparser = "*"
+django-storages = "*"
+gunicorn = "*"
 
 [dev-packages]
 

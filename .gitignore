@@ -11,6 +11,12 @@ out/
 
 docs/
 
+staticfiles/
+media/
+
+
 .vscode
 .idea
+
+
 

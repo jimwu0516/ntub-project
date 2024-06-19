@@ -15,7 +15,9 @@ import configparser
 from web3 import Web3
 
 from django.utils.translation import gettext_lazy as _
+from dotenv import load_dotenv
 
+load_dotenv()
 """
 config=configparser.ConfigParser()
 path = '/'.join((os.path.abspath(__file__).replace('\\', '/')).split('/')[:-1])
@@ -30,7 +32,6 @@ private_key = config['credentials']['private_key']
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -40,9 +41,7 @@ SECRET_KEY = 'django-insecure-i9v3x)_xkl2ptnh=k2nk!0tm%xu5j&&&yqz#+l4^xenm0*za(3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', 'localhost', '127.0.0.1', '172.20.10.2']
-
-
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -101,10 +100,12 @@ DATABASES = {
         'NAME': 'ntub_project_share_db',
         'USER': 'postgres',
         'PASSWORD': os.getenv('DATABASE_PASSWORD'),
-        'HOST': 'db',
+        'HOST': 'localhost',
         'PORT': '5432'
     }
 }
+
+
 
 
 # Password validation
@@ -143,15 +144,17 @@ TIME_ZONE = 'Asia/Taipei'
 
 USE_I18N = True  
 USE_L10N = True
-USE_TZ = True  
+USE_TZ = True 
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
+STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATICFILES_DIRS = [BASE_DIR / 'static']
+ 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -170,11 +173,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY')
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 PRIVATE_KEY = os.getenv('PRIVATE_KEY')
-
-
-
-

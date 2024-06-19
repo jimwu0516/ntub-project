@@ -22,6 +22,8 @@ msgstr ""
 msgid "Borrow"
 msgstr "借用"
 
+
 #: templates/base.html:39
 msgid "Order"
 msgstr "訂單"
+

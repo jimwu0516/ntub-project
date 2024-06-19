@@ -10,6 +10,7 @@ web3 = Web3(Web3.HTTPProvider(rpc_url))
 web3.middleware_onion.inject(geth_poa_middleware, layer=0)
 
 def load_contract_abi():
+    
     abi_path = os.path.join(settings.STATICFILES_DIRS[0], 'abi', 'ShareTokenABI.json')
     with open(abi_path, 'r') as file:
         contract_abi = json.load(file)
@@ -20,8 +21,12 @@ chain_id = '0x61'; #mainnet 0x38 testnet 0x61
 abi = load_contract_abi()
 contract = web3.eth.contract(address=contract_address, abi=abi)
 
-owner_private_key = settings.PRIVATE_KEY
+owner_private_key = os.getenv('PRIVATE_KEY')
+if not owner_private_key:
+    raise ValueError("PRIVATE_KEY environment variable is not set")
+
 owner_account = Account.from_key(owner_private_key)
+
 
 
 def returnDepositAndAirdrop(borrower_address, contributor_address, depositAmount, damagePercentage, airdropAmount):
