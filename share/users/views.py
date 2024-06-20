@@ -119,8 +119,14 @@ class AdminDashboardView(UserPassesTestMixin, View):
         next_unlock = get_next_unlock() 
         airdrop_mint = get_airdrop_mint() / 10**18
         user_count = Profile.objects.count()
-        average_breakage = int(Order.objects.filter(status='finish').aggregate(Avg('breakage'))['breakage__avg'])
-
+        #average_breakage = int(Order.objects.filter(status='finish').aggregate(Avg('breakage'))['breakage__avg'])
+        average_breakage_aggregate = Order.objects.filter(status='finish').aggregate(Avg('breakage'))
+        average_breakage = average_breakage_aggregate['breakage__avg']
+        if average_breakage is not None:
+            average_breakage = int(average_breakage)
+        else:
+            average_breakage = 0 
+        
         like_count = Review.objects.filter(review_result='like').count()
         dislike_count =  Review.objects.filter(review_result='dislike').count()
         
