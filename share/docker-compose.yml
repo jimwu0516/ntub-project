@@ -1,25 +1,39 @@
-version: '3'
+version: '3.8'
 
 services:
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8000
+    command: gunicorn share.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - .:/app
+      - .:/usr/src/app
+      - /usr/src/app/staticfiles:/usr/src/app/staticfiles
+      - /usr/src/app/media:/usr/src/app/media
+    env_file:
+      - .env
     ports:
       - "8000:8000"
     depends_on:
       - db
-    env_file:
-      - .env
+
   db:
-    image: postgres
+    image: postgres:16
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: ntub_project_share_db
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+
+  nginx:
+    image: nginx:alpine
     volumes:
-      - postgres_data:/var/lib/postgresql/data/
+      - ./nginx:/etc/nginx/conf.d
+      - /usr/src/app/staticfiles:/usr/src/app/staticfiles
+      - /usr/src/app/media:/usr/src/app/media
+    ports:
+      - "80:80"
+    depends_on:
+      - web
 
 volumes:
   postgres_data:

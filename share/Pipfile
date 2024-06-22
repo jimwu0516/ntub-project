@@ -13,6 +13,7 @@ google-cloud-storage = "*"
 configparser = "*"
 django-storages = "*"
 gunicorn = "*"
+whitenoise = "*"
 
 [dev-packages]
 
