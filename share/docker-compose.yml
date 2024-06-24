@@ -21,8 +21,8 @@ services:
       - postgres_data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: ntub_project_share_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_USER: jimwu
+      POSTGRES_PASSWORD: ${GCP_DATABASE_PASSWORD}
 
   nginx:
     image: nginx:alpine

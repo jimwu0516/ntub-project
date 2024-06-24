@@ -1,6 +1,5 @@
 #!/bin/sh
 
-# Wait for PostgreSQL to be ready
 if [ "$DATABASE" = "postgres" ]
 then
     echo "Waiting for postgres..."
@@ -12,16 +11,14 @@ then
     echo "PostgreSQL started"
 fi
 
-# Apply database migrations
 echo "Apply database migrations"
 pipenv run python manage.py migrate
 
-# Collect static files
 echo "Collect static files"
 pipenv run python manage.py collectstatic --noinput
 
-exec pipenv run "$@"
-
+echo "Starting Gunicorn"
+exec pipenv run gunicorn share.wsgi:application --bind 0.0.0.0:8000 --workers 3
 
 
 

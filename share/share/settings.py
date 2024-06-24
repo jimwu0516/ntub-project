@@ -15,6 +15,12 @@ import configparser
 from web3 import Web3
 
 from django.utils.translation import gettext_lazy as _
+
+from google.oauth2 import service_account
+import google.auth
+from google.auth import load_credentials_from_file
+
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -39,7 +45,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-i9v3x)_xkl2ptnh=k2nk!0tm%xu5j&&&yqz#+l4^xenm0*za(3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
+PRODUCTION = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -55,6 +62,7 @@ INSTALLED_APPS = [
     'users',
     'contribute',
     'borrow',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -135,38 +143,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
-
-
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'ntub_project_share_db',
-            'USER': 'postgres',
-            'PASSWORD': os.getenv('DATABASE_PASSWORD'),
-            'HOST': 'localhost',
-            'PORT': '5432'
-        }
-    }
-
-else:
-     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'ntub_project_share_db',
-            'USER': 'postgres',
-            'PASSWORD': os.getenv('DATABASE_PASSWORD'),
-            'HOST': os.getenv('DB_HOST'),
-            'PORT': '5432'
-        }
-    }
-    
+ 
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -186,3 +163,69 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY')
 
 PRIVATE_KEY = os.getenv('PRIVATE_KEY')
+
+
+if PRODUCTION:
+    
+    os.environ['GOOGLE_APPLICATION_CREDENTIALS'] = '/secrets/key.json'
+
+    # Now load the credentials
+    try:
+        credentials, project_id = load_credentials_from_file(os.getenv('GOOGLE_APPLICATION_CREDENTIALS'))
+    except Exception as e:
+        print(f"Error loading Google credentials: {e}")
+        
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'ntub_project_share_db',
+            'USER': 'jimwu',
+            'PASSWORD': os.getenv('GCP_DATABASE_PASSWORD'),
+            #'HOST': '/cloudsql/ntub-senior-project-427211:asia-east1:ntub-senior-project-instance', 
+            'HOST' : '127.0.0.1',
+            'PORT': '5432',
+        }
+    }
+  
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+    GS_BUCKET_NAME = 'ntub-share-to-earn-bucket'
+
+    STATIC_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/static/'
+    MEDIA_URL = f'https://storage.googleapis.com/{GS_BUCKET_NAME}/media/'
+    
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
+
+else:
+    
+    if DEBUG:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': 'ntub_project_share_db',
+                'USER': 'postgres',
+                'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+                'HOST': 'localhost',
+                'PORT': '5432'
+            }
+        }
+    else:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.postgresql',
+                'NAME': 'ntub_project_share_db',
+                'USER': 'postgres',
+                'PASSWORD': os.getenv('DATABASE_PASSWORD'),
+                'HOST': os.getenv('DB_HOST'),
+                'PORT': '5432'
+            }
+        }
+        
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+    STATIC_URL = '/static/'
+    STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+
+

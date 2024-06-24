@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: share-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: share
+  template:
+    metadata:
+      labels:
+        app: share
+    spec:
+      containers:
+      - name: share
+        image: gcr.io/ntub-senior-project-427211/share:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+        env:
+        - name: DB_HOST
+          value: 127.0.0.1
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_NAME
+          value: "ntub_project_share_db"
+        - name: DB_USER
+          value: "jimwu"
+        - name: DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: django-secrets
+              key: DATABASE_PASSWORD
+        - name: GCP_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: django-secrets
+              key: GCP_DATABASE_PASSWORD
+        - name: EMAIL_HOST_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: django-secrets
+              key: EMAIL_HOST_PASSWORD
+        - name: GOOGLE_MAPS_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: django-secrets
+              key: GOOGLE_MAPS_API_KEY
+        - name: PRIVATE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: django-secrets
+              key: PRIVATE_KEY
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /secrets/key.json
+        volumeMounts:
+        - name: cloudsql-instance-credentials
+          mountPath: /secrets
+          readOnly: true
+      - name: cloud-sql-proxy
+        image: gcr.io/cloudsql-docker/gce-proxy:1.19.1
+        command: ["/cloud_sql_proxy",
+                  "-instances=ntub-senior-project-427211:asia-east1:ntub-senior-project-instance=tcp:5432",
+                  "-credential_file=/secrets/key.json"]
+        volumeMounts:
+        - name: cloudsql-instance-credentials
+          mountPath: /secrets
+          readOnly: true
+      volumes:
+      - name: cloudsql-instance-credentials
+        secret:
+          secretName: cloudsql-instance-credentials
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: share-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 8000
+  selector:
+    app: share

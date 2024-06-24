@@ -21,39 +21,39 @@
 
               const statusInput = document.getElementById('transactionStatus');
               statusInput.value = 'unpaid'; 
-  
+
               var start_time = new Date(document.getElementsByName('start_time')[0].value);
               var end_time = new Date(document.getElementsByName('end_time')[0].value);
               var currentTime = new Date();
               var oneDayLater = new Date(currentTime);
               oneDayLater.setDate(currentTime.getDate() + 1);
-  
+
               if (start_time <= oneDayLater) {
                   alert('The borrowing start time must begin at least one day in the future');
                   return false;
               }
-  
+
               if (end_time <= start_time) {
                   alert('The end time must be after the start time');
                   return false;
               }
-  
+
               var fourteenDaysLater = new Date(start_time);
               fourteenDaysLater.setDate(start_time.getDate() + 14);
               if (end_time > fourteenDaysLater) {
                   alert('The end time must be within 14 days after the borrowing start time');
                   return false;
               }
-  
+
               if (!localStorage.getItem('walletConnected')) {      
                 alert('Please connect your wallet');
                 return
               }
-  
+
               const depositAmount = document.getElementById('depositAmount').value;
               const accounts = await web3.eth.getAccounts();
               const account = accounts[0];
-  
+
               contract.methods
                   .payDeposit(depositAmount)
                   .send({ 
@@ -81,13 +81,13 @@
   });
 
 
-  function transaction_processing(transactionHash) {
-      var transaction_processing = document.getElementById('transaction_processing');
-      document.getElementById('hashDisplay').innerText = transactionHash;
-      transaction_processing.style.display = "block";
-  }
+    function transaction_processing(transactionHash) {
+        var transaction_processing = document.getElementById('transaction_processing');
+        document.getElementById('hashDisplay').innerText = transactionHash;
+        transaction_processing.style.display = "block";
+    }
   </script>
-
+  
   <div class="borrow-request-container">
     <div class="borrow-request-card">
       <img src="{{ item.item_image.url }}" alt="{{ item.item_name }}" />
@@ -96,7 +96,9 @@
 
         <p>Deposit Required: {{ item.item_deposit_require }}</p>
         <p>Item Address: {{ item.item_address }}</p>
-        <p>Contributor:<a href="{% url 'contributor_history_dashboard' item.contributor.id %}" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'"> {{ item.contributor }}</a></p>
+        <p>
+          Contributor:<a href="{% url 'contributor_history_dashboard' item.contributor.id %}" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">{{ item.contributor }}</a>
+        </p>
 
         <form id="borrowForm" action="{% url 'borrow_item' item.pk %}" method="post">
           {% csrf_token %}
@@ -120,8 +122,8 @@
 
   <div id="transaction_processing" class="transaction_processing">
     <div class="transaction_processing-content">
-      <p class="Transaction_processing_title"style="font-size: 50px;">Transaction Processing...</p>
-      <img src="{% static 'images/exchange.png' %}" alt="exchange"/>
+      <p class="Transaction_processing_title" style="font-size: 50px;">Transaction Processing...</p>
+      <img src="{% static 'images/exchange.png' %}" alt="exchange" />
       <p class="Transaction_hash_title">Transaction Hash</p>
       <p id="hashDisplay"></p>
     </div>
