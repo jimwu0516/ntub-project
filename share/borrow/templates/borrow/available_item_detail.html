@@ -10,84 +10,82 @@
   <script>
     document.addEventListener('DOMContentLoaded', async function () {
       if (window.ethereum) {
-          window.web3 = new Web3(ethereum);
-          const response = await fetch('{% static "abi/ShareTokenABI.json" %}');
-          const contractABI = await response.json();
-          const contractAddress = localStorage.getItem('contract_address');
-          const contract = new web3.eth.Contract(contractABI, contractAddress);
-
-          document.getElementById('borrowForm').addEventListener('submit', async function (event) {
-              event.preventDefault();
-
-              const statusInput = document.getElementById('transactionStatus');
-              statusInput.value = 'unpaid'; 
-
-              var start_time = new Date(document.getElementsByName('start_time')[0].value);
-              var end_time = new Date(document.getElementsByName('end_time')[0].value);
-              var currentTime = new Date();
-              var oneDayLater = new Date(currentTime);
-              oneDayLater.setDate(currentTime.getDate() + 1);
-
-              if (start_time <= oneDayLater) {
-                  alert('The borrowing start time must begin at least one day in the future');
-                  return false;
-              }
-
-              if (end_time <= start_time) {
-                  alert('The end time must be after the start time');
-                  return false;
-              }
-
-              var fourteenDaysLater = new Date(start_time);
-              fourteenDaysLater.setDate(start_time.getDate() + 14);
-              if (end_time > fourteenDaysLater) {
-                  alert('The end time must be within 14 days after the borrowing start time');
-                  return false;
-              }
-
-              if (!localStorage.getItem('walletConnected')) {      
-                alert('Please connect your wallet');
-                return
-              }
-
-              const depositAmount = document.getElementById('depositAmount').value;
-              const accounts = await web3.eth.getAccounts();
-              const account = accounts[0];
-
-              contract.methods
-                  .payDeposit(depositAmount)
-                  .send({ 
-                    from: account
-        
-                  })
-                  .on('transactionHash', function (hash) {
-                      console.log('Transaction Hash:', hash);
-                      transaction_processing (hash);
-                  })
-                  .on('receipt', function (receipt) {
-                      console.log('Receipt:', receipt);
-                      statusInput.value = 'pending';  
-                      document.getElementById('borrowForm').submit();
-                  })
-                  .on('error', function (error, receipt) {
-                      console.error('Error:', error);
-                      document.getElementById('borrowForm').submit();
-                      alert('Transaction failed!');
-                  });
-          });
+        window.web3 = new Web3(ethereum)
+        const response = await fetch('{% static "abi/ShareTokenABI.json" %}')
+        const contractABI = await response.json()
+        const contractAddress = localStorage.getItem('contract_address')
+        const contract = new web3.eth.Contract(contractABI, contractAddress)
+    
+        document.getElementById('borrowForm').addEventListener('submit', async function (event) {
+          event.preventDefault()
+    
+          const statusInput = document.getElementById('transactionStatus')
+          statusInput.value = 'unpaid'
+    
+          var start_time = new Date(document.getElementsByName('start_time')[0].value)
+          var end_time = new Date(document.getElementsByName('end_time')[0].value)
+          var currentTime = new Date()
+          var oneDayLater = new Date(currentTime)
+          oneDayLater.setDate(currentTime.getDate() + 1)
+    
+          if (start_time <= oneDayLater) {
+            alert('The borrowing start time must begin at least one day in the future')
+            return false
+          }
+    
+          if (end_time <= start_time) {
+            alert('The end time must be after the start time')
+            return false
+          }
+    
+          var fourteenDaysLater = new Date(start_time)
+          fourteenDaysLater.setDate(start_time.getDate() + 14)
+          if (end_time > fourteenDaysLater) {
+            alert('The end time must be within 14 days after the borrowing start time')
+            return false
+          }
+    
+          if (!localStorage.getItem('walletConnected')) {
+            alert('Please connect your wallet')
+            return
+          }
+    
+          const depositAmount = document.getElementById('depositAmount').value
+          const accounts = await web3.eth.getAccounts()
+          const account = accounts[0]
+    
+          contract.methods
+            .payDeposit(depositAmount)
+            .send({
+              from: account
+            })
+            .on('transactionHash', function (hash) {
+              console.log('Transaction Hash:', hash)
+              transaction_processing(hash)
+            })
+            .on('receipt', function (receipt) {
+              console.log('Receipt:', receipt)
+              statusInput.value = 'pending'
+              document.getElementById('borrowForm').submit()
+            })
+            .on('error', function (error, receipt) {
+              console.error('Error:', error)
+              document.getElementById('borrowForm').submit()
+              alert('Transaction failed!')
+            })
+        })
       } else {
-          alert('Non-Ethereum browser detected. You should consider trying MetaMask!');
+        alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
       }
-  });
-
-
+    })
+    
     function transaction_processing(transactionHash) {
-        var transaction_processing = document.getElementById('transaction_processing');
-        document.getElementById('hashDisplay').innerText = transactionHash;
-        transaction_processing.style.display = "block";
+      var transaction_processing = document.getElementById('transaction_processing')
+      document.getElementById('hashDisplay').innerText = transactionHash
+      transaction_processing.style.display = 'block'
     }
   </script>
-  
+
   <div class="borrow-request-container">
     <div class="borrow-request-card">
       <img src="{{ item.item_image.url }}" alt="{{ item.item_name }}" />

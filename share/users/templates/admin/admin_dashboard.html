@@ -153,7 +153,8 @@
   <body>
     <header class="header">
       <div class="navbar-left">
-        <img src="{% static 'images/logo-admin.PNG' %}" alt="Logo" />
+        <a href="{% url "admin_dashboard" %}"><img src="{% static 'images/logo-admin.PNG' %}" alt="Logo" /></a>
+        <a href="{% url 'create_proposal' %}" >create proposal</a>
       </div>
 
       <div class="navbar-right">

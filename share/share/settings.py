@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'contribute',
     'borrow',
     'storages',
+    'governance',
 ]
 
 MIDDLEWARE = [

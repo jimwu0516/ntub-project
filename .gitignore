@@ -1,6 +1,7 @@
 .env
 *.ini
 __pycache__/
+migrations/
 
 cache/
 out/
@@ -17,6 +18,8 @@ media/
 
 .vscode
 .idea
+
+
 
 
 

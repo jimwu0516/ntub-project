@@ -30,6 +30,7 @@ urlpatterns = [
     path('', include('users.urls')),
     path('', include('contribute.urls')),
     path('', include('borrow.urls')),
+    path('', include('governance.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += i18n_patterns(
