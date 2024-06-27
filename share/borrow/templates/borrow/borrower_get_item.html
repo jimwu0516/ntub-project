@@ -6,12 +6,6 @@
 
 {% block content %}
   <script>
-    function confirmGetItem() {
-      return confirm('Are you sure you already got this item?')
-    }
-  </script>
-
-  <script>
     function initMap() {
       var geocoder = new google.maps.Geocoder()
       var address = '{{ item_address }}'
@@ -85,42 +79,64 @@
       })
     }
     
-    
     function updateTimeAndCheck() {
-      var order = document.querySelector('.get-item-page-container');
-      var startTimeString = order.getAttribute('data-start-time');
-      var startTime = new Date(startTimeString);
-      var currentTime = new Date();
-      var timeDiff = Math.abs(currentTime - startTime);
-      var diffInSeconds = timeDiff / 1000;
-      var minutes = Math.floor(diffInSeconds / 60);
-      var seconds = Math.floor(diffInSeconds % 60);
-  
+      var order = document.querySelector('.get-item-page-container')
+      var startTimeString = order.getAttribute('data-start-time')
+      var startTime = new Date(startTimeString)
+      var currentTime = new Date()
+      var timeDiff = Math.abs(currentTime - startTime)
+      var diffInSeconds = timeDiff / 1000
+      var minutes = Math.floor(diffInSeconds / 60)
+      var seconds = Math.floor(diffInSeconds % 60)
+    
       if (currentTime > startTime) {
-        var Timeoutwarn = document.getElementById('Timeout');
-        Timeoutwarn.textContent = 'Delay ' + minutes + ' min  ' + seconds + ' sec';
-        Timeoutwarn.style.color = 'red';
-        
-        document.getElementById('overdue_minutes').value = minutes;
+        var Timeoutwarn = document.getElementById('Timeout')
+        Timeoutwarn.textContent = 'Delay ' + minutes + ' min  ' + seconds + ' sec'
+        Timeoutwarn.style.color = 'red'
+    
+        document.getElementById('overdue_minutes').value = minutes
       }
-  
+    
       if (currentTime > startTime && minutes >= 60) {
-        var xhr = new XMLHttpRequest();
-        var borrower_not_picked_up_url = order.getAttribute('borrower-not-picked-up-url');
-        xhr.open('POST', borrower_not_picked_up_url, true);
-        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
-        xhr.send();
-  
-        window.location.href = "{% url 'latest_status_user_orders' %}";
+        var xhr = new XMLHttpRequest()
+        var borrower_not_picked_up_url = order.getAttribute('borrower-not-picked-up-url')
+        xhr.open('POST', borrower_not_picked_up_url, true)
+        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}')
+        xhr.send()
+    
+        window.location.href = "{% url 'latest_status_user_orders' %}"
       }
     }
-  
-    document.addEventListener('DOMContentLoaded', function () {
-      updateTimeAndCheck();
-      setInterval(updateTimeAndCheck, 1000);
-    });
-
     
+    document.addEventListener('DOMContentLoaded', function () {
+      updateTimeAndCheck()
+      setInterval(updateTimeAndCheck, 1000)
+    })
+    
+    function confirmGetItem() {
+      var pin = prompt('Please enter your PIN code:')
+      if (pin) {
+        var xhr = new XMLHttpRequest()
+        xhr.open('POST', '{% url "verify_pin_code" %}', true)
+        xhr.setRequestHeader('Content-Type', 'application/json')
+        xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}')
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4 && xhr.status === 200) {
+            var response = JSON.parse(xhr.responseText)
+            if (response.valid) {
+              document.getElementById('pinCode').value = pin
+              document.getElementById('getItemForm').submit()
+            } else {
+              alert('Incorrect PIN code. Please try again.')
+            }
+          } else if (xhr.readyState === 4) {
+            alert('An error occurred. Please try again.')
+          }
+        }
+        xhr.send(JSON.stringify({ order_id: '{{ order.order_id }}', pin_code: pin }))
+      }
+      return false
+    }
   </script>
 
   <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
@@ -133,17 +149,19 @@
     <div class="get-item-info">
       <div class="get-item-info-left">
         <p>Contributor:</p>
-        <p style="font-weight: bold;"><a href="{% url 'contributor_history_dashboard' order.item.contributor.id %}" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">{{ order.item.contributor }} </a></p>
-        
+        <p style="font-weight: bold;">
+          <a href="{% url 'contributor_history_dashboard' order.item.contributor.id %}" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">{{ order.item.contributor }}</a>
+        </p>
+
         <p>Item Address:</p>
         <p>{{ order.item.item_address }}</p>
-
       </div>
       <div class="get-item-info-right">
         <p id="Timeout"></p>
-        <form action="{% url 'update_to_get_item' order.order_id %}" method="post" onsubmit="return confirmGetItem()">
+        <form id="getItemForm" action="{% url 'update_to_get_item' order.order_id %}" method="post" onsubmit="return confirmGetItem()">
           {% csrf_token %}
-          <input type="hidden" id="overdue_minutes" name="overdue_minutes" value="0">
+          <input type="hidden" id="pinCode" name="pin_code" value="" />
+          <input type="hidden" id="overdue_minutes" name="overdue_minutes" value="0" />
           <button type="submit" class="get-item-btn">Get item</button>
         </form>
       </div>

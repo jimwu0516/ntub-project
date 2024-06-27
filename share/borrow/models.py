@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from contribute.models import Item 
 from django.utils import timezone
+import random
 # Create your models here.
 
 class Order(models.Model):
@@ -45,6 +46,16 @@ class Order(models.Model):
         )
     breakage = models.IntegerField(default=0, choices=BREAKAGE_CHOICES)
     airdropAmount = models.IntegerField(default=0)
+    pin_code = models.CharField(max_length=4)
+
     
     objects = models.Manager() 
     
+    def save(self, *args, **kwargs):
+        if not self.pin_code:
+            self.pin_code = self.generate_pin_code()
+        super().save(*args, **kwargs)
+    
+    @staticmethod
+    def generate_pin_code():
+        return str(random.randint(1000, 9999))

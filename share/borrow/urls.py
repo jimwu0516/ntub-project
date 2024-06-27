@@ -39,7 +39,8 @@ urlpatterns = [
     
     path('borrower-history-dashboard/<int:borrower_id>/', views.borrower_history_dashboard, name='borrower_history_dashboard'),
     path('contributor-history-dashboard/<int:contributor_id>/', views.contributor_history_dashboard, name='contributor_history_dashboard'),
-
+    
+    path('verify-pin-code/', views.verify_pin_code, name='verify_pin_code'),
 
 ]
 

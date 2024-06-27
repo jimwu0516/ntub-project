@@ -22,6 +22,9 @@ from django.db.models import Avg, Count,  F, Q, DateField
 from django.utils.timezone import now, timedelta
 from django.db.models.functions import TruncWeek
 from collections import OrderedDict
+
+from django.views.decorators.csrf import csrf_exempt
+import json
 #----------------------borrower browse available items --------------------------------------------------------
 @login_required
 def available_items(request):
@@ -369,7 +372,13 @@ def borrower_get_item_page(request, order_id):
 @login_required
 def update_to_get_item(request, order_id):
     if request.method == "POST":
+        pin_code = request.POST.get('pin_code')
         order = get_object_or_404(Order, order_id=order_id)
+        
+        if pin_code != order.pin_code:
+            messages.error(request, 'Incorrect PIN code. Please try again!')
+            return redirect('latest_status_user_orders')
+        
         order.status = 'get_item'
         order.save()
         
@@ -382,8 +391,20 @@ def update_to_get_item(request, order_id):
         profile.save()
         
         messages.success(request, 'Get item successfully.')
-
         return redirect('latest_status_user_orders')
+
+@csrf_exempt
+def verify_pin_code(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        order_id = data.get('order_id')
+        pin_code = data.get('pin_code')
+        
+    order = Order.objects.get(order_id=order_id)
+    if order.pin_code == pin_code:
+        return JsonResponse({'valid': True})
+    else:
+        return JsonResponse({'valid': False})   
 
 
 #---------------contributor gets the item back-------------------------------------------------------------
@@ -450,7 +471,6 @@ def borrower_submit_review(request, order_id):
         
         order.status = 'finish'
         order.save()
-        
         
         messages.success(request, 'Your review has been submitted.')
         return JsonResponse({'txn_hash': txn_hash})
