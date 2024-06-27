@@ -6,6 +6,7 @@ import os
 from django.conf import settings
 from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse
+from borrow.web3 import get_list_end_proposals, get_list_active_proposals
 
 def load_contract_abi():
     abi_path = os.path.join(settings.STATICFILES_DIRS[0], 'abi', 'ShareTokenABI.json')
@@ -20,3 +21,8 @@ def create_proposal(request):
         deadline = request.POST.get('deadline')
         return HttpResponseRedirect(reverse('admin_dashboard'))
     return render(request, 'governance/create_proposal.html')
+
+def admin_show_all_proposal(request):
+    end_proposals = get_list_end_proposals()
+    active_proposals = get_list_active_proposals()
+    return render(request, 'governance/admin_proposal_list.html', {'end_proposals': end_proposals, 'active_proposals': active_proposals})

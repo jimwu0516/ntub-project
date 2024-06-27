@@ -1,0 +1,211 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Create Proposal</title>
+    <script src="{% static 'js/web3.min.js' %}"></script>
+    <script src="{% static 'js/connect_wallet.js' %}"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 10px 10px;
+        padding: 0;
+        padding-top: 75px;
+        display: flex;
+        flex-direction: column;
+        background-color: #161131;
+        color: #f5e5a7;
+      }
+      .header {
+        height: 75px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+        background-color: #161131;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 100%;
+        padding: 0 255px;
+        margin: 0px 15px;
+      }
+      .navbar-left {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+      }
+      .navbar-left img {
+        max-height: 75px;
+      }
+      .navbar-right {
+        display: flex;
+        align-items: center;
+      }
+      .connect-wallet-btn {
+        margin-right: 20px;
+      }
+      .disconnectSelect {
+        background-color: #ffffff;
+        color: #000000;
+        border: 1px solid #999999;
+        padding: 5px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        outline: none;
+      }
+      .disconnectSelect option {
+        background-color: #ffffff;
+        color: #000000;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      .transaction_processing {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        margin-top: 20px;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
+        justify-content: center;
+        align-items: center;
+        animation: fadeIn 0.15s ease-out forwards;
+      }
+      .transaction_processing-content {
+        background-color: #fff8dc;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 10px;
+        width: 50%;
+        align-items: center;
+        animation: scaleUp 0.15s ease-out forwards;
+        text-align: center;
+        margin-top: 220px;
+      }
+      .Transaction_processing_title {
+        text-align: center;
+        font-size: 50px;
+        color: #8b4513;
+      }
+      .Transaction_hash_title {
+        text-align: center;
+        font-size: 40px;
+        color: #e77a29;
+        margin-bottom: 15px;
+      }
+      #hashDisplay {
+        text-align: center;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        font-size: max(22px, calc(100% - 40px));
+        font-family: 'Consolas';
+        box-sizing: border-box;
+        padding: 10px;
+        overflow: hidden;
+        color: #e77a29;
+        padding-top: 0;
+        margin-top: 0;
+      }
+      .transaction_processing-content img {
+        width: auto;
+        max-width: 12%;
+        height: auto;
+        margin: 0;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+      @keyframes scaleUp {
+        from {
+          transform: scale(0.8);
+        }
+        to {
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <div class="navbar-left">
+        <a href="{% url 'admin_dashboard' %}"><img src="{% static 'images/logo-admin.PNG' %}" alt="Logo" /></a>
+      </div>
+      <div class="navbar-right">
+        <div class="connect-wallet-btn">
+          <button id="connectWalletBtn" class="connectWalletBtn" style="background-color: green; color: white; border: 0px; padding: 10px; border-radius: 5px;">Connect Wallet</button>
+          <select id="disconnectSelect" class="disconnectSelect" style="display: none;"></select>
+        </div>
+        <a href="{% url 'logout' %}" id="logoutBtn" style="color: red; font-weight: bold;">Logout</a>
+      </div>
+    </header>
+    <main>
+      <a href="{% url 'create_proposal' %}" >Create proposal</a>
+      <h1>Ended Proposals</h1>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Total Yes Votes</th>
+            <th>Total No Votes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for proposal in end_proposals %}
+            <tr>
+              <td>{{ proposal.id }}</td>
+              <td>{{ proposal.title }}</td>
+              <td>{{ proposal.description }}</td>
+              <td>{{ proposal.totalYes }}</td>
+              <td>{{ proposal.totalNo }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <br />
+      <h1>Active Proposals</h1>
+      <table border="1">
+          <thead>
+              <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Description</th>
+                  <th>Total Yes Votes</th>
+                  <th>Total No Votes</th>
+                  <th>Remaining Time (minutes)</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for proposal in active_proposals %}
+                  <tr>
+                      <td>{{ proposal.id }}</td>
+                      <td>{{ proposal.title }}</td>
+                      <td>{{ proposal.description }}</td>
+                      <td>{{ proposal.totalYes }}</td>
+                      <td>{{ proposal.totalNo }}</td>
+                      <td>{{ proposal.remainingMinutes }}</td>
+                  </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+    </main>
+  </body>
+</html>

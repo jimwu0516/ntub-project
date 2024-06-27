@@ -103,3 +103,34 @@ def get_top_token_holders():
     top_token_holders = sorted_balances[:5]
     
     return top_token_holders
+
+def get_list_end_proposals():
+    
+    result = contract.functions.listEndProposals().call()
+    ids, titles, descriptions, totalYess, totalNos = result
+    proposals = []
+    for i in range(len(ids)):
+        proposals.append({
+            'id': ids[i],
+            'title': titles[i],
+            'description': descriptions[i],
+            'totalYes': totalYess[i],
+            'totalNo': totalNos[i]
+        })
+    return proposals
+
+def get_list_active_proposals():
+    
+    result = contract.functions.listActiveProposals().call()
+    ids, titles, descriptions, totalYess, totalNos, remainingMinutes = result
+    proposals = []
+    for i in range(len(ids)):
+        proposals.append({
+            'id': ids[i],
+            'title': titles[i],
+            'description': descriptions[i],
+            'totalYes': totalYess[i],
+            'totalNo': totalNos[i],
+            'remainingMinutes': remainingMinutes[i]
+        })
+    return proposals    
