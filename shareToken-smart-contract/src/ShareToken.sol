@@ -13,6 +13,8 @@ contract ShareToken {
     mapping(address => uint256) public balanceOf;
     address[] public holders; 
     mapping(address => bool) public isHolder;
+    mapping(address => mapping(address => uint256)) public allowance;
+
 
     uint256 public teamAllocation = (totalSupply * 30) / 100;
     uint256 public initialMint = (totalSupply * 20) / 100;
@@ -24,6 +26,7 @@ contract ShareToken {
     address public owner;
 
     event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approval(address indexed owner, address indexed spender, uint256 value);
     event ProposalCreated(uint256 id, string title, uint256 snapshotId);
     event Voted(address indexed voter, uint256 proposalId, bool vote);
 
@@ -67,6 +70,12 @@ contract ShareToken {
         return balanceOf[_address] / (10**uint256(decimals));
     }
 
+    function approve(address _spender, uint256 _value) public returns (bool success) {
+        allowance[msg.sender][_spender] = _value;
+        emit Approval(msg.sender, _spender, _value);
+        return true;
+    }
+
     function transfer(address _to, uint256 _value)
         public
         returns (bool success)
@@ -85,6 +94,26 @@ contract ShareToken {
         }
 
         emit Transfer(msg.sender, _to, _value);
+        return true;
+    }
+
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
+        require(_from != address(0), "Invalid address");
+        require(_to != address(0), "Invalid address");
+        require(balanceOf[_from] >= _value, "Insufficient balance");
+        
+        balanceOf[_from] -= _value;
+        balanceOf[_to] += _value;
+
+        if (!isHolder[_to]) {
+            holders.push(_to);
+            isHolder[_to] = true;
+        }
+        if (balanceOf[_from] == 0) {
+            isHolder[_from] = false;
+        }
+
+        emit Transfer(_from, _to, _value);
         return true;
     }
 
@@ -395,4 +424,3 @@ contract ShareToken {
         emit Transfer(projectWallet, borrower_address, depositAamountInWei);
     }     
 }
-
