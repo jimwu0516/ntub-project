@@ -100,6 +100,8 @@ contract LiquidityPool {
         require(_shareTokenAmount > 0, "Invalid amount");
         uint256 usdtAmountOut = getAmountOut(_shareTokenAmount, shareTokenReserve, usdtTokenReserve);
 
+        require(usdtAmountOut <= usdtTokenReserve, "Insufficient USDT reserve");
+
         shareToken.transferFrom(msg.sender, address(this), _shareTokenAmount);
         usdtToken.transfer(msg.sender, usdtAmountOut);
 
@@ -118,6 +120,8 @@ contract LiquidityPool {
     function swapUSDTForShareToken(uint256 _usdtAmount) public {
         require(_usdtAmount > 0, "Invalid amount");
         uint256 shareTokenAmountOut = getAmountOut(_usdtAmount, usdtTokenReserve, shareTokenReserve);
+
+        require(shareTokenAmountOut <= shareTokenReserve, "Insufficient ShareToken reserve");
 
         usdtToken.transferFrom(msg.sender, address(this), _usdtAmount);
         shareToken.transfer(msg.sender, shareTokenAmountOut);
