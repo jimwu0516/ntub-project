@@ -5,16 +5,15 @@ contract ShareToken {
     string public name = "ShareToken";
     string public symbol = "STE";
     uint8 public decimals = 18;
-    uint256 public totalSupply = 10000000 * 10**uint256(decimals);
+    uint256 public totalSupply = 10000000 * 10 ** uint256(decimals);
     uint256 public remainingUnlockedTokens;
- 
+
     address public projectWallet = msg.sender;
 
     mapping(address => uint256) public balanceOf;
-    address[] public holders; 
+    address[] public holders;
     mapping(address => bool) public isHolder;
     mapping(address => mapping(address => uint256)) public allowance;
-
 
     uint256 public teamAllocation = (totalSupply * 30) / 100;
     uint256 public initialMint = (totalSupply * 20) / 100;
@@ -67,7 +66,7 @@ contract ShareToken {
     }
 
     function getBalance(address _address) public view returns (uint256) {
-        return balanceOf[_address] / (10**uint256(decimals));
+        return balanceOf[_address] / (10 ** uint256(decimals));
     }
 
     function approve(address _spender, uint256 _value) public returns (bool success) {
@@ -76,10 +75,7 @@ contract ShareToken {
         return true;
     }
 
-    function transfer(address _to, uint256 _value)
-        public
-        returns (bool success)
-    {
+    function transfer(address _to, uint256 _value) public returns (bool success) {
         require(_to != address(0), "Invalid address");
         require(balanceOf[msg.sender] >= _value, "Insufficient balance");
         balanceOf[msg.sender] -= _value;
@@ -101,7 +97,7 @@ contract ShareToken {
         require(_from != address(0), "Invalid address");
         require(_to != address(0), "Invalid address");
         require(balanceOf[_from] >= _value, "Insufficient balance");
-        
+
         balanceOf[_from] -= _value;
         balanceOf[_to] += _value;
 
@@ -128,8 +124,8 @@ contract ShareToken {
 
         for (uint256 i = 0; i < holders.length; i++) {
             address voter = holders[i];
-            if (isHolder[voter]) { 
-                proposal.votingPowers[voter] = balanceOf[voter]/10**uint256(decimals);
+            if (isHolder[voter]) {
+                proposal.votingPowers[voter] = balanceOf[voter] / 10 ** uint256(decimals);
             }
         }
 
@@ -153,12 +149,27 @@ contract ShareToken {
         emit Voted(msg.sender, _proposalId, _vote);
     }
 
-    function getProposal(uint256 _proposalId) public view returns (string memory title, string memory description, uint256 totalYes, uint256 totalNo) {
+    function getProposal(uint256 _proposalId)
+        public
+        view
+        returns (string memory title, string memory description, uint256 totalYes, uint256 totalNo)
+    {
         Proposal storage proposal = proposals[_proposalId];
         return (proposal.title, proposal.description, proposal.totalYes, proposal.totalNo);
     }
 
-    function listActiveProposals() public view returns (uint256[] memory, string[] memory, string[]memory, uint256[]memory, uint256[]memory, uint256[]memory ) {
+    function listActiveProposals()
+        public
+        view
+        returns (
+            uint256[] memory,
+            string[] memory,
+            string[] memory,
+            uint256[] memory,
+            uint256[] memory,
+            uint256[] memory
+        )
+    {
         uint256 activeCount = 0;
 
         for (uint256 i = 0; i < nextProposalId; i++) {
@@ -169,9 +180,9 @@ contract ShareToken {
 
         uint256[] memory ids = new uint256[](activeCount);
         string[] memory titles = new string[](activeCount);
-        string[] memory descriptions = new  string[](activeCount);
-        uint256[] memory totalYess = new uint256[](activeCount); 
-        uint256[] memory totalNos = new uint256[](activeCount); 
+        string[] memory descriptions = new string[](activeCount);
+        uint256[] memory totalYess = new uint256[](activeCount);
+        uint256[] memory totalNos = new uint256[](activeCount);
         uint256[] memory remainingMinute = new uint256[](activeCount);
 
         uint256 currentIndex = 0;
@@ -182,15 +193,19 @@ contract ShareToken {
                 descriptions[currentIndex] = proposals[i].description;
                 totalYess[currentIndex] = proposals[i].totalYes;
                 totalNos[currentIndex] = proposals[i].totalNo;
-                remainingMinute[currentIndex]=  (proposals[i].deadline - block.timestamp) / 60 ;
+                remainingMinute[currentIndex] = (proposals[i].deadline - block.timestamp) / 60;
                 currentIndex++;
             }
         }
 
-        return (ids, titles, descriptions,  totalYess,  totalNos, remainingMinute);
+        return (ids, titles, descriptions, totalYess, totalNos, remainingMinute);
     }
 
-    function listEndProposals() public view returns (uint256[] memory, string[] memory, string[]memory, uint256[]memory, uint256[]memory ) {
+    function listEndProposals()
+        public
+        view
+        returns (uint256[] memory, string[] memory, string[] memory, uint256[] memory, uint256[] memory)
+    {
         uint256 endCount = 0;
 
         for (uint256 i = 0; i < nextProposalId; i++) {
@@ -201,9 +216,9 @@ contract ShareToken {
 
         uint256[] memory ids = new uint256[](endCount);
         string[] memory titles = new string[](endCount);
-        string[] memory descriptions = new  string[](endCount);
-        uint256[] memory totalYess = new uint256[](endCount); 
-        uint256[] memory totalNos = new uint256[](endCount); 
+        string[] memory descriptions = new string[](endCount);
+        uint256[] memory totalYess = new uint256[](endCount);
+        uint256[] memory totalNos = new uint256[](endCount);
 
         uint256 currentIndex = 0;
         for (uint256 i = 0; i < nextProposalId; i++) {
@@ -217,17 +232,13 @@ contract ShareToken {
             }
         }
 
-        return (ids, titles, descriptions,  totalYess,  totalNos);
+        return (ids, titles, descriptions, totalYess, totalNos);
     }
 
-    function getVotersDetails(uint256 _proposalId) 
-        public 
-        view 
-        returns (
-            address[] memory, 
-            uint256[] memory, 
-            bool[] memory
-        ) 
+    function getVotersDetails(uint256 _proposalId)
+        public
+        view
+        returns (address[] memory, uint256[] memory, bool[] memory)
     {
         uint256 voterCount = 0;
 
@@ -254,7 +265,7 @@ contract ShareToken {
         return (voters, votingPowers, votes);
     }
 
-   //unlocktoken-----------------------------------------------------------------------------------------------------------------------------------
+    //unlocktoken-----------------------------------------------------------------------------------------------------------------------------------
     function unlockTokens() external onlyOwner {
         require(block.timestamp >= unlockStart, "Tokens are still locked");
         require(unlockedTokens < teamAllocation, "All tokens unlocked");
@@ -264,16 +275,16 @@ contract ShareToken {
         uint256 intervalsPassed = timePassed / (365 days / 2);
 
         uint256[] memory unlockAmounts = new uint256[](10);
-        unlockAmounts[0] = 0 * (10**uint256(decimals));
-        unlockAmounts[1] = 93706 * (10**uint256(decimals));
-        unlockAmounts[2] = 121818 * (10**uint256(decimals));
-        unlockAmounts[3] = 158363 * (10**uint256(decimals));
-        unlockAmounts[4] = 205872 * (10**uint256(decimals));
-        unlockAmounts[5] = 267634 * (10**uint256(decimals));
-        unlockAmounts[6] = 347924 * (10**uint256(decimals));
-        unlockAmounts[7] = 452301 * (10**uint256(decimals));
-        unlockAmounts[8] = 587992 * (10**uint256(decimals));
-        unlockAmounts[9] = 764390 * (10**uint256(decimals));
+        unlockAmounts[0] = 0 * (10 ** uint256(decimals));
+        unlockAmounts[1] = 93706 * (10 ** uint256(decimals));
+        unlockAmounts[2] = 121818 * (10 ** uint256(decimals));
+        unlockAmounts[3] = 158363 * (10 ** uint256(decimals));
+        unlockAmounts[4] = 205872 * (10 ** uint256(decimals));
+        unlockAmounts[5] = 267634 * (10 ** uint256(decimals));
+        unlockAmounts[6] = 347924 * (10 ** uint256(decimals));
+        unlockAmounts[7] = 452301 * (10 ** uint256(decimals));
+        unlockAmounts[8] = 587992 * (10 ** uint256(decimals));
+        unlockAmounts[9] = 764390 * (10 ** uint256(decimals));
 
         if (intervalsPassed > unlockedTokens) {
             uint256 tokensToUnlock = 0;
@@ -298,9 +309,7 @@ contract ShareToken {
             return (0, 0);
         } else {
             //計算距離下一次解鎖還有多久
-            uint256 timeUntilUnlock = (intervalsPassed + 1) *
-                (365 days / 2) -
-                timePassed;
+            uint256 timeUntilUnlock = (intervalsPassed + 1) * (365 days / 2) - timePassed;
             day = timeUntilUnlock / 1 days;
             hour = (timeUntilUnlock % 1 days) / 1 hours;
             return (day, hour);
@@ -309,7 +318,7 @@ contract ShareToken {
 
     //paydeposit tackle -----------------------------------------------------------------------------------------------------------------------------------
     function payDeposit(uint256 amount) public returns (bool success) {
-        uint256 amountInWei = amount * 10**uint256(decimals);
+        uint256 amountInWei = amount * 10 ** uint256(decimals);
         require(balanceOf[msg.sender] >= amountInWei, "Insufficient balance");
 
         balanceOf[msg.sender] -= amountInWei;
@@ -320,7 +329,6 @@ contract ShareToken {
         return true;
     }
 
-    
     //return deposit and airdrop token ---------------------------------
     function returnDepositAndAirdrop(
         address borrower_address,
@@ -329,27 +337,16 @@ contract ShareToken {
         uint256 damagePercentage,
         uint256 airdropAmount
     ) public onlyOwner {
-        require(
-            borrower_address != address(0) && contributor_address != address(0),
-            "Invalid address"
-        );
-        require(
-            damagePercentage >= 0 && damagePercentage <= 100,
-            "Invalid fraction percentage"
-        );
-        require(
-            balanceOf[projectWallet] >= depositAmount,
-            "Insufficient balance in project wallet"
-        );
-        require(
-            airdropAmount > 0, "Invalid amount"
-        );
+        require(borrower_address != address(0) && contributor_address != address(0), "Invalid address");
+        require(damagePercentage >= 0 && damagePercentage <= 100, "Invalid fraction percentage");
+        require(balanceOf[projectWallet] >= depositAmount, "Insufficient balance in project wallet");
+        require(airdropAmount > 0, "Invalid amount");
 
-        uint256 depositAmountInWei = depositAmount * 10**uint256(decimals);
+        uint256 depositAmountInWei = depositAmount * 10 ** uint256(decimals);
         uint256 contributorAmount = (depositAmountInWei * damagePercentage) / 100;
         uint256 borrowerAmount = depositAmountInWei - contributorAmount;
 
-        uint256 airdropAmountInWei = airdropAmount * 10**uint256(decimals);
+        uint256 airdropAmountInWei = airdropAmount * 10 ** uint256(decimals);
 
         balanceOf[projectWallet] -= depositAmountInWei;
         balanceOf[contributor_address] += contributorAmount;
@@ -364,16 +361,12 @@ contract ShareToken {
             balanceOf[contributor_address] += airdropAmountInWei;
             emit Transfer(address(this), contributor_address, airdropAmountInWei);
         } else {
-            require(
-                balanceOf[projectWallet] >= airdropAmountInWei,
-                "Insufficient balance in project wallet"
-            );
+            require(balanceOf[projectWallet] >= airdropAmountInWei, "Insufficient balance in project wallet");
             balanceOf[projectWallet] -= airdropAmountInWei;
             balanceOf[contributor_address] += airdropAmountInWei;
             emit Transfer(projectWallet, contributor_address, airdropAmountInWei);
         }
     }
-
 
     //return deposit while borrower_not_picked_up ---------------------------------
     function borrowerNotPickedUpReturnDeposit(
@@ -381,16 +374,10 @@ contract ShareToken {
         address contributor_address,
         uint256 depositAmount
     ) public onlyOwner {
-        require(
-            borrower_address != address(0) && contributor_address != address(0),
-            "Invalid address"
-        );
-        require(
-            balanceOf[projectWallet] >= depositAmount,
-            "Insufficient balance in project wallet"
-        );
+        require(borrower_address != address(0) && contributor_address != address(0), "Invalid address");
+        require(balanceOf[projectWallet] >= depositAmount, "Insufficient balance in project wallet");
 
-        uint256 depositAamountInWei = depositAmount * 10**uint256(decimals);
+        uint256 depositAamountInWei = depositAmount * 10 ** uint256(decimals);
         uint256 contributorAmount = (depositAamountInWei * 30) / 100;
         uint256 borrowerAmount = depositAamountInWei - contributorAmount;
 
@@ -403,24 +390,15 @@ contract ShareToken {
     }
 
     //return deposit while cancel_order ---------------------------------
-    function cancelOrderReturnDeposit(
-        address borrower_address,
-        uint256 depositAmount
-    ) public onlyOwner {
-        require(
-            borrower_address != address(0) ,
-            "Invalid address"
-        );
-        require(
-            balanceOf[projectWallet] >= depositAmount,
-            "Insufficient balance in project wallet"
-        );
+    function cancelOrderReturnDeposit(address borrower_address, uint256 depositAmount) public onlyOwner {
+        require(borrower_address != address(0), "Invalid address");
+        require(balanceOf[projectWallet] >= depositAmount, "Insufficient balance in project wallet");
 
-        uint256 depositAamountInWei = depositAmount * 10**uint256(decimals);
-        
+        uint256 depositAamountInWei = depositAmount * 10 ** uint256(decimals);
+
         balanceOf[projectWallet] -= depositAamountInWei;
         balanceOf[borrower_address] += depositAamountInWei;
 
         emit Transfer(projectWallet, borrower_address, depositAamountInWei);
-    }     
+    }
 }

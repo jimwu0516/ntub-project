@@ -202,10 +202,55 @@
                       <td>{{ proposal.totalYes }}</td>
                       <td>{{ proposal.totalNo }}</td>
                       <td>{{ proposal.remainingMinutes }}</td>
+                      <button onclick="vote({{ proposal.id }}, true)">Yes</button>
+                      <button onclick="vote({{ proposal.id }}, false)">No</button>
                   </tr>
               {% endfor %}
           </tbody>
       </table>
+
+
+
+
+
+      
+
+
+      <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+      <script>
+          async function vote(proposalId, vote) {
+              if (typeof window.ethereum !== 'undefined') {
+                  const web3 = new Web3(window.ethereum);
+
+                  if (!localStorage.getItem('walletConnected')) {
+                    alert('Please connect your wallet first!')
+                    return
+                  }
+
+                  try {
+                      await window.ethereum.request({ method: 'eth_requestAccounts' });
+
+                      const accounts = await web3.eth.getAccounts();
+                      const account = accounts[0];
+
+                      const contractAddress = localStorage.getItem('contract_address');
+                      const response = await fetch('{% static "abi/ShareTokenABI.json" %}')
+                      const contractABI = await response.json()
+
+                      const contract = new web3.eth.Contract(contractABI, contractAddress);
+
+                      await contract.methods.vote(proposalId, vote).send({ from: account });
+
+                      alert('Vote submitted successfully!');
+                  } catch (error) {
+                      console.error("Error voting:", error);
+                      alert('There was an error submitting your vote.');
+                  }
+              } else {
+                  alert('Please install MetaMask!');
+              }
+          }
+      </script>
     </main>
   </body>
 </html>

@@ -51,10 +51,10 @@ contract ShareTokenTest is Test {
         vm.prank(owner);
         shareToken.createProposal("Test Proposal", "Description", 7 days);
 
-        (string memory title,,uint256 totalYes,uint256 totalNo) = shareToken.getProposal(0);
+        (string memory title,, uint256 totalYes, uint256 totalNo) = shareToken.getProposal(0);
         assertEq(title, "Test Proposal");
-        assertEq(totalYes, 0); 
-        assertEq(totalNo, 0);  
+        assertEq(totalYes, 0);
+        assertEq(totalNo, 0);
     }
 
     function testVote() public {
@@ -64,12 +64,11 @@ contract ShareTokenTest is Test {
         shareToken.vote(0, true);
 
         (,, uint256 totalYes,) = shareToken.getProposal(0);
-        assertEq(totalYes, shareToken.balanceOf(owner) / (10 ** 18)); 
+        assertEq(totalYes, shareToken.balanceOf(owner) / (10 ** 18));
     }
 
-
     function testUnlockTokens() public {
-        vm.warp(365 days); 
+        vm.warp(365 days);
 
         vm.prank(owner);
         shareToken.unlockTokens();
@@ -77,12 +76,11 @@ contract ShareTokenTest is Test {
         assertTrue(expectedBalance > 0, "Should unlock tokens and increase owner balance");
     }
 
-
     function testReturnDepositAndAirdrop() public {
         vm.prank(owner);
         shareToken.returnDepositAndAirdrop(addr1, addr2, 100, 10, 50);
 
-        assertEq(shareToken.balanceOf(addr1), 90 * 10 ** 18); 
-        assertEq(shareToken.balanceOf(addr2), 60 * 10 ** 18); 
+        assertEq(shareToken.balanceOf(addr1), 90 * 10 ** 18);
+        assertEq(shareToken.balanceOf(addr2), 60 * 10 ** 18);
     }
 }

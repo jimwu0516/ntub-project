@@ -4,4 +4,5 @@ from . import views
 urlpatterns = [
     path('create-proposal/', views.create_proposal, name='create_proposal'),
     path('admin-all-proposal', views.admin_show_all_proposal, name='admin_all_proposal'),
+    path('proposals/<str:filter>/', views.user_proposals_list, name='user_proposals_list'),
 ]

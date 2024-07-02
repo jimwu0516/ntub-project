@@ -1,0 +1,336 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>Polling</title>
+{% endblock %}
+
+{% block content %}
+  <style>
+    .voting-card-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .proposal-category-bar {
+      padding: 10px 0;
+      margin-top: 15px;
+      display: flex;
+      justify-content: center;
+    }
+    
+    .proposal-category-links {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .proposal-category-links li {
+      display: inline;
+      padding: 10px 20px;
+      border-bottom: 2px solid transparent;
+      margin-left: 100px;
+      margin-right: 100px;
+    }
+    
+    .proposal-category-links a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      padding: 10px;
+    }
+
+    /*-------------------------------*/
+    
+    .voting-card {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 700px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .voting-card h3 {
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+    
+    .voting-card p {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+    
+    .voting-card .vote-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    
+    .vote-button {
+      flex: 1;
+      padding: 10px 0;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    
+    .vote-button:first-child {
+      margin-right: 10px;
+    }
+    
+    .vote-button.yes {
+      background-color: #007bff;
+      color: #fff;
+    }
+    
+    .vote-button.no {
+      background-color: #dc3545;
+      color: #fff;
+    }
+    
+    .vote-percentage {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 5px;
+    }
+    
+    .vote-percentage div {
+      font-size: 14px;
+      color: #333;
+    }
+    
+    .vote-percentage .yes-percentage {
+      color: #007bff;
+    }
+    
+    .vote-percentage .no-percentage {
+      color: #dc3545;
+    }
+    
+    .vote-percentage .middle-percentage {
+      color: #666;
+    }
+
+    /*--------------------------------*/
+    
+    .result-bar {
+      display: flex;
+      height: 10px;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-top: 10px;
+      position: relative;
+    }
+    
+    .result-bar div {
+      height: 100%;
+    }
+    
+    .result-yes {
+      background-color: #007bff;
+    }
+    
+    .result-no {
+      background-color: #dc3545;
+    }
+
+    
+    
+    .Winning-option {
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var menuItems = ['active-proposal', 'ended-proposal']
+    
+      menuItems.forEach(function (itemId) {
+        var item = document.getElementById(itemId)
+        var link = item.querySelector('a')
+    
+        if (window.location.href.includes(link.getAttribute('href'))) {
+          item.style.borderBottom = '2px solid #02a9f7'
+          link.style.color = '#02a9f7'
+        }
+    
+        item.addEventListener('mouseenter', function () {
+          item.style.borderBottom = '2px solid #02a9f7'
+        })
+    
+        item.addEventListener('mouseleave', function () {
+          if (!window.location.href.includes(link.getAttribute('href'))) {
+            item.style.borderBottom = ''
+            link.style.color = ''
+          }
+        })
+    
+        link.addEventListener('click', function () {
+          menuItems.forEach(function (itemId) {
+            var otherItem = document.getElementById(itemId)
+            var otherLink = otherItem.querySelector('a')
+            otherItem.style.borderBottom = ''
+            otherLink.style.color = ''
+          })
+    
+          item.style.borderBottom = '2px solid #02a9f7'
+          link.style.color = '#02a9f7'
+        })
+      })
+    })
+  </script>
+
+  <script>
+    async function vote(proposalId, vote) {
+      if (typeof window.ethereum !== 'undefined') {
+        const web3 = new Web3(window.ethereum)
+    
+        if (!localStorage.getItem('walletConnected')) {
+          alert('Please connect your wallet first!')
+          return
+        }
+    
+        try {
+          await window.ethereum.request({ method: 'eth_requestAccounts' })
+    
+          const accounts = await web3.eth.getAccounts()
+          const account = accounts[0]
+    
+          const contractAddress = localStorage.getItem('contract_address')
+          const response = await fetch('{% static "abi/ShareTokenABI.json" %}')
+          const contractABI = await response.json()
+    
+          const contract = new web3.eth.Contract(contractABI, contractAddress)
+    
+          await contract.methods.vote(proposalId, vote).send({ from: account })
+    
+          alert('Vote submitted successfully!')
+        } catch (error) {
+          console.error('Error voting:', error)
+          alert('There was an error submitting your vote.')
+        }
+      } else {
+        alert('Please install MetaMask!')
+      }
+    }
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var voteProgresses = document.querySelectorAll('.voting-card')
+    
+      voteProgresses.forEach(function (voteProgress) {
+        var totalYes = parseInt(voteProgress.getAttribute('data-total-yes'))
+        var totalNo = parseInt(voteProgress.getAttribute('data-total-no'))
+        var totalVotes = totalYes + totalNo
+    
+        var yesPercentage = totalVotes ? (totalYes / totalVotes) * 100 : 0
+        var noPercentage = totalVotes ? (totalNo / totalVotes) * 100 : 0
+    
+        var yesElement = voteProgress.querySelector('.yes-percentage')
+        var noElement = voteProgress.querySelector('.no-percentage')
+    
+        if (yesElement && noElement) {
+          yesElement.textContent = yesPercentage.toFixed(2) + '%'
+          noElement.textContent = noPercentage.toFixed(2) + '%'
+        } else {
+          console.error('Could not find yes-percentage or no-percentage elements in proposal ID:', voteProgress.id)
+        }
+    
+        var yesBar = voteProgress.querySelector('.result-yes')
+        var noBar = voteProgress.querySelector('.result-no')
+    
+        if (yesBar && noBar) {
+          yesBar.style.width = yesPercentage + '%'
+          noBar.style.width = noPercentage + '%'
+        } else {
+          console.error('Could not find result-yes or result-no elements in proposal ID:', voteProgress.id)
+        }
+      })
+    })
+  </script>
+
+  <nav class="proposal-category-bar">
+    <ul class="proposal-category-links">
+      <li id="active-proposal">
+        <a href="{% url 'user_proposals_list' 'active' %}">Active Proposals</a>
+      </li>
+      <li id="ended-proposal">
+        <a href="{% url 'user_proposals_list' 'ended' %}">Ended Proposals</a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="voting-card-container">
+    {% if filter == 'active' %}
+      {% for proposal in proposals %}
+        <div class="voting-card" data-total-yes="{{ proposal.totalYes }}" data-total-no="{{ proposal.totalNo }}">
+          <h3>{{ proposal.title }}</h3>
+          <p>{{ proposal.description }}</p>
+          <p>Remaining minutes: {{ proposal.remainingMinutes }}</p>
+
+          <div class="vote-buttons">
+            <button class="vote-button yes" onclick="vote({{ proposal.id }}, true)">Yes</button>
+            <button class="vote-button no" onclick="vote({{ proposal.id }}, false)">No</button>
+          </div>
+
+          <div class="vote-percentage">
+            <div class="yes-percentage"></div>
+            <div class="no-percentage"></div>
+          </div>
+
+          <div class="result-bar">
+            {% if proposal.totalYes == 0 and proposal.totalNo == 0 %}
+              <div style="text-align: center;">No Data</div>
+            {% else %}
+              <div class="result-yes" style="width: {{ proposal.totalYes }}%;"></div>
+              <div class="result-no" style="width: {{ proposal.totalNo }}%;"></div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    {% elif filter == 'ended' %}
+      {% for proposal in proposals %}
+        <div class="voting-card" data-total-yes="{{ proposal.totalYes }}" data-total-no="{{ proposal.totalNo }}">
+          <h3>{{ proposal.title }}</h3>
+          <p>{{ proposal.description }}</p>
+
+          {% if proposal.totalYes == 0 and proposal.totalNo == 0 %}
+            <div style="text-align: center;">No Data</div>
+          {% else %}
+            <div class="vote-percentage">
+              <div class="yes-percentage"></div>
+              <div class="middle-percentage">0%</div>
+              <div class="no-percentage"></div>
+            </div>
+
+            <div class="result-bar">
+              <div class="result-yes" style="width: {{ proposal.totalYes }}%;"></div>
+              <div class="result-no" style="width: {{ proposal.totalNo }}%;"></div>
+            </div>
+
+            <div class="Winning-option">
+              Winning option:
+              <span>
+                {% if proposal.totalYes > proposal.totalNo %}
+                  <span style="color: #ff8c00;">Yes</span>, with {{ proposal.totalYes }} STE
+                {% else %}
+                  <span style="color: #ff8c00;">No</span>, with {{ proposal.totalNo }} STE
+                {% endif %}
+              </span>
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>No proposals found.</p>
+    {% endif %}
+  </div>
+{% endblock %}

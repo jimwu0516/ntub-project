@@ -26,3 +26,18 @@ def admin_show_all_proposal(request):
     end_proposals = get_list_end_proposals()
     active_proposals = get_list_active_proposals()
     return render(request, 'governance/admin_proposal_list.html', {'end_proposals': end_proposals, 'active_proposals': active_proposals})
+
+def user_proposals_list(request, filter):
+    if filter == 'active':
+        proposals = get_list_active_proposals()
+    elif filter == 'ended':
+        proposals = get_list_end_proposals()
+    else:
+        proposals = []
+
+    context = {
+        'proposals': proposals,
+        'filter': filter,
+    }
+
+    return render(request, 'governance/user_proposal_list.html', context)

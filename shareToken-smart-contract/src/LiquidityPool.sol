@@ -114,7 +114,7 @@ contract LiquidityPool {
     function getSwapShareTokenForUSDT(uint256 _shareTokenAmount) public view returns (uint256) {
         require(_shareTokenAmount > 0, "Invalid amount");
         uint256 usdtAmountOut = getAmountOut(_shareTokenAmount, shareTokenReserve, usdtTokenReserve);
-        return  usdtAmountOut;
+        return usdtAmountOut;
     }
 
     function swapUSDTForShareToken(uint256 _usdtAmount) public {
@@ -131,7 +131,6 @@ contract LiquidityPool {
 
         emit Swap(msg.sender, "ShareToken", shareTokenAmountOut, _usdtAmount);
     }
-
 
     function getSwapUSDTForShareToken(uint256 _usdtAmount) public view returns (uint256) {
         require(_usdtAmount > 0, "Invalid amount");
