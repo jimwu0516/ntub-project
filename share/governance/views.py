@@ -6,7 +6,7 @@ import os
 from django.conf import settings
 from django.http import JsonResponse, HttpResponseRedirect
 from django.urls import reverse
-from borrow.web3 import get_list_end_proposals, get_list_active_proposals
+from borrow.web3 import get_list_end_proposals, get_list_active_proposals, get_proposal_details, get_proposal_info
 
 def load_contract_abi():
     abi_path = os.path.join(settings.STATICFILES_DIRS[0], 'abi', 'ShareTokenABI.json')
@@ -41,3 +41,11 @@ def user_proposals_list(request, filter):
     }
 
     return render(request, 'governance/user_proposal_list.html', context)
+
+def user_proposal_detail(request, proposal_id):
+    
+    proposal_details = get_proposal_details(proposal_id)
+    proposal_info = get_proposal_info(proposal_id)
+    
+    return render(request, 'governance/user_proposal_detail.html',  {'proposal_details': proposal_details, 'proposal_info': proposal_info})
+

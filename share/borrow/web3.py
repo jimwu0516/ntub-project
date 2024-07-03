@@ -134,3 +134,27 @@ def get_list_active_proposals():
             'remainingMinutes': remainingMinutes[i]
         })
     return proposals    
+
+def get_proposal_info(proposal_id):
+    proposal_id = int(proposal_id)
+    title, description, totalYes, totalNo =contract.functions.getProposal(proposal_id).call()
+    data = {
+        'title':title, 
+        'description':description, 
+        'totalYes':totalYes,
+        'totalNo':totalNo,
+    }
+    return data
+    
+
+def get_proposal_details(proposal_id):
+    proposal_id = int(proposal_id)
+    voters, voting_powers, votes = contract.functions.getVotersDetails(proposal_id).call()
+
+    data = {
+        "proposal_id": proposal_id,
+        "voters": list(zip(voters, voting_powers, votes)),
+    }
+    return data
+
+

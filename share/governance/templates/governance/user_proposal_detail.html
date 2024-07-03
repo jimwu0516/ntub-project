@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>Proposal Detail</title>
+{% endblock %}
+
+{% block content %}
+<style>
+    .voting-detail-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        margin-top: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+    }
+
+    .voting-detail-container .title {
+        font-size: 20px;
+        margin: 10px 0;
+    }
+    .voting-detail-container .description {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 20px;
+    }
+    .result {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .result span {
+        color: red;
+    }
+    .bar-container {
+        margin-bottom: 20px;
+    }
+    .bar-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+        font-size: 14px;
+    }
+    .bar {
+        height: 20px;
+        background-color: #ddd;
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+        margin-bottom: 10px;
+    }
+    .bar-fill {
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .bar-fill.yes {
+        background-color: blue;
+    }
+    .bar-fill.no {
+        background-color: red;
+    }
+
+    .votes-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .votes-table th, .votes-table td {
+        padding: 10px;
+        text-align: left;
+        border: 1px solid #ddd;
+    }
+
+    .votes-table td.option-yes {
+        color: blue;
+    }
+    .votes-table td.option-no {
+        color: red;
+    }
+
+    .voting-detail-container .Winning-option {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 20px;
+    }
+
+    .back-button {
+        margin-top: 120px;
+        display: inline-block;
+        margin-bottom: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        color: white;
+        background-color: #007bff;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-left: 75px;
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var totalYes = parseInt("{{ proposal_info.totalYes }}");
+        var totalNo = parseInt("{{ proposal_info.totalNo }}");
+
+        var totalVotes = totalYes + totalNo;
+
+        var yesPercent = (totalYes / totalVotes) * 100;
+        var noPercent = (totalNo / totalVotes) * 100;
+
+        document.getElementById('bar-yes').style.width = yesPercent + '%';
+        document.getElementById('yes-percent').textContent = totalYes + " STE Voting " + yesPercent.toFixed(2) + '%';
+
+        document.getElementById('bar-no').style.width = noPercent + '%';
+        document.getElementById('no-percent').textContent = totalNo + " STE Voting " + noPercent.toFixed(2) + '%';
+    });
+</script>
+
+<a href="javascript:history.back()" class="back-button">Back</a>
+
+<div class="voting-detail-container">
+
+    <h2 class="title">{{ proposal_info.title }}</h2>
+    <div class="description">{{ proposal_info.description }}</div>
+    
+    <div class="Winning-option">
+        Winning option:
+        <span>
+          {% if proposal_info.totalYes > proposal_info.totalNo %}
+            <span style="color: #ff8c00;">Yes</span>, with {{ proposal_info.totalYes }} STE
+          {% else %}
+            <span style="color: #ff8c00;">No</span>, with {{ proposal_info.totalNo }} STE
+          {% endif %}
+        </span>
+    </div>
+
+    <h3>Detail</h3>
+   
+    <div class="bar-container">
+        <div class="bar-label">
+            <span>Yes</span>
+            <span id="yes-percent">0%</span>
+        </div>
+        <div class="bar">
+            <div class="bar-fill yes" id="bar-yes" style="width: 0%;"></div>
+        </div>
+        <div class="bar-label">
+            <span>No</span>
+            <span id="no-percent">0%</span>
+        </div>
+        <div class="bar">
+            <div class="bar-fill no" id="bar-no" style="width: 0%;"></div>
+        </div>
+    </div>
+
+    <table class="votes-table">
+        <thead>
+            <tr>
+                <th>Address</th>
+                <th>Option</th>
+                <th>Voting power</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for voter, power, vote in proposal_details.voters %}
+                <tr>
+                    <td>{{ voter }}</td>
+                    {% if  vote %}
+                        <td  class="option-yes">Yes</td>
+                    {% else %}
+                        <td class="option-no">No</td>
+                    {% endif %}
+                    <td>{{ power }} STE</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

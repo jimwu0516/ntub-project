@@ -42,7 +42,7 @@
       font-weight: bold;
       padding: 10px;
     }
-
+    
     /*-------------------------------*/
     
     .voting-card {
@@ -52,6 +52,10 @@
       width: 700px;
       padding: 20px;
       margin-bottom: 20px;
+    }
+
+    .voting-card.ended:hover {
+      background-color: #d3d3d3; /* 更深的灰色背景，区分 ended 状态 */
     }
     
     .voting-card h3 {
@@ -85,7 +89,7 @@
     }
     
     .vote-button.yes {
-      background-color: #007bff;
+      background-color: #000080;
       color: #fff;
     }
     
@@ -116,7 +120,7 @@
     .vote-percentage .middle-percentage {
       color: #666;
     }
-
+    
     /*--------------------------------*/
     
     .result-bar {
@@ -133,14 +137,12 @@
     }
     
     .result-yes {
-      background-color: #007bff;
+      background-color: #000080;
     }
     
     .result-no {
       background-color: #dc3545;
     }
-
-    
     
     .Winning-option {
       text-align: center;
@@ -271,7 +273,7 @@
   <div class="voting-card-container">
     {% if filter == 'active' %}
       {% for proposal in proposals %}
-        <div class="voting-card" data-total-yes="{{ proposal.totalYes }}" data-total-no="{{ proposal.totalNo }}">
+        <div class="voting-card active" data-total-yes="{{ proposal.totalYes }}" data-total-no="{{ proposal.totalNo }}">
           <h3>{{ proposal.title }}</h3>
           <p>{{ proposal.description }}</p>
           <p>Remaining minutes: {{ proposal.remainingMinutes }}</p>
@@ -298,35 +300,37 @@
       {% endfor %}
     {% elif filter == 'ended' %}
       {% for proposal in proposals %}
-        <div class="voting-card" data-total-yes="{{ proposal.totalYes }}" data-total-no="{{ proposal.totalNo }}">
-          <h3>{{ proposal.title }}</h3>
-          <p>{{ proposal.description }}</p>
+        <div class="voting-card ended" data-total-yes="{{ proposal.totalYes }}" data-total-no="{{ proposal.totalNo }}">
+          <a href="{% url 'user_proposal_detail' proposal.id %}">
+            <h3>{{ proposal.title }}</h3>
+            <p>{{ proposal.description }}</p>
 
-          {% if proposal.totalYes == 0 and proposal.totalNo == 0 %}
-            <div style="text-align: center;">No Data</div>
-          {% else %}
-            <div class="vote-percentage">
-              <div class="yes-percentage"></div>
-              <div class="middle-percentage">0%</div>
-              <div class="no-percentage"></div>
-            </div>
+            {% if proposal.totalYes == 0 and proposal.totalNo == 0 %}
+              <div style="text-align: center;">No Data</div>
+            {% else %}
+              <div class="vote-percentage">
+                <div class="yes-percentage"></div>
+                <div class="middle-percentage">0%</div>
+                <div class="no-percentage"></div>
+              </div>
 
-            <div class="result-bar">
-              <div class="result-yes" style="width: {{ proposal.totalYes }}%;"></div>
-              <div class="result-no" style="width: {{ proposal.totalNo }}%;"></div>
-            </div>
+              <div class="result-bar">
+                <div class="result-yes" style="width: {{ proposal.totalYes }}%;"></div>
+                <div class="result-no" style="width: {{ proposal.totalNo }}%;"></div>
+              </div>
 
-            <div class="Winning-option">
-              Winning option:
-              <span>
-                {% if proposal.totalYes > proposal.totalNo %}
-                  <span style="color: #ff8c00;">Yes</span>, with {{ proposal.totalYes }} STE
-                {% else %}
-                  <span style="color: #ff8c00;">No</span>, with {{ proposal.totalNo }} STE
-                {% endif %}
-              </span>
-            </div>
-          {% endif %}
+              <div class="Winning-option">
+                Winning option:
+                <span>
+                  {% if proposal.totalYes > proposal.totalNo %}
+                    <span style="color: #ff8c00;">Yes</span>, with {{ proposal.totalYes }} STE
+                  {% else %}
+                    <span style="color: #ff8c00;">No</span>, with {{ proposal.totalNo }} STE
+                  {% endif %}
+                </span>
+              </div>
+            {% endif %}
+          </a>
         </div>
       {% endfor %}
     {% else %}
