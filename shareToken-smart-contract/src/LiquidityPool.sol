@@ -32,8 +32,6 @@ contract LiquidityPool {
         usdtToken = IFakeUSDT(_usdtTokenAddress);
     }
 
-    //----add liquidity-------------------------------------------------
-
     function addLiquidity(uint256 _shareTokenAmount, uint256 _usdtTokenAmount) public {
         require(_shareTokenAmount > 0 && _usdtTokenAmount > 0, "Invalid amount");
 
@@ -69,8 +67,6 @@ contract LiquidityPool {
         return (usdtAmount * shareTokenReserve) / usdtTokenReserve;
     }
 
-    //----remove liquidity-------------------------------------------------
-
     function removeLiquidity(uint256 _liquidityAmount) public {
         require(_liquidityAmount > 0, "Invalid amount");
         require(liquidity[msg.sender] >= _liquidityAmount, "Insufficient liquidity");
@@ -90,17 +86,9 @@ contract LiquidityPool {
         emit RemoveLiquidity(msg.sender, shareTokenAmount, usdtTokenAmount);
     }
 
-    function getUserLiquidity() public view returns (uint256) {
-        return liquidity[msg.sender];
-    }
-
-    //----swap-------------------------------------------------
-
     function swapShareTokenForUSDT(uint256 _shareTokenAmount) public {
         require(_shareTokenAmount > 0, "Invalid amount");
         uint256 usdtAmountOut = getAmountOut(_shareTokenAmount, shareTokenReserve, usdtTokenReserve);
-
-        require(usdtAmountOut <= usdtTokenReserve, "Insufficient USDT reserve");
 
         shareToken.transferFrom(msg.sender, address(this), _shareTokenAmount);
         usdtToken.transfer(msg.sender, usdtAmountOut);
@@ -121,8 +109,6 @@ contract LiquidityPool {
         require(_usdtAmount > 0, "Invalid amount");
         uint256 shareTokenAmountOut = getAmountOut(_usdtAmount, usdtTokenReserve, shareTokenReserve);
 
-        require(shareTokenAmountOut <= shareTokenReserve, "Insufficient ShareToken reserve");
-
         usdtToken.transferFrom(msg.sender, address(this), _usdtAmount);
         shareToken.transfer(msg.sender, shareTokenAmountOut);
 
@@ -138,7 +124,9 @@ contract LiquidityPool {
         return shareTokenAmountOut;
     }
 
-    //----calculate-------------------------------------------------
+    function getUserLiquidity() public view returns (uint256) {
+        return liquidity[msg.sender];
+    }
 
     function getAmountOut(uint256 _amountIn, uint256 _reserveIn, uint256 _reserveOut) private pure returns (uint256) {
         require(_amountIn > 0, "Invalid input amount");
