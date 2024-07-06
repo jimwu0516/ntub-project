@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+  <title>Liquidity Reserves</title>
+{% endblock %}
+
+{% block content %}
+  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <script>
+    async function fetchReserves() {
+      if (!window.ethereum) {
+        alert('MetaMask is not installed!')
+        return
+      }
+    
+      const web3 = new Web3(window.ethereum)
+    
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' })
+    
+        const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress')
+        const response1 = await fetch('{% static "abi/LiquidityPoolABI.json" %}')
+        const liquidityPoolAbi = await response1.json()
+        const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress)
+    
+        const shareTokenReserve = await liquidityPoolContract.methods.shareTokenReserve().call()
+        const usdtTokenReserve = await liquidityPoolContract.methods.usdtTokenReserve().call()
+    
+        document.getElementById('shareTokenReserve').innerText = web3.utils.fromWei(shareTokenReserve, 'ether') + ' STE'
+        document.getElementById('usdtTokenReserve').innerText = web3.utils.fromWei(usdtTokenReserve, 'ether') + ' USDT'
+      } catch (error) {
+        console.error(error)
+        alert('An error occurred while fetching reserves.')
+      }
+    }
+
+    async function getUserLiquidity() {
+      if (!window.ethereum) {
+        alert('MetaMask is not installed!');
+        return;
+      }
+
+      const web3 = new Web3(window.ethereum);
+
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const accounts = await web3.eth.getAccounts();
+        const userAccount = accounts[0];
+
+        const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress');
+        const response1 = await fetch('{% static "abi/LiquidityPoolABI.json" %}');
+        const liquidityPoolAbi = await response1.json();
+        const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress);
+
+        const liquidity = await liquidityPoolContract.methods.getUserLiquidity().call({ from: userAccount });
+        document.getElementById('userLiquidity').innerText = web3.utils.fromWei(liquidity, 'ether') + ' tokens';
+      } catch (error) {
+        console.error(error);
+        alert('An error occurred while fetching user liquidity.');
+      }
+    }
+    
+    document.addEventListener('DOMContentLoaded', function () {
+      fetchReserves()
+      getUserLiquidity()
+    })
+  </script>
+
+  <h1>Liquidity Reserves</h1>
+  <div>
+    <p>
+      ShareToken Reserve: <span id="shareTokenReserve">Loading...</span>
+    </p>
+    <p>
+      USDT Reserve: <span id="usdtTokenReserve">Loading...</span>
+    </p>
+
+    <p>Your liquidity:</p>
+    <div id="userLiquidity">Your Liquidity: Loading...</div>
+
+
+  </div>
+
+  <hr />
+
+  <a href="{% url 'add_liquidity' %}">Add Liquidity</a>
+  <hr />
+  <a href="{% url 'remove_liquidity' %}">Remove Liquidity</a>
+{% endblock %}
