@@ -4,7 +4,9 @@ document.addEventListener("DOMContentLoaded", function () {
     var logoutBtn = document.getElementById("logoutBtn");
     var rpcUrl = "https://data-seed-prebsc-1-s2.bnbchain.org:8545"
     const chainId = '0x61'; //mainnet 0x38 testnet 0x61
-    localStorage.setItem('contract_address', '0x27ab1897F2649b84d10AC4cDBcdAed8C3Fb5edB0');
+    localStorage.setItem('contract_address', '0xFa0D29E5ab2B9082B1E56734574d307a69AC08BC');
+    localStorage.setItem('liquidityPoolAddress', '0x9Afc765f2a785cB3B6306b3eC298Ac0935235485');
+    localStorage.setItem('usdtTokenAddress', '0xE153BD85705d0fBdEC93940689e705e9Ed02D0A5');
     localStorage.setItem('rpcUrl', rpcUrl);
     localStorage.setItem('chainId', chainId);
 

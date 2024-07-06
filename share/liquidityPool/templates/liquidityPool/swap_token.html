@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+  <title>Swap Tokens</title>
+{% endblock %}
+
+{% block content %}
+  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <script>
+    let isSwapForUSDT = true
+    
+    async function connectWeb3() {
+      if (window.ethereum) {
+        const web3 = new Web3(window.ethereum)
+        try {
+          await window.ethereum.request({ method: 'eth_requestAccounts' })
+          return web3
+        } catch (error) {
+          console.error('User denied account access')
+        }
+      } else {
+        console.error('No Ethereum provider found')
+      }
+    }
+    
+    async function fetchContractData(web3) {
+      const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress')
+      const liquidityPoolResponse = await fetch('{% static "abi/LiquidityPoolABI.json" %}')
+      const liquidityPoolAbi = await liquidityPoolResponse.json()
+      const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress)
+    
+      return liquidityPoolContract
+    }
+    
+    async function calculateAmountReceived() {
+      const inputAmount = document.getElementById('inputAmount').value
+      if (inputAmount && inputAmount > 0) {
+        const web3 = await connectWeb3()
+        if (!web3) return
+        const contract = await fetchContractData(web3)
+        let outputAmount
+        if (isSwapForUSDT) {
+          outputAmount = await contract.methods.getSwapShareTokenForUSDT(web3.utils.toWei(inputAmount, 'ether')).call()
+        } else {
+          outputAmount = await contract.methods.getSwapUSDTForShareToken(web3.utils.toWei(inputAmount, 'ether')).call()
+        }
+        document.getElementById('outputAmount').placeholder = parseFloat(web3.utils.fromWei(outputAmount, 'ether')).toFixed(2)
+      }
+    }
+    
+    async function swapTokens() {
+      const inputAmount = document.getElementById('inputAmount').value
+    
+      if (!inputAmount || inputAmount <= 0) {
+        alert('Please enter a valid amount to swap.')
+        return
+      }
+    
+      if (!window.ethereum) {
+        alert('MetaMask is not installed!')
+        return
+      }
+    
+      const web3 = new Web3(window.ethereum)
+    
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' })
+        const accounts = await web3.eth.getAccounts()
+        const userAccount = accounts[0]
+    
+        if (!localStorage.getItem('walletConnected')) {
+          alert('Please connect your wallet')
+          return
+        }
+    
+        const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress')
+        const response1 = await fetch('{% static "abi/LiquidityPoolABI.json" %}')
+        const liquidityPoolAbi = await response1.json()
+        const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress)
+    
+        const tokenAddress = isSwapForUSDT ? localStorage.getItem('contract_address') : localStorage.getItem('usdtTokenAddress')
+        const response2 = await fetch(isSwapForUSDT ? '{% static "abi/ShareTokenABI.json" %}' : '{% static "abi/FakeUSDTABI.json" %}')
+        const tokenAbi = await response2.json()
+        const tokenContract = new web3.eth.Contract(tokenAbi, tokenAddress)
+    
+        const inputAmountInWei = web3.utils.toWei(inputAmount, 'ether')
+    
+        await tokenContract.methods.approve(liquidityPoolAddress, inputAmountInWei).send({ from: userAccount })
+    
+        if (isSwapForUSDT) {
+          await liquidityPoolContract.methods.swapShareTokenForUSDT(inputAmountInWei).send({ from: userAccount })
+        } else {
+          await liquidityPoolContract.methods.swapUSDTForShareToken(inputAmountInWei).send({ from: userAccount })
+        }
+    
+        alert('Tokens swapped successfully!')
+      } catch (error) {
+        console.error(error)
+        alert('An error occurred while swapping tokens.')
+      }
+    }
+    
+    function toggleSwapDirection() {
+      isSwapForUSDT = !isSwapForUSDT
+      if (isSwapForUSDT) {
+        document.getElementById('inputAmount').placeholder = 'Enter ShareToken Amount'
+        document.getElementById('outputAmount').placeholder = 'USDT Amount'
+        document.getElementById('swapTokenName').innerText = 'STE'
+        document.getElementById('forTokenName').innerText = 'USDT'
+      } else {
+        document.getElementById('inputAmount').placeholder = 'Enter USDT Amount'
+        document.getElementById('outputAmount').placeholder = 'ShareToken Amount'
+        document.getElementById('swapTokenName').innerText = 'USDT'
+        document.getElementById('forTokenName').innerText = 'STE'
+      }
+      document.getElementById('inputAmount').value = ''
+      document.getElementById('outputAmount').placeholder = ''
+    }
+    
+    document.addEventListener('DOMContentLoaded', function () {
+      document.getElementById('inputAmount').addEventListener('input', calculateAmountReceived)
+    })
+  </script>
+
+  <form id="swapForm">
+    <p id="swapTokenName">STE</p>
+    <input type="number" id="inputAmount" placeholder="Enter ShareToken Amount" required />
+    <p id="forTokenName">USDT</p>
+    <input type="number" id="outputAmount" placeholder="" readonly />
+    <button type="button" onclick="swapTokens()">Swap</button>
+    <button type="button" onclick="toggleSwapDirection()">Toggle Swap Direction</button>
+  </form>
+
+  <a href="{% url 'liquidity_reserves' %}">Liquidity Reserves</a>
+{% endblock %}

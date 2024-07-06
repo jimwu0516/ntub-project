@@ -31,6 +31,7 @@ urlpatterns = [
     path('', include('contribute.urls')),
     path('', include('borrow.urls')),
     path('', include('governance.urls')),
+    path('', include('liquidityPool.urls')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += i18n_patterns(

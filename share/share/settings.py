@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'borrow',
     'storages',
     'governance',
+    'liquidityPool',
 ]
 
 MIDDLEWARE = [
