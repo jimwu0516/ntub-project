@@ -139,12 +139,27 @@
           transform: scale(1);
         }
       }
+
+      .menu-item {
+        margin-left: 10px;
+        padding: 10px;
+        border-radius: 10px;
+        text-decoration: none;
+        color: white;
+        font-weight: bold;
+      }
+      
+      .menu-item:hover {
+        background-color: #30879A;
+        color: #FFFFFF;
+      }
     </style>
   </head>
   <body>
     <header class="header">
       <div class="navbar-left">
         <a href="{% url 'admin_dashboard' %}"><img src="{% static 'images/logo-admin.PNG' %}" alt="Logo" /></a>
+        <a href="{% url 'admin_all_proposal' %}" class="menu-item" >Governance</a>
       </div>
       <div class="navbar-right">
         <div class="connect-wallet-btn">

@@ -56,10 +56,10 @@
         left: 0;
     }
     .bar-fill.yes {
-        background-color: blue;
+        background-color: #FB8C00;
     }
     .bar-fill.no {
-        background-color: red;
+        background-color: #1F2CBB;
     }
 
     .votes-table {
@@ -73,10 +73,10 @@
     }
 
     .votes-table td.option-yes {
-        color: blue;
+        color: #FB8C00;
     }
     .votes-table td.option-no {
-        color: red;
+        color: #1F2CBB;
     }
 
     .voting-detail-container .Winning-option {
@@ -92,7 +92,7 @@
         padding: 10px 20px;
         font-size: 16px;
         color: white;
-        background-color: #007bff;
+        background-color: #8D6E63;
         border-radius: 5px;
         text-decoration: none;
         margin-left: 75px;
@@ -128,9 +128,9 @@
         Winning option:
         <span>
           {% if proposal_info.totalYes > proposal_info.totalNo %}
-            <span style="color: #ff8c00;">Yes</span>, with {{ proposal_info.totalYes }} STE
+            <span style="color: red;">Yes</span>, with {{ proposal_info.totalYes }} STE
           {% else %}
-            <span style="color: #ff8c00;">No</span>, with {{ proposal_info.totalNo }} STE
+            <span style="color: red;">No</span>, with {{ proposal_info.totalNo }} STE
           {% endif %}
         </span>
     </div>

@@ -55,7 +55,7 @@
     }
 
     .voting-card.ended:hover {
-      background-color: #d3d3d3; /* 更深的灰色背景，区分 ended 状态 */
+      background-color: #d3d3d3;
     }
     
     .voting-card h3 {
@@ -89,12 +89,12 @@
     }
     
     .vote-button.yes {
-      background-color: #000080;
+      background-color: #FB8C00;
       color: #fff;
     }
     
     .vote-button.no {
-      background-color: #dc3545;
+      background-color: #1F2CBB;
       color: #fff;
     }
     
@@ -110,11 +110,11 @@
     }
     
     .vote-percentage .yes-percentage {
-      color: #007bff;
+      color: #FB8C00;
     }
     
     .vote-percentage .no-percentage {
-      color: #dc3545;
+      color: #1F2CBB;
     }
     
     .vote-percentage .middle-percentage {
@@ -137,11 +137,11 @@
     }
     
     .result-yes {
-      background-color: #000080;
+      background-color: #FB8C00;
     }
     
     .result-no {
-      background-color: #dc3545;
+      background-color: #1F2CBB;
     }
     
     .Winning-option {
@@ -325,7 +325,7 @@
                   {% if proposal.totalYes > proposal.totalNo %}
                     <span style="color: #ff8c00;">Yes</span>, with {{ proposal.totalYes }} STE
                   {% else %}
-                    <span style="color: #ff8c00;">No</span>, with {{ proposal.totalNo }} STE
+                    <span style="color: #1F2CBB;">No</span>, with {{ proposal.totalNo }} STE
                   {% endif %}
                 </span>
               </div>
