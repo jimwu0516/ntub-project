@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+  <title>Remove Liquidity</title>
+{% endblock %}
+
+{% block content %}
+  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <script>
+    async function connectWeb3() {
+      if (window.ethereum) {
+        const web3 = new Web3(window.ethereum);
+        try {
+          await window.ethereum.request({ method: 'eth_requestAccounts' });
+          return web3;
+        } catch (error) {
+          console.error('User denied account access');
+        }
+      } else {
+        console.error('No Ethereum provider found');
+      }
+    }
+
+    async function fetchContractData(web3) {
+      const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress');
+      const liquidityPoolResponse = await fetch('{% static "abi/LiquidityPoolABI.json" %}');
+      const liquidityPoolAbi = await liquidityPoolResponse.json();
+      const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress);
+
+      return liquidityPoolContract;
+    }
+
+    async function removeLiquidity() {
+      const liquidityPercent = document.getElementById('liquidityPercent').value;
+      const totalLiquidity = document.getElementById('userLiquidity').dataset.totalLiquidity;
+
+      if (!totalLiquidity) {
+        alert('Failed to get user liquidity.');
+        return;
+      }
+
+      const liquidityAmount = (totalLiquidity * liquidityPercent) / 100;
+
+      if (!window.ethereum) {
+        alert('MetaMask is not installed!');
+        return;
+      }
+
+      const web3 = new Web3(window.ethereum);
+
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const accounts = await web3.eth.getAccounts();
+        const userAccount = accounts[0];
+
+        if (!localStorage.getItem('walletConnected')) {
+          alert('Please connect your wallet');
+          return;
+        }
+
+        const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress');
+        const response1 = await fetch('{% static "abi/LiquidityPoolABI.json" %}');
+        const liquidityPoolAbi = await response1.json();
+        const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress);
+
+        const liquidityAmountInWei = web3.utils.toWei(liquidityAmount.toString(), 'ether');
+
+        await liquidityPoolContract.methods.removeLiquidity(liquidityAmountInWei).send({ from: userAccount });
+
+        alert('Liquidity removed successfully!');
+        getUserLiquidity();
+      } catch (error) {
+        console.error(error);
+        alert('An error occurred while removing liquidity.');
+      }
+    }
+
+    async function getUserLiquidity() {
+      if (!window.ethereum) {
+        alert('MetaMask is not installed!');
+        return;
+      }
+
+      const web3 = new Web3(window.ethereum);
+
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const accounts = await web3.eth.getAccounts();
+        const userAccount = accounts[0];
+
+        const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress');
+        const response1 = await fetch('{% static "abi/LiquidityPoolABI.json" %}');
+        const liquidityPoolAbi = await response1.json();
+        const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress);
+
+        const liquidity = await liquidityPoolContract.methods.getUserLiquidity().call({ from: userAccount });
+        document.getElementById('userLiquidity').innerText = web3.utils.fromWei(liquidity, 'ether') + ' tokens';
+        document.getElementById('userLiquidity').dataset.totalLiquidity = web3.utils.fromWei(liquidity, 'ether');
+      } catch (error) {
+        console.error(error);
+        alert('An error occurred while fetching user liquidity.');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      getUserLiquidity();
+    });
+  </script>
+
+  <form id="liquidityForm">
+    <select id="liquidityPercent" required>
+      <option value="" disabled selected>Select Percentage</option>
+      <option value="25">25%</option>
+      <option value="50">50%</option>
+      <option value="100">100%</option>
+    </select>
+    <button type="button" onclick="removeLiquidity()">Remove Liquidity</button>
+  </form>
+
+  <div id="userLiquidity" data-total-liquidity="0">Your Liquidity: Loading...</div>
+{% endblock %}
