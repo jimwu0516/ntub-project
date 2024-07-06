@@ -11,139 +11,174 @@
   <script>
     async function connectWeb3() {
       if (window.ethereum) {
-        const web3 = new Web3(window.ethereum);
+        const web3 = new Web3(window.ethereum)
         try {
-          await window.ethereum.request({ method: 'eth_requestAccounts' });
-          return web3;
+          await window.ethereum.request({ method: 'eth_requestAccounts' })
+          return web3
         } catch (error) {
-          console.error('User denied account access');
+          console.error('User denied account access')
         }
       } else {
-        console.error('No Ethereum provider found');
+        console.error('No Ethereum provider found')
       }
     }
-
+    
     async function fetchContractData(web3) {
-      const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress');
-      const liquidityPoolResponse = await fetch('{% static "abi/LiquidityPoolABI.json" %}');
-      const liquidityPoolAbi = await liquidityPoolResponse.json();
-      const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress);
-
-      return liquidityPoolContract;
+      const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress')
+      const liquidityPoolResponse = await fetch('{% static "abi/LiquidityPoolABI.json" %}')
+      const liquidityPoolAbi = await liquidityPoolResponse.json()
+      const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress)
+    
+      return liquidityPoolContract
     }
-
+    
     async function calculateUSDTRequired() {
-      const shareTokenAmount = document.getElementById('shareTokenAmount').value;
+      const shareTokenAmount = document.getElementById('shareTokenAmount').value
+      const usdtTokenAmountField = document.getElementById('usdtTokenAmount')
       if (shareTokenAmount && shareTokenAmount > 0) {
-        const web3 = await connectWeb3();
-        if (!web3) return;
-        const contract = await fetchContractData(web3);
-        const usdtAmount = await contract.methods.calculateRequiredUSDT(web3.utils.toWei(shareTokenAmount, 'ether')).call();
-        document.getElementById('usdtTokenAmount').value = web3.utils.fromWei(usdtAmount, 'ether');
+        const web3 = await connectWeb3()
+        if (!web3) return
+        const contract = await fetchContractData(web3)
+        const usdtAmount = await contract.methods.calculateRequiredUSDT(web3.utils.toWei(shareTokenAmount, 'ether')).call()
+        usdtTokenAmountField.value = web3.utils.fromWei(usdtAmount, 'ether')
+        checkBalance()
+      } else {
+        usdtTokenAmountField.value = ''
       }
     }
-
+    
     async function calculateShareTokenRequired() {
-      const usdtTokenAmount = document.getElementById('usdtTokenAmount').value;
+      const usdtTokenAmount = document.getElementById('usdtTokenAmount').value
+      const shareTokenAmountField = document.getElementById('shareTokenAmount')
       if (usdtTokenAmount && usdtTokenAmount > 0) {
-        const web3 = await connectWeb3();
-        if (!web3) return;
-        const contract = await fetchContractData(web3);
-        const shareTokenAmount = await contract.methods.calculateRequiredShareToken(web3.utils.toWei(usdtTokenAmount, 'ether')).call();
-        document.getElementById('shareTokenAmount').value = web3.utils.fromWei(shareTokenAmount, 'ether');
+        const web3 = await connectWeb3()
+        if (!web3) return
+        const contract = await fetchContractData(web3)
+        const shareTokenAmount = await contract.methods.calculateRequiredShareToken(web3.utils.toWei(usdtTokenAmount, 'ether')).call()
+        shareTokenAmountField.value = web3.utils.fromWei(shareTokenAmount, 'ether')
+        checkBalance()
+      } else {
+        shareTokenAmountField.value = ''
       }
     }
-
+    
     async function addLiquidity() {
-      const shareTokenAmount = document.getElementById('shareTokenAmount').value;
-      const usdtTokenAmount = document.getElementById('usdtTokenAmount').value;
-
+      const shareTokenAmount = document.getElementById('shareTokenAmount').value
+      const usdtTokenAmount = document.getElementById('usdtTokenAmount').value
+    
       if (!window.ethereum) {
-        alert('MetaMask is not installed!');
-        return;
+        alert('MetaMask is not installed!')
+        return
       }
-
-      const web3 = new Web3(window.ethereum);
-
+    
+      const web3 = new Web3(window.ethereum)
+    
       try {
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const accounts = await web3.eth.getAccounts();
-        const userAccount = accounts[0];
-
+        await window.ethereum.request({ method: 'eth_requestAccounts' })
+        const accounts = await web3.eth.getAccounts()
+        const userAccount = accounts[0]
+    
         if (!localStorage.getItem('walletConnected')) {
-          alert('Please connect your wallet');
-          return;
+          alert('Please connect your wallet')
+          return
         }
-
-        const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress');
-        const response1 = await fetch('{% static "abi/LiquidityPoolABI.json" %}');
-        const liquidityPoolAbi = await response1.json();
-        const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress);
-
-        const shareTokenAddress = localStorage.getItem('contract_address');
-        const response2 = await fetch('{% static "abi/ShareTokenABI.json" %}');
-        const shareTokenAbi = await response2.json();
-        const shareTokenContract = new web3.eth.Contract(shareTokenAbi, shareTokenAddress);
-
-        const usdtTokenAddress = localStorage.getItem('usdtTokenAddress');
-        const response3 = await fetch('{% static "abi/FakeUSDTABI.json" %}');
-        const usdtTokenAbi = await response3.json();
-        const usdtTokenContract = new web3.eth.Contract(usdtTokenAbi, usdtTokenAddress);
-
-        const shareTokenAmountInWei = web3.utils.toWei(shareTokenAmount, 'ether');
-        const usdtTokenAmountInWei = web3.utils.toWei(usdtTokenAmount, 'ether');
-
-        await shareTokenContract.methods.approve(liquidityPoolAddress, shareTokenAmountInWei).send({ from: userAccount });
-        await usdtTokenContract.methods.approve(liquidityPoolAddress, usdtTokenAmountInWei).send({ from: userAccount });
-
-        await liquidityPoolContract.methods.addLiquidity(shareTokenAmountInWei, usdtTokenAmountInWei).send({ from: userAccount });
-
-        alert('Liquidity added successfully!');
-        getUserLiquidity();
+    
+        const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress')
+        const response1 = await fetch('{% static "abi/LiquidityPoolABI.json" %}')
+        const liquidityPoolAbi = await response1.json()
+        const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress)
+    
+        const shareTokenAddress = localStorage.getItem('contract_address')
+        const response2 = await fetch('{% static "abi/ShareTokenABI.json" %}')
+        const shareTokenAbi = await response2.json()
+        const shareTokenContract = new web3.eth.Contract(shareTokenAbi, shareTokenAddress)
+    
+        const usdtTokenAddress = localStorage.getItem('usdtTokenAddress')
+        const response3 = await fetch('{% static "abi/FakeUSDTABI.json" %}')
+        const usdtTokenAbi = await response3.json()
+        const usdtTokenContract = new web3.eth.Contract(usdtTokenAbi, usdtTokenAddress)
+    
+        const shareTokenAmountInWei = web3.utils.toWei(shareTokenAmount, 'ether')
+        const usdtTokenAmountInWei = web3.utils.toWei(usdtTokenAmount, 'ether')
+    
+        await shareTokenContract.methods.approve(liquidityPoolAddress, shareTokenAmountInWei).send({ from: userAccount })
+        await usdtTokenContract.methods.approve(liquidityPoolAddress, usdtTokenAmountInWei).send({ from: userAccount })
+    
+        await liquidityPoolContract.methods.addLiquidity(shareTokenAmountInWei, usdtTokenAmountInWei).send({ from: userAccount })
+    
+        alert('Liquidity added successfully!')
+        getUserLiquidity()
       } catch (error) {
-        console.error(error);
-        alert('An error occurred while adding liquidity.');
+        console.error(error)
+        alert('An error occurred while adding liquidity.')
       }
     }
-
+    
     async function getUserLiquidity() {
-      if (!window.ethereum) {
-        alert('MetaMask is not installed!');
-        return;
-      }
-
-      const web3 = new Web3(window.ethereum);
-
+      const web3 = await connectWeb3()
+      if (!web3) return
+      const contract = await fetchContractData(web3)
+    
       try {
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const accounts = await web3.eth.getAccounts();
-        const userAccount = accounts[0];
-
-        const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress');
-        const response1 = await fetch('{% static "abi/LiquidityPoolABI.json" %}');
-        const liquidityPoolAbi = await response1.json();
-        const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress);
-
-        const liquidity = await liquidityPoolContract.methods.getUserLiquidity().call({ from: userAccount });
-        document.getElementById('userLiquidity').innerText = web3.utils.fromWei(liquidity, 'ether') + ' tokens';
+        const accounts = await web3.eth.getAccounts()
+        const userAccount = accounts[0]
+        const liquidity = await contract.methods.getUserLiquidity().call({ from: userAccount })
+        document.getElementById('userLiquidity').textContent = `Your Liquidity: ${web3.utils.fromWei(liquidity, 'ether')} tokens`
       } catch (error) {
-        console.error(error);
-        alert('An error occurred while fetching user liquidity.');
+        console.error('Failed to fetch user liquidity', error)
       }
     }
-
+    
+    async function checkBalance() {
+      const shareTokenAmount = document.getElementById('shareTokenAmount').value
+      const usdtTokenAmount = document.getElementById('usdtTokenAmount').value
+    
+      const web3 = await connectWeb3()
+      if (!web3) return
+    
+      const userAccount = (await web3.eth.getAccounts())[0]
+    
+      const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress')
+      const response1 = await fetch('{% static "abi/LiquidityPoolABI.json" %}')
+      const liquidityPoolAbi = await response1.json()
+      const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress)
+    
+      const shareTokenAddress = localStorage.getItem('contract_address')
+      const response2 = await fetch('{% static "abi/ShareTokenABI.json" %}')
+      const shareTokenAbi = await response2.json()
+      const shareTokenContract = new web3.eth.Contract(shareTokenAbi, shareTokenAddress)
+      const shareTokenBalance = await shareTokenContract.methods.balanceOf(userAccount).call()
+      const shareTokenBalanceInEther = web3.utils.fromWei(shareTokenBalance, 'ether')
+    
+      const usdtTokenAddress = localStorage.getItem('usdtTokenAddress')
+      const response3 = await fetch('{% static "abi/FakeUSDTABI.json" %}')
+      const usdtTokenAbi = await response3.json()
+      const usdtTokenContract = new web3.eth.Contract(usdtTokenAbi, usdtTokenAddress)
+      const usdtTokenBalance = await usdtTokenContract.methods.balanceOf(userAccount).call()
+      const usdtTokenBalanceInEther = web3.utils.fromWei(usdtTokenBalance, 'ether')
+    
+      const addLiquidityButton = document.getElementById('add_liquidity')
+      if (parseFloat(shareTokenAmount) > parseFloat(shareTokenBalanceInEther) || parseFloat(usdtTokenAmount) > parseFloat(usdtTokenBalanceInEther)) {
+        addLiquidityButton.disabled = true
+        addLiquidityButton.innerText = 'Insufficient balance'
+      } else {
+        addLiquidityButton.disabled = false
+        addLiquidityButton.innerHTML = 'Add Liquidity'
+      }
+    }
+    
     document.addEventListener('DOMContentLoaded', function () {
-      document.getElementById('shareTokenAmount').addEventListener('input', calculateUSDTRequired);
-      document.getElementById('usdtTokenAmount').addEventListener('input', calculateShareTokenRequired);
-      getUserLiquidity();
-    });
+      document.getElementById('shareTokenAmount').addEventListener('input', calculateUSDTRequired)
+      document.getElementById('usdtTokenAmount').addEventListener('input', calculateShareTokenRequired)
+      getUserLiquidity()
+    })
   </script>
+
+  <div id="userLiquidity">Your Liquidity: Loading...</div>
 
   <form id="liquidityForm">
     <input type="number" id="shareTokenAmount" placeholder="ShareToken Amount" required />
     <input type="number" id="usdtTokenAmount" placeholder="USDT Amount" required />
-    <button type="button" onclick="addLiquidity()">Add Liquidity</button>
+    <button type="button" onclick="addLiquidity()" id="add_liquidity">Add Liquidity</button>
   </form>
-
-  <div id="userLiquidity">Your Liquidity: Loading...</div>
 {% endblock %}

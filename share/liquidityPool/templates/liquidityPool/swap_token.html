@@ -47,6 +47,8 @@
           outputAmount = await contract.methods.getSwapUSDTForShareToken(web3.utils.toWei(inputAmount, 'ether')).call()
         }
         document.getElementById('outputAmount').placeholder = parseFloat(web3.utils.fromWei(outputAmount, 'ether')).toFixed(2)
+      } else {
+        document.getElementById('outputAmount').placeholder = ''
       }
     }
     
@@ -119,8 +121,54 @@
       document.getElementById('outputAmount').placeholder = ''
     }
     
+    async function checkLiquidity() {
+      const web3 = await connectWeb3()
+      if (!web3) return
+    
+      const contract = await fetchContractData(web3)
+      const shareTokenReserve = await contract.methods.shareTokenReserve().call()
+      const usdtTokenReserve = await contract.methods.usdtTokenReserve().call()
+    
+      const swapButton = document.getElementById('swapButton')
+      if (parseInt(shareTokenReserve) === 0 || parseInt(usdtTokenReserve) === 0) {
+        swapButton.disabled = true
+        swapButton.innerText = 'Insufficient liquidity'
+      } else {
+        swapButton.disabled = false
+        swapButton.innerText = 'Swap'
+        checkBalance()
+      }
+    }
+    
+    async function checkBalance() {
+      const inputAmount = document.getElementById('inputAmount').value
+      if (!inputAmount) return
+    
+      const web3 = await connectWeb3()
+      if (!web3) return
+    
+      const userAccount = (await web3.eth.getAccounts())[0]
+      const tokenAddress = isSwapForUSDT ? localStorage.getItem('contract_address') : localStorage.getItem('usdtTokenAddress')
+      const response = await fetch(isSwapForUSDT ? '{% static "abi/ShareTokenABI.json" %}' : '{% static "abi/FakeUSDTABI.json" %}')
+      const tokenAbi = await response.json()
+      const tokenContract = new web3.eth.Contract(tokenAbi, tokenAddress)
+    
+      const balance = await tokenContract.methods.balanceOf(userAccount).call()
+      const balanceInEther = web3.utils.fromWei(balance, 'ether')
+    
+      const swapButton = document.getElementById('swapButton')
+      if (parseFloat(inputAmount) > parseFloat(balanceInEther)) {
+        swapButton.disabled = true
+        swapButton.innerText = 'Insufficient balance'
+      } else {
+        swapButton.disabled = false
+        swapButton.innerHTML = 'Swap'
+      }
+    }
+    
     document.addEventListener('DOMContentLoaded', function () {
       document.getElementById('inputAmount').addEventListener('input', calculateAmountReceived)
+      document.getElementById('inputAmount').addEventListener('input', checkLiquidity)
     })
   </script>
 
@@ -129,7 +177,7 @@
     <input type="number" id="inputAmount" placeholder="Enter ShareToken Amount" required />
     <p id="forTokenName">USDT</p>
     <input type="number" id="outputAmount" placeholder="" readonly />
-    <button type="button" onclick="swapTokens()">Swap</button>
+    <button type="button" id="swapButton" onclick="swapTokens()">Swap</button>
     <button type="button" onclick="toggleSwapDirection()">Toggle Swap Direction</button>
   </form>
 
