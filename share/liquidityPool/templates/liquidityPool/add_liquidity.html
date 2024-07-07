@@ -66,6 +66,11 @@
       const shareTokenAmount = document.getElementById('shareTokenAmount').value
       const usdtTokenAmount = document.getElementById('usdtTokenAmount').value
     
+      if (!shareTokenAmount || !usdtTokenAmount || parseFloat(shareTokenAmount) <= 0 || parseFloat(usdtTokenAmount) <= 0) {
+        alert('Please enter valid amounts for both ShareToken and USDT.')
+        return
+      }
+    
       if (!window.ethereum) {
         alert('MetaMask is not installed!')
         return
@@ -114,6 +119,7 @@
         alert('An error occurred while adding liquidity.')
       }
     }
+    
     
     async function getUserLiquidity() {
       const web3 = await connectWeb3()
@@ -238,8 +244,6 @@
     <div class="add-liquidity">
       <h2>Add liquidity</h2>
 
-      <div id="userLiquidity">Your Liquidity: Loading...</div>
-
       <form id="liquidityForm">
         <div class="input-group">
           <p>STE</p>
@@ -253,6 +257,8 @@
 
         <button type="button" onclick="addLiquidity()" id="add_liquidity">Add Liquidity</button>
       </form>
+
+      <div id="userLiquidity" style="margin-top: 10px;">Your Liquidity: Loading...</div>
     </div>
   </div>
 {% endblock %}
