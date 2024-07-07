@@ -41,7 +41,7 @@
         return;
       }
 
-      const liquidityAmount = (totalLiquidity * liquidityPercent) / 100;
+      const liquidityAmount = (BigInt(totalLiquidity) * BigInt(liquidityPercent)) / BigInt(100);
 
       if (!window.ethereum) {
         alert('MetaMask is not installed!');
@@ -104,8 +104,52 @@
       }
     }
 
+    async function calculateReceiveAmounts() {
+      if (!window.ethereum) {
+        alert('MetaMask is not installed!');
+        return;
+      }
+
+      const web3 = new Web3(window.ethereum);
+
+      try {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        const accounts = await web3.eth.getAccounts();
+        const userAccount = accounts[0];
+
+        const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress');
+        const response1 = await fetch('{% static "abi/LiquidityPoolABI.json" %}');
+        const liquidityPoolAbi = await response1.json();
+        const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress);
+
+        const totalLiquidity = BigInt(document.getElementById('userLiquidity').dataset.totalLiquidity);
+        const liquidityPercent = document.getElementById('liquidityPercent').value;
+
+        if (!liquidityPercent || !totalLiquidity) {
+          alert('Please select a percentage and ensure your liquidity is loaded.');
+          return;
+        }
+
+        const liquidityAmount = (totalLiquidity * BigInt(liquidityPercent)) / BigInt(100);
+
+        const shareTokenReserve = BigInt(await liquidityPoolContract.methods.shareTokenReserve().call());
+        const usdtTokenReserve = BigInt(await liquidityPoolContract.methods.usdtTokenReserve().call());
+        const totalPoolLiquidity = BigInt(await liquidityPoolContract.methods.totalLiquidity().call());
+
+        const shareTokenAmount = (liquidityAmount * shareTokenReserve) / totalPoolLiquidity;
+        const usdtTokenAmount = (liquidityAmount * usdtTokenReserve) / totalPoolLiquidity;
+        document.getElementById('ste_receive_amount').innerText = `You will receive approximately ${shareTokenAmount} ShareToken`;
+        document.getElementById('usdt_receive_amount').innerText = `You will receive approximately ${usdtTokenAmount} USDT`;
+
+      } catch (error) {
+        console.error(error);
+        alert('An error occurred while calculating withdrawn amounts.');
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
       getUserLiquidity();
+      document.getElementById('liquidityPercent').addEventListener('change', calculateReceiveAmounts);
     });
   </script>
 
@@ -120,4 +164,7 @@
   </form>
 
   <div id="userLiquidity" data-total-liquidity="0">Your Liquidity: Loading...</div>
+  <p id="ste_receive_amount"></p>
+  <p id="usdt_receive_amount"></p>
+
 {% endblock %}
