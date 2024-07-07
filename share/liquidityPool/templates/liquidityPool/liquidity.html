@@ -8,6 +8,7 @@
 
 {% block content %}
   <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script>
     async function fetchReserves() {
       if (!window.ethereum) {
@@ -27,65 +28,166 @@
     
         const shareTokenReserve = await liquidityPoolContract.methods.shareTokenReserve().call()
         const usdtTokenReserve = await liquidityPoolContract.methods.usdtTokenReserve().call()
+        const totalLiquidity = await liquidityPoolContract.methods.totalLiquidity().call()
     
-        document.getElementById('shareTokenReserve').innerText = web3.utils.fromWei(shareTokenReserve, 'ether') + ' STE'
-        document.getElementById('usdtTokenReserve').innerText = web3.utils.fromWei(usdtTokenReserve, 'ether') + ' USDT'
+        const shareTokenReserveInEther = web3.utils.fromWei(shareTokenReserve, 'ether')
+        const usdtTokenReserveInEther = web3.utils.fromWei(usdtTokenReserve, 'ether')
+        const totalLiquidityInEther = web3.utils.fromWei(totalLiquidity, 'ether')
+    
+        document.getElementById('shareTokenReserve').innerText = shareTokenReserveInEther + ' STE'
+        document.getElementById('usdtTokenReserve').innerText = usdtTokenReserveInEther + ' USDT'
+    
+        createReservesPieChart(shareTokenReserveInEther, usdtTokenReserveInEther)
+    
+        return totalLiquidityInEther
       } catch (error) {
         console.error(error)
         alert('An error occurred while fetching reserves.')
       }
     }
-
-    async function getUserLiquidity() {
+    
+    async function getUserLiquidity(totalLiquidity) {
       if (!window.ethereum) {
-        alert('MetaMask is not installed!');
-        return;
+        alert('MetaMask is not installed!')
+        return
       }
-
-      const web3 = new Web3(window.ethereum);
-
+    
+      const web3 = new Web3(window.ethereum)
+    
       try {
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const accounts = await web3.eth.getAccounts();
-        const userAccount = accounts[0];
-
-        const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress');
-        const response1 = await fetch('{% static "abi/LiquidityPoolABI.json" %}');
-        const liquidityPoolAbi = await response1.json();
-        const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress);
-
-        const liquidity = await liquidityPoolContract.methods.getUserLiquidity().call({ from: userAccount });
-        document.getElementById('userLiquidity').innerText = web3.utils.fromWei(liquidity, 'ether') + ' tokens';
+        await window.ethereum.request({ method: 'eth_requestAccounts' })
+        const accounts = await web3.eth.getAccounts()
+        const userAccount = accounts[0]
+    
+        const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress')
+        const response1 = await fetch('{% static "abi/LiquidityPoolABI.json" %}')
+        const liquidityPoolAbi = await response1.json()
+        const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress)
+    
+        const liquidity = await liquidityPoolContract.methods.getUserLiquidity().call({ from: userAccount })
+        const userLiquidityInEther = web3.utils.fromWei(liquidity, 'ether')
+    
+        document.getElementById('userLiquidity').innerText = userLiquidityInEther + ' tokens'
+    
+        createUserLiquidityPieChart(userLiquidityInEther, totalLiquidity)
       } catch (error) {
-        console.error(error);
-        alert('An error occurred while fetching user liquidity.');
+        console.error(error)
+        alert('An error occurred while fetching user liquidity.')
       }
     }
     
-    document.addEventListener('DOMContentLoaded', function () {
-      fetchReserves()
-      getUserLiquidity()
+    function createReservesPieChart(shareTokenReserve, usdtTokenReserve) {
+      const ctx = document.getElementById('reservesChart').getContext('2d')
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['ShareToken Reserve', 'USDT Reserve'],
+          datasets: [
+            {
+              data: [shareTokenReserve, usdtTokenReserve],
+              backgroundColor: ['#FF6384', '#36A2EB']
+            }
+          ]
+        },
+        options: {
+          responsive: true
+        }
+      })
+    }
+    
+    function createUserLiquidityPieChart(userLiquidity, totalLiquidity) {
+      const ctx = document.getElementById('userLiquidityChart').getContext('2d')
+      new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: ['User Liquidity', 'Total Liquidity'],
+          datasets: [
+            {
+              data: [userLiquidity, totalLiquidity - userLiquidity],
+              backgroundColor: ['#FF6384', '#36A2EB']
+            }
+          ]
+        },
+        options: {
+          responsive: true
+        }
+      })
+    }
+    
+    document.addEventListener('DOMContentLoaded', async function () {
+      const totalLiquidity = await fetchReserves()
+      await getUserLiquidity(totalLiquidity)
     })
   </script>
 
-  <h1>Liquidity Reserves</h1>
-  <div>
-    <p>
-      ShareToken Reserve: <span id="shareTokenReserve">Loading...</span>
-    </p>
-    <p>
-      USDT Reserve: <span id="usdtTokenReserve">Loading...</span>
-    </p>
+  <style>
+    .liquidity-chart-container {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+    
+    .liquidity-chart-container p {
+      text-align: center;
+    }
+    
+    .liquidity-chart-info {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+    
+    .liquidity-function-btn {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    
+    .add-liquidity-btn {
+      padding: 10px 20px;
+      background-color: #30878a;
+      border-radius: 5px;
+      margin: 20px;
+    }
+    
+    .remove-liquidity-btn {
+      padding: 10px 20px;
+      background-color: #30878a;
+      border-radius: 5px;
+      margin: 20px;
+    }
+  </style>
 
-    <p>Your liquidity:</p>
-    <div id="userLiquidity">Your Liquidity: Loading...</div>
+  <h2 style="text-align: center;">Liquidity Reserves</h2>
 
-
+  <div class="liquidity-chart-container">
+    <div>
+      <canvas id="reservesChart" width="400" height="400"></canvas>
+    </div>
+    <div>
+      <canvas id="userLiquidityChart" width="400" height="400"></canvas>
+    </div>
   </div>
 
-  <hr />
+  <div class="liquidity-chart-info">
+    <div>
+      <p>
+        ShareToken Reserve: <span id="shareTokenReserve">Loading...</span>
+      </p>
+      <p>
+        USDT Reserve: <span id="usdtTokenReserve">Loading...</span>
+      </p>
+    </div>
 
-  <a href="{% url 'add_liquidity' %}">Add Liquidity</a>
-  <hr />
-  <a href="{% url 'remove_liquidity' %}">Remove Liquidity</a>
+    <div>
+      <p>
+        Your Liquidity: <span id="userLiquidity">Loading...</span>
+      </p>
+    </div>
+  </div>
+
+  <div class="liquidity-function-btn">
+    <a href="{% url 'add_liquidity' %}" class="add-liquidity-btn">Add Liquidity</a>
+    <a href="{% url 'remove_liquidity' %}" class="remove-liquidity-btn">Remove Liquidity</a>
+  </div>
 {% endblock %}
