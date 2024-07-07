@@ -172,14 +172,94 @@
     })
   </script>
 
-  <form id="swapForm">
-    <p id="swapTokenName">STE</p>
-    <input type="number" id="inputAmount" placeholder="Enter ShareToken Amount" required />
-    <p id="forTokenName">USDT</p>
-    <input type="number" id="outputAmount" placeholder="" readonly />
-    <button type="button" id="swapButton" onclick="swapTokens()">Swap</button>
-    <button type="button" onclick="toggleSwapDirection()">Toggle Swap Direction</button>
-  </form>
+  <style>
+    .swap-token-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .swap-container {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 400px;
+      text-align: center;
+      margin-top: 200px;
+      justify-content: center;
+    }
+    
+    .swap-token-container h2 {
+      margin-top: 0;
+      color: #30878A;
+    }
+    
+    .input-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+    
+    .swap-token-container p {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+    }
+    
+    .swap-token-container input[type='number'] {
+      /*width: calc(100% - 10px);*/
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
 
-  <a href="{% url 'liquidity_reserves' %}">Liquidity Reserves</a>
+    .toggleSwap{
+      cursor: pointer;
+      border-radius: 5px;
+      border-width: 0;
+    }
+    
+    #swapButton {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      background-color: #30878A;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    
+    #swapButton:hover {
+      background-color: #1e5758;
+    }
+  </style>
+
+  <div class="swap-token-container">
+    <div class="swap-container">
+      <h2>Swap token</h2>
+      <form id="swapForm">
+        <div class="input-group">
+          <p id="swapTokenName">STE</p>
+          <input type="number" id="inputAmount" placeholder="Enter ShareToken Amount" required />
+        </div>
+
+        <button type="button" class="toggleSwap" onclick="toggleSwapDirection()">
+          <img src="{% static 'images/arrow-icon.svg' %}" alt="arrow-icon" style="width:25px;" />
+        </button>
+
+        <div class="input-group">
+          <p id="forTokenName" style="margin-top: 0px;">USDT</p>
+          <input type="number" id="outputAmount" placeholder="" readonly />
+        </div>
+
+        <button type="button" id="swapButton" onclick="swapTokens()">Swap</button>
+
+        <a href="{% url 'liquidity_reserves' %}">Liquidity Pool</a>
+      </form>
+    </div>
+  </div>
 {% endblock %}
