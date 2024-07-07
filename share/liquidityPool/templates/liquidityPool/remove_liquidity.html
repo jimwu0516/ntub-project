@@ -41,6 +41,11 @@
         return;
       }
 
+      if (!liquidityPercent) {
+        alert('Please select a percentage to remove.');
+        return;
+      }
+
       const liquidityAmount = (BigInt(totalLiquidity) * BigInt(liquidityPercent)) / BigInt(100);
 
       if (!window.ethereum) {
@@ -96,7 +101,7 @@
         const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress);
 
         const liquidity = await liquidityPoolContract.methods.getUserLiquidity().call({ from: userAccount });
-        document.getElementById('userLiquidity').innerText = web3.utils.fromWei(liquidity, 'ether') + ' tokens';
+        document.getElementById('userLiquidity').innerText = 'Your Liquidity: ' + web3.utils.fromWei(liquidity, 'ether') + ' tokens';
         document.getElementById('userLiquidity').dataset.totalLiquidity = web3.utils.fromWei(liquidity, 'ether');
       } catch (error) {
         console.error(error);
@@ -138,12 +143,10 @@
 
         const shareTokenAmount = (liquidityAmount * shareTokenReserve) / totalPoolLiquidity;
         const usdtTokenAmount = (liquidityAmount * usdtTokenReserve) / totalPoolLiquidity;
-        document.getElementById('ste_receive_amount').innerText = `You will receive approximately ${shareTokenAmount} ShareToken`;
-        document.getElementById('usdt_receive_amount').innerText = `You will receive approximately ${usdtTokenAmount} USDT`;
-
+        document.getElementById('ste_receive_amount').innerText = `${shareTokenAmount}`;
+        document.getElementById('usdt_receive_amount').innerText = `${usdtTokenAmount}`;
       } catch (error) {
         console.error(error);
-        alert('An error occurred while calculating withdrawn amounts.');
       }
     }
 
@@ -153,18 +156,125 @@
     });
   </script>
 
-  <form id="liquidityForm">
-    <select id="liquidityPercent" required>
-      <option value="" disabled selected>Select Percentage</option>
-      <option value="25">25%</option>
-      <option value="50">50%</option>
-      <option value="100">100%</option>
-    </select>
-    <button type="button" onclick="removeLiquidity()">Remove Liquidity</button>
-  </form>
+  <style>
+    .remove-liquidity-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
-  <div id="userLiquidity" data-total-liquidity="0">Your Liquidity: Loading...</div>
-  <p id="ste_receive_amount"></p>
-  <p id="usdt_receive_amount"></p>
+    .remove-liquidity {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      width: 350px;
+      text-align: center;
+      margin-top: 200px;
+      justify-content: center;
+    }
 
+    .remove-liquidity h2 {
+      margin-top: 0;
+      color: #30878a;
+    }
+
+    #liquidityForm {
+      margin-bottom: 10px;
+      text-align: left;
+    }
+
+    .remove-liquidity-container p {
+      display: block;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    .remove-liquidity-container select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      margin-bottom: 20px;
+    }
+
+    .remove_liquidity_btn {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      background-color: #30878a;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .remove_liquidity_btn:hover {
+      background-color: #1e5758;
+    }
+
+    .receive-amount-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      width: 100%;
+      margin-bottom: 13px;
+    }
+
+    .receive-token-info {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin: 5px 0;
+    }
+
+    .receive-amount-info p {
+      font-size: 18px;
+    }
+
+    .token-name {
+      font-size: 16px;
+    }
+
+    .token-amount {
+      font-size: 16px;
+      font-weight: bold;
+    }
+  </style>
+
+  <div class="remove-liquidity-container">
+    <div class="remove-liquidity">
+      <h2>Remove liquidity</h2>
+
+      <form id="liquidityForm">
+        <p>Remove Percentage</p>
+        <select id="liquidityPercent" required>
+          <option value="" disabled selected>Select</option>
+          <option value="25">25%</option>
+          <option value="50">50%</option>
+          <option value="100">100%</option>
+        </select>
+
+        <div class="receive-amount-info">
+          <p style="margin-bottom: 5px;">You'll receive:</p>
+          <div class="receive-token-info">
+            <span class="token-name">STE</span>
+            <span class="token-amount" id="ste_receive_amount">0</span>
+          </div>
+          <div class="receive-token-info">
+            <span class="token-name">USDT</span>
+            <span class="token-amount" id="usdt_receive_amount">0</span>
+          </div>
+        </div>
+
+        <button type="button" onclick="removeLiquidity()" class="remove_liquidity_btn">Remove Liquidity</button>
+
+        <div id="userLiquidity" data-total-liquidity="0" style="text-align: center; margin-top: 10px;">Your Liquidity: Loading...</div>
+
+      </form>
+    </div>
+  </div>
+  
 {% endblock %}
