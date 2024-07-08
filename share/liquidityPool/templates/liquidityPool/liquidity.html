@@ -68,6 +68,7 @@
         const userLiquidityInEther = web3.utils.fromWei(liquidity, 'ether')
     
         document.getElementById('userLiquidity').innerText = userLiquidityInEther + ' tokens'
+        document.getElementById('totalLiquidity').innerText = totalLiquidity + ' tokens'
     
         createUserLiquidityPieChart(userLiquidityInEther, totalLiquidity)
       } catch (error) {
@@ -81,11 +82,11 @@
       new Chart(ctx, {
         type: 'pie',
         data: {
-          labels: ['ShareToken Reserve', 'USDT Reserve'],
+          labels: ['STE', 'USDT'],
           datasets: [
             {
               data: [shareTokenReserve, usdtTokenReserve],
-              backgroundColor: ['#FF6384', '#36A2EB']
+              backgroundColor: ['#FFCE56', '#36A2EB']
             }
           ]
         },
@@ -100,11 +101,11 @@
       new Chart(ctx, {
         type: 'pie',
         data: {
-          labels: ['User Liquidity', 'Total Liquidity'],
+          labels: ['Your', 'Others'],
           datasets: [
             {
               data: [userLiquidity, totalLiquidity - userLiquidity],
-              backgroundColor: ['#FF6384', '#36A2EB']
+              backgroundColor: ['#FFCE56', '#36A2EB']
             }
           ]
         },
@@ -125,6 +126,8 @@
       display: flex;
       justify-content: space-around;
       align-items: center;
+      margin: 30px 0;
+      gap: 3px;
     }
     
     .liquidity-chart-container p {
@@ -140,54 +143,81 @@
     .liquidity-function-btn {
       display: flex;
       justify-content: center;
-      margin-top: 20px;
+      margin-top: 40px;
+    }
+    
+    .add-liquidity-btn,
+    .remove-liquidity-btn {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      color: #fff;
+      margin: 0 10px;
+      text-decoration: none;
+      width: 200px;
+      text-align: center;
+      font-size: 20px;
     }
     
     .add-liquidity-btn {
-      padding: 10px 20px;
-      background-color: #30878a;
-      border-radius: 5px;
-      margin: 20px;
+      background-color: #28a745;
+    }
+    
+    .add-liquidity-btn:hover {
+      background-color: #218838;
     }
     
     .remove-liquidity-btn {
-      padding: 10px 20px;
-      background-color: #30878a;
-      border-radius: 5px;
-      margin: 20px;
+      background-color: #dc3545;
+    }
+    
+    .remove-liquidity-btn:hover {
+      background-color: #c82333;
+    }
+    
+    .chart-card {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 35%;
+      text-align: center;
+    }
+    
+    .chart-card h3 {
+      margin-top: 0;
+      color: #5a6268;
+    }
+    
+    .chart-card p {
+      font-size: 18px;
+      color: #5a6268;
     }
   </style>
 
-  <h2 style="text-align: center;">Liquidity Reserves</h2>
+  <h1 style="text-align: center; color: #30879A; margin-top: 45px;">Liquidity Pool</h1>
 
   <div class="liquidity-chart-container">
-    <div>
-      <canvas id="reservesChart" width="400" height="400"></canvas>
-    </div>
-    <div>
-      <canvas id="userLiquidityChart" width="400" height="400"></canvas>
-    </div>
-  </div>
-
-  <div class="liquidity-chart-info">
-    <div>
+    <div class="chart-card">
+      <h3>Token Reserves</h3>
       <p>
-        ShareToken Reserve: <span id="shareTokenReserve">Loading...</span>
+        STE: <span id="shareTokenReserve">Loading...</span> USDT: <span id="usdtTokenReserve">Loading...</span>
       </p>
-      <p>
-        USDT Reserve: <span id="usdtTokenReserve">Loading...</span>
-      </p>
+      <canvas id="reservesChart" width="320" height="320"></canvas>
     </div>
-
-    <div>
+    <div class="chart-card">
+      <h3>Total Liquidity</h3>
       <p>
-        Your Liquidity: <span id="userLiquidity">Loading...</span>
+        Total: <span id="totalLiquidity">Loading...</span> Your: <span id="userLiquidity">Loading...</span>
       </p>
+      <canvas id="userLiquidityChart" width="320" height="320"></canvas> 
     </div>
   </div>
 
   <div class="liquidity-function-btn">
-    <a href="{% url 'add_liquidity' %}" class="add-liquidity-btn">Add Liquidity</a>
-    <a href="{% url 'remove_liquidity' %}" class="remove-liquidity-btn">Remove Liquidity</a>
+    <a href="{% url 'add_liquidity' %}" class="add-liquidity-btn">+ Add Liquidity</a>
+    <a href="{% url 'remove_liquidity' %}" class="remove-liquidity-btn">- Remove Liquidity</a>
   </div>
 {% endblock %}
