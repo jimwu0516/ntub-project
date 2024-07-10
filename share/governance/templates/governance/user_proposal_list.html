@@ -92,10 +92,18 @@
       background-color: #FB8C00;
       color: #fff;
     }
+
+    .vote-button.yes:hover{
+      background-color: #DA7A01;
+    }
     
     .vote-button.no {
       background-color: #1F2CBB;
       color: #fff;
+    }
+
+    .vote-button.no:hover{
+      background-color: #000A75;
     }
     
     .vote-percentage {
@@ -279,7 +287,7 @@
           <p>Remaining minutes: {{ proposal.remainingMinutes }}</p>
 
           <div class="vote-buttons">
-            <button class="vote-button yes" onclick="vote({{ proposal.id }}, true)">Yes</button>
+            <button class="vote-button yes"onclick="vote({{ proposal.id }}, true)">Yes</button>
             <button class="vote-button no" onclick="vote({{ proposal.id }}, false)">No</button>
           </div>
 
