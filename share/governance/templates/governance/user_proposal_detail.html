@@ -7,10 +7,13 @@
 
 {% block content %}
 <style>
-    .voting-detail-container {
+    .voting-detail-wrapper {
         max-width: 1000px;
         margin: 0 auto;
         margin-top: 20px;
+    }
+
+    .voting-detail-container {
         border: 1px solid #ddd;
         border-radius: 10px;
         padding: 20px;
@@ -86,16 +89,18 @@
     }
 
     .back-button {
-        margin-top: 120px;
-        display: inline-block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         margin-bottom: 20px;
         padding: 10px 20px;
         font-size: 16px;
         color: white;
-        background-color: #8D6E63;
-        border-radius: 5px;
+        background-color: #30878A;
         text-decoration: none;
-        margin-left: 75px;
+        border-radius: 10px;
+        margin-top: 80px;
+        width: 50px;
     }
 </style>
 
@@ -117,64 +122,65 @@
     });
 </script>
 
-<a href="javascript:history.back()" class="back-button">Back</a>
-
-<div class="voting-detail-container">
-
-    <h2 class="title">{{ proposal_info.title }}</h2>
-    <div class="description">{{ proposal_info.description }}</div>
-    
-    <div class="Winning-option">
-        Winning option:
-        <span>
-          {% if proposal_info.totalYes > proposal_info.totalNo %}
-            <span style="color: red;">Yes</span>, with {{ proposal_info.totalYes }} STE
-          {% else %}
-            <span style="color: red;">No</span>, with {{ proposal_info.totalNo }} STE
-          {% endif %}
-        </span>
-    </div>
-
-    <h3>Detail</h3>
-   
-    <div class="bar-container">
-        <div class="bar-label">
-            <span>Yes</span>
-            <span id="yes-percent">0%</span>
+<div class="voting-detail-wrapper">
+    <a href="javascript:history.back()" class="back-button"><img src="{% static 'images/back-arrow-icon.svg' %}" alt="back-arrow-icon" style="width:20px; margin-right: 10px;" />
+        Back</a>
+    <div class="voting-detail-container">
+        <h2 class="title">{{ proposal_info.title }}</h2>
+        <div class="description">{{ proposal_info.description }}</div>
+        
+        <div class="Winning-option">
+            Winning option:
+            <span>
+              {% if proposal_info.totalYes > proposal_info.totalNo %}
+                <span style="color: red;">Yes</span>, with {{ proposal_info.totalYes }} STE
+              {% else %}
+                <span style="color: red;">No</span>, with {{ proposal_info.totalNo }} STE
+              {% endif %}
+            </span>
         </div>
-        <div class="bar">
-            <div class="bar-fill yes" id="bar-yes" style="width: 0%;"></div>
-        </div>
-        <div class="bar-label">
-            <span>No</span>
-            <span id="no-percent">0%</span>
-        </div>
-        <div class="bar">
-            <div class="bar-fill no" id="bar-no" style="width: 0%;"></div>
-        </div>
-    </div>
 
-    <table class="votes-table">
-        <thead>
-            <tr>
-                <th>Address</th>
-                <th>Option</th>
-                <th>Voting power</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for voter, power, vote in proposal_details.voters %}
+        <h3>Detail</h3>
+       
+        <div class="bar-container">
+            <div class="bar-label">
+                <span>Yes</span>
+                <span id="yes-percent">0%</span>
+            </div>
+            <div class="bar">
+                <div class="bar-fill yes" id="bar-yes" style="width: 0%;"></div>
+            </div>
+            <div class="bar-label">
+                <span>No</span>
+                <span id="no-percent">0%</span>
+            </div>
+            <div class="bar">
+                <div class="bar-fill no" id="bar-no" style="width: 0%;"></div>
+            </div>
+        </div>
+
+        <table class="votes-table">
+            <thead>
                 <tr>
-                    <td>{{ voter }}</td>
-                    {% if  vote %}
-                        <td  class="option-yes">Yes</td>
-                    {% else %}
-                        <td class="option-no">No</td>
-                    {% endif %}
-                    <td>{{ power }} STE</td>
+                    <th>Address</th>
+                    <th>Option</th>
+                    <th>Voting power</th>
                 </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                {% for voter, power, vote in proposal_details.voters %}
+                    <tr>
+                        <td>{{ voter }}</td>
+                        {% if  vote %}
+                            <td  class="option-yes">Yes</td>
+                        {% else %}
+                            <td class="option-no">No</td>
+                        {% endif %}
+                        <td>{{ power }} STE</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 {% endblock %}
