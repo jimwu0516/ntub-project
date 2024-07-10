@@ -271,7 +271,7 @@
                 {% for holder in top_token_holders %}
                   <tr>
                     <td>{{ holder.0 }}</td>
-                    <td>{{ holder.1 }}</td>
+                    <td>{{ holder.1|floatformat:2 }}</td>
                   </tr>
                 {% endfor %}
               </tbody>
