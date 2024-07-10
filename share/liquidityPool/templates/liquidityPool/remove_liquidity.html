@@ -72,9 +72,16 @@
 
         const liquidityAmountInWei = web3.utils.toWei(liquidityAmount.toString(), 'ether');
 
-        await liquidityPoolContract.methods.removeLiquidity(liquidityAmountInWei).send({ from: userAccount });
+        await liquidityPoolContract.methods
+        .removeLiquidity(liquidityAmountInWei)
+        .send({ from: userAccount })
+        .on('transactionHash', function (hash) {
+          transaction_processing(hash)
+        })
 
+        document.getElementById('transaction_processing').style.display = 'none';
         alert('Liquidity removed successfully!');
+        window.location.href = '/liquidity-reserves'
         getUserLiquidity();
       } catch (error) {
         console.error(error);
@@ -153,7 +160,16 @@
     document.addEventListener('DOMContentLoaded', function () {
       getUserLiquidity();
       document.getElementById('liquidityPercent').addEventListener('change', calculateReceiveAmounts);
+      document.getElementById('cancel-btn').addEventListener('click', function() {
+        window.history.back();
+      })
     });
+
+    function transaction_processing(transactionHash) {
+      var transaction_processing = document.getElementById('transaction_processing')
+      document.getElementById('hashDisplay').innerText = transactionHash
+      transaction_processing.style.display = 'block'
+    }
   </script>
 
   <style>
@@ -242,6 +258,100 @@
       font-size: 16px;
       font-weight: bold;
     }
+
+    #cancel-btn{
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 4px;
+      color: #30878a;
+      border: solid 0.1px #30878a;
+      background-color:white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    #cancel-btn:hover {
+      border-color: #1e5758;
+    }
+
+    /*-------------------------------------*/
+    .transaction_processing {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      margin-top: 20px;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgb(0, 0, 0);
+      background-color: rgba(0, 0, 0, 0.4);
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.15s ease-out forwards;
+    }
+    .transaction_processing-content {
+      background-color: #fff8dc;
+      margin: 15% auto;
+      padding: 20px;
+      border-radius: 10px;
+      width: 50%;
+      align-items: center;
+      animation: scaleUp 0.15s ease-out forwards;
+      text-align: center;
+      margin-top: 220px;
+    }
+    .Transaction_processing_title {
+      text-align: center;
+      font-size: 50px;
+      color: #8b4513;
+    }
+    .Transaction_hash_title {
+      text-align: center;
+      font-size: 40px;
+      color: #e77a29;
+      margin-bottom: 15px;
+    }
+    #hashDisplay {
+      text-align: center;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      font-size: max(22px, calc(100% - 40px));
+      font-family: 'Consolas';
+      box-sizing: border-box;
+      padding: 10px;
+      overflow: hidden;
+      color: #e77a29;
+      padding-top: 0;
+      margin-top: 0;
+    }
+    .transaction_processing-content img {
+      width: auto;
+      max-width: 12%;
+      height: auto;
+      margin: 0;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    @keyframes scaleUp {
+      from {
+        transform: scale(0.8);
+      }
+      to {
+        transform: scale(1);
+      }
+    }
   </style>
 
   <div class="remove-liquidity-container">
@@ -270,11 +380,19 @@
         </div>
 
         <button type="button" onclick="removeLiquidity()" class="remove_liquidity_btn">Remove Liquidity</button>
+        <button type="button" id="cancel-btn">Cancel</button>
 
         <div id="userLiquidity" data-total-liquidity="0" style="text-align: center; margin-top: 10px;">Your Liquidity: Loading...</div>
-
       </form>
     </div>
   </div>
-  
+
+  <div id="transaction_processing" class="transaction_processing">
+    <div class="transaction_processing-content">
+      <p class="Transaction_processing_title" style="font-size: 50px;">Removing liquidity...</p>
+      <img src="{% static 'images/exchange.png' %}" alt="exchange" />
+      <p class="Transaction_hash_title">Hash:</p>
+      <p id="hashDisplay"></p>
+    </div>
+  </div>
 {% endblock %}
