@@ -64,82 +64,6 @@
         font-size: 16px;
         cursor: pointer;
       }
-      .transaction_processing {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        margin-top: 20px;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgb(0, 0, 0);
-        background-color: rgba(0, 0, 0, 0.4);
-        justify-content: center;
-        align-items: center;
-        animation: fadeIn 0.15s ease-out forwards;
-      }
-      .transaction_processing-content {
-        background-color: #fff8dc;
-        margin: 15% auto;
-        padding: 20px;
-        border-radius: 10px;
-        width: 50%;
-        align-items: center;
-        animation: scaleUp 0.15s ease-out forwards;
-        text-align: center;
-        margin-top: 220px;
-      }
-      .Transaction_processing_title {
-        text-align: center;
-        font-size: 50px;
-        color: #8b4513;
-      }
-      .Transaction_hash_title {
-        text-align: center;
-        font-size: 40px;
-        color: #e77a29;
-        margin-bottom: 15px;
-      }
-      #hashDisplay {
-        text-align: center;
-        max-width: 100%;
-        max-height: 100%;
-        width: auto;
-        height: auto;
-        font-size: max(22px, calc(100% - 40px));
-        font-family: 'Consolas';
-        box-sizing: border-box;
-        padding: 10px;
-        overflow: hidden;
-        color: #e77a29;
-        padding-top: 0;
-        margin-top: 0;
-      }
-      .transaction_processing-content img {
-        width: auto;
-        max-width: 12%;
-        height: auto;
-        margin: 0;
-      }
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-        }
-        to {
-          opacity: 1;
-        }
-      }
-      @keyframes scaleUp {
-        from {
-          transform: scale(0.8);
-        }
-        to {
-          transform: scale(1);
-        }
-      }
-
       .menu-item {
         margin-left: 10px;
         padding: 10px;
@@ -148,10 +72,101 @@
         color: white;
         font-weight: bold;
       }
-      
       .menu-item:hover {
-        background-color: #30879A;
-        color: #FFFFFF;
+        background-color: #30879a;
+        color: #ffffff;
+      }
+      .voting-card-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .voting-card-container h2 {
+        color: #4a90e2;
+      }
+      .active-proposal-bar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        width: 700px;
+      }
+      .active-proposal-bar h2 {
+        text-align: center;
+        flex: 1;
+      }
+      .create-proposal-btn {
+        position: absolute;
+        right: 0;
+        border-radius: 5px;
+        overflow: hidden;
+        padding: 2px 2px;
+        background-color: #4a90e2;
+      }
+      .create-proposal-btn:hover {
+        background-color: #3a72b2;
+      }
+      .create-proposal-btn img {
+        width: 40px;
+        height: 40px;
+        margin-left: 3px;
+      }
+      .voting-card {
+        background-color: #282952;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 700px;
+        padding: 20px;
+        margin-bottom: 20px;
+      }
+      .voting-card h3 {
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+      .voting-card p {
+        font-size: 14px;
+        color: white;
+        margin-bottom: 20px;
+      }
+      .vote-percentage {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 5px;
+      }
+      .vote-percentage div {
+        font-size: 14px;
+        color: #333;
+      }
+      .vote-percentage .yes-percentage {
+        color: #e88118;
+      }
+      .vote-percentage .no-percentage {
+        color: #63bb69;
+      }
+      .vote-percentage .middle-percentage {
+        color: white;
+      }
+      .result-bar {
+        display: flex;
+        height: 10px;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-top: 10px;
+        position: relative;
+      }
+      .result-bar div {
+        height: 100%;
+      }
+      .result-yes {
+        background-color: #e88118;
+      }
+      .result-no {
+        background-color: #63bb69;
+      }
+      .Winning-option {
+        text-align: center;
+        margin-top: 20px;
+        color: white;
       }
     </style>
   </head>
@@ -159,7 +174,7 @@
     <header class="header">
       <div class="navbar-left">
         <a href="{% url 'admin_dashboard' %}"><img src="{% static 'images/logo-admin.PNG' %}" alt="Logo" /></a>
-        <a href="{% url 'admin_all_proposal' %}" class="menu-item" >Governance</a>
+        <a href="{% url 'admin_all_proposal' %}" class="menu-item">Governance</a>
       </div>
       <div class="navbar-right">
         <div class="connect-wallet-btn">
@@ -170,102 +185,118 @@
       </div>
     </header>
     <main>
-      <a href="{% url 'create_proposal' %}" >Create proposal</a>
-      <h1>Ended Proposals</h1>
-      <table border="1">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Total Yes Votes</th>
-            <th>Total No Votes</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for proposal in end_proposals %}
-            <tr>
-              <td>{{ proposal.id }}</td>
-              <td>{{ proposal.title }}</td>
-              <td>{{ proposal.description }}</td>
-              <td>{{ proposal.totalYes }}</td>
-              <td>{{ proposal.totalNo }}</td>
-            </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-
-      <br />
-      <h1>Active Proposals</h1>
-      <table border="1">
-          <thead>
-              <tr>
-                  <th>ID</th>
-                  <th>Title</th>
-                  <th>Description</th>
-                  <th>Total Yes Votes</th>
-                  <th>Total No Votes</th>
-                  <th>Remaining Time (minutes)</th>
-              </tr>
-          </thead>
-          <tbody>
-              {% for proposal in active_proposals %}
-                  <tr>
-                      <td>{{ proposal.id }}</td>
-                      <td>{{ proposal.title }}</td>
-                      <td>{{ proposal.description }}</td>
-                      <td>{{ proposal.totalYes }}</td>
-                      <td>{{ proposal.totalNo }}</td>
-                      <td>{{ proposal.remainingMinutes }}</td>
-                      <button onclick="vote({{ proposal.id }}, true)">Yes</button>
-                      <button onclick="vote({{ proposal.id }}, false)">No</button>
-                  </tr>
-              {% endfor %}
-          </tbody>
-      </table>
-
-
-
-
-
-      
-
-
-      <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
       <script>
-          async function vote(proposalId, vote) {
-              if (typeof window.ethereum !== 'undefined') {
-                  const web3 = new Web3(window.ethereum);
-
-                  if (!localStorage.getItem('walletConnected')) {
-                    alert('Please connect your wallet first!')
-                    return
-                  }
-
-                  try {
-                      await window.ethereum.request({ method: 'eth_requestAccounts' });
-
-                      const accounts = await web3.eth.getAccounts();
-                      const account = accounts[0];
-
-                      const contractAddress = localStorage.getItem('contract_address');
-                      const response = await fetch('{% static "abi/ShareTokenABI.json" %}')
-                      const contractABI = await response.json()
-
-                      const contract = new web3.eth.Contract(contractABI, contractAddress);
-
-                      await contract.methods.vote(proposalId, vote).send({ from: account });
-
-                      alert('Vote submitted successfully!');
-                  } catch (error) {
-                      console.error("Error voting:", error);
-                      alert('There was an error submitting your vote.');
-                  }
-              } else {
-                  alert('Please install MetaMask!');
-              }
-          }
+        document.addEventListener('DOMContentLoaded', function () {
+          var voteProgresses = document.querySelectorAll('.voting-card')
+        
+          voteProgresses.forEach(function (voteProgress) {
+            var totalYes = parseInt(voteProgress.getAttribute('data-total-yes'))
+            var totalNo = parseInt(voteProgress.getAttribute('data-total-no'))
+            var totalVotes = totalYes + totalNo
+        
+            var yesPercentage = totalVotes ? (totalYes / totalVotes) * 100 : 0
+            var noPercentage = totalVotes ? (totalNo / totalVotes) * 100 : 0
+        
+            var yesElement = voteProgress.querySelector('.yes-percentage')
+            var noElement = voteProgress.querySelector('.no-percentage')
+        
+            if (yesElement && noElement) {
+              yesElement.textContent = yesPercentage.toFixed(2) + '%'
+              noElement.textContent = noPercentage.toFixed(2) + '%'
+            } else {
+              console.error('Could not find yes-percentage or no-percentage elements in proposal ID:', voteProgress.id)
+            }
+        
+            var yesBar = voteProgress.querySelector('.result-yes')
+            var noBar = voteProgress.querySelector('.result-no')
+        
+            if (yesBar && noBar) {
+              yesBar.style.width = yesPercentage + '%'
+              noBar.style.width = noPercentage + '%'
+            } else {
+              console.error('Could not find result-yes or result-no elements in proposal ID:', voteProgress.id)
+            }
+          })
+        })
       </script>
+      <div class="voting-card-container">
+        <div class="active-proposal-bar">
+          <h2>Active Proposal</h2>
+          <div class="create-proposal-btn">
+            <a href="{% url 'create_proposal' %}"><img src="{% static 'images/create-proposal-icon.svg' %}" alt="create-proposal-icon" /></a>
+          </div>
+        </div>
+
+        {% if active_proposals %}
+          {% for proposal in active_proposals %}
+            <div class="voting-card active" data-total-yes="{{ proposal.totalYes }}" data-total-no="{{ proposal.totalNo }}">
+              <h3>{{ proposal.title }}</h3>
+              <p>{{ proposal.description }}</p>
+              <p>Remaining minutes: {{ proposal.remainingMinutes }}</p>
+
+              <div class="vote-percentage">
+                <div class="yes-percentage"></div>
+                <div class="middle-percentage">0%</div>
+                <div class="no-percentage"></div>
+              </div>
+
+              <div class="result-bar">
+                {% if proposal.totalYes == 0 and proposal.totalNo == 0 %}
+                  <div style="text-align: center;">No Data</div>
+                {% else %}
+                  <div class="result-yes" style="width: {{ proposal.totalYes }}%;"></div>
+                  <div class="result-no" style="width: {{ proposal.totalNo }}%;"></div>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="voting-card active">
+            <p>No Active proposal</p>
+          </div>
+        {% endif %}
+
+        <h2>Ended Proposal</h2>
+
+        {% if end_proposals %}
+          {% for proposal in end_proposals %}
+            <div class="voting-card ended" data-total-yes="{{ proposal.totalYes }}" data-total-no="{{ proposal.totalNo }}">
+              <h3>{{ proposal.title }}</h3>
+              <p>{{ proposal.description }}</p>
+
+              {% if proposal.totalYes == 0 and proposal.totalNo == 0 %}
+                <div style="text-align: center;">No Data</div>
+              {% else %}
+                <div class="vote-percentage">
+                  <div class="yes-percentage"></div>
+                  <div class="middle-percentage">0%</div>
+                  <div class="no-percentage"></div>
+                </div>
+
+                <div class="result-bar">
+                  <div class="result-yes" style="width: {{ proposal.totalYes }}%;"></div>
+                  <div class="result-no" style="width: {{ proposal.totalNo }}%;"></div>
+                </div>
+
+                <div class="Winning-option">
+                  Winning option:
+                  <span>
+                    {% if proposal.totalYes > proposal.totalNo %}
+                      <span style="color: #e88118;">Yes</span>, with {{ proposal.totalYes }} STE
+                    {% else %}
+                      <span style="color: #63bb69;">No</span>, with {{ proposal.totalNo }} STE
+                    {% endif %}
+                  </span>
+                </div>
+              {% endif %}
+            </div>
+          {% endfor %}
+        {% else %}
+          <div class="voting-card ended">
+            <p>No ended proposal</p>
+          </div>
+        {% endif %}
+      </div>
     </main>
   </body>
 </html>
