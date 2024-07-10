@@ -20,7 +20,7 @@
     
       try {
         await window.ethereum.request({ method: 'eth_requestAccounts' })
-    
+     
         const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress')
         const response1 = await fetch('{% static "abi/LiquidityPoolABI.json" %}')
         const liquidityPoolAbi = await response1.json()
@@ -34,8 +34,8 @@
         const usdtTokenReserveInEther = web3.utils.fromWei(usdtTokenReserve, 'ether')
         const totalLiquidityInEther = web3.utils.fromWei(totalLiquidity, 'ether')
     
-        document.getElementById('shareTokenReserve').innerText = shareTokenReserveInEther + ' STE'
-        document.getElementById('usdtTokenReserve').innerText = usdtTokenReserveInEther + ' USDT'
+        document.getElementById('shareTokenReserve').innerText = shareTokenReserveInEther 
+        document.getElementById('usdtTokenReserve').innerText = usdtTokenReserveInEther
     
         createReservesPieChart(shareTokenReserveInEther, usdtTokenReserveInEther)
     
@@ -78,7 +78,7 @@
     }
     
     function createReservesPieChart(shareTokenReserve, usdtTokenReserve) {
-      const ctx = document.getElementById('reservesChart').getContext('2d')
+      const ctx = document.getElementById('reservesChart').getContext('2d');
       new Chart(ctx, {
         type: 'pie',
         data: {
@@ -86,15 +86,21 @@
           datasets: [
             {
               data: [shareTokenReserve, usdtTokenReserve],
-              backgroundColor: ['#FFCE56', '#36A2EB']
+              backgroundColor: ['#ea7b94', '#3c9f80']
             }
           ]
         },
         options: {
-          responsive: true
+          responsive: true,
+          plugins: {
+            legend: {
+              display: false
+            }
+          }
         }
-      })
+      });
     }
+    
     
     function createUserLiquidityPieChart(userLiquidity, totalLiquidity) {
       const ctx = document.getElementById('userLiquidityChart').getContext('2d')
@@ -105,12 +111,17 @@
           datasets: [
             {
               data: [userLiquidity, totalLiquidity - userLiquidity],
-              backgroundColor: ['#FFCE56', '#36A2EB']
+              backgroundColor: ['#e66a14', '#87c6cb']
             }
           ]
         },
         options: {
-          responsive: true
+          responsive: true,
+          plugins: {
+            legend: {
+              display: false
+            }
+          }
         }
       })
     }
@@ -203,14 +214,14 @@
     <div class="chart-card">
       <h3>Token Reserves</h3>
       <p>
-        STE: <span id="shareTokenReserve">Loading...</span> USDT: <span id="usdtTokenReserve">Loading...</span>
+        <label style="color: #ea7b94;">STE: <span id="shareTokenReserve">Loading...</span></label>    <label style="color: #3c9f80;"> USDT: <span id="usdtTokenReserve">Loading...</span></label>
       </p>
       <canvas id="reservesChart" width="320" height="320"></canvas>
     </div>
     <div class="chart-card">
       <h3>Total Liquidity</h3>
       <p>
-        Total: <span id="totalLiquidity">Loading...</span> Your: <span id="userLiquidity">Loading...</span>
+        <label style="color: #87c6cb">Total: <span id="totalLiquidity">Loading...</span> </label>     <label style="color: #e66a14 ;">Your: <span id="userLiquidity">Loading...</span></label>
       </p>
       <canvas id="userLiquidityChart" width="320" height="320"></canvas> 
     </div>
