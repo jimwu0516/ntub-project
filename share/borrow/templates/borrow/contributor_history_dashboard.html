@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
   <title>contributor history dashboard</title>
@@ -8,7 +9,7 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-cloud/1.2.5/d3.layout.cloud.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+  
   <!-- Get comment (Hidden) -->
   <div id="comments-container" style="display: none;">
     {% for review in reviews %}
@@ -17,7 +18,7 @@
   </div>
 
   <div class="user-info-container">
-    <button class="action-button"  onclick="history.back()">Back</button>
+    <button class="action-button"  onclick="history.back()"><img src="{% static 'images/back-arrow-icon.svg' %}" alt="back-arrow-icon" style="width:15px; margin-right: 10px;" />Back</button>
     <div class="user-info-contributor">
       <span>Contributor: {{ contributor.username }}</span>
       <span>Wallet Address: {{ contributor_wallet_address }}</span>

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
   <title>Borrower history dashboard</title>
@@ -17,7 +18,7 @@
   </div>
 
   <div class="user-info-container">
-    <button class="action-button"  onclick="history.back()">Back</button>
+    <button class="action-button"  onclick="history.back()"><img src="{% static 'images/back-arrow-icon.svg' %}" alt="back-arrow-icon" style="width:15px; margin-right: 10px;" />Back</button>
     <div class="user-info-borrower">
       <span>Borrower: {{ borrower.username }}</span>
       <span>Wallet Address: {{ borrower_wallet_address }}</span>
