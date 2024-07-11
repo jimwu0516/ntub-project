@@ -11,160 +11,160 @@
   <script>
     async function connectWeb3() {
       if (window.ethereum) {
-        const web3 = new Web3(window.ethereum);
+        const web3 = new Web3(window.ethereum)
         try {
-          await window.ethereum.request({ method: 'eth_requestAccounts' });
-          return web3;
+          await window.ethereum.request({ method: 'eth_requestAccounts' })
+          return web3
         } catch (error) {
-          console.error('User denied account access');
+          console.error('User denied account access')
         }
       } else {
-        console.error('No Ethereum provider found');
+        console.error('No Ethereum provider found')
       }
     }
-
+    
     async function fetchContractData(web3) {
-      const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress');
-      const liquidityPoolResponse = await fetch('{% static "abi/LiquidityPoolABI.json" %}');
-      const liquidityPoolAbi = await liquidityPoolResponse.json();
-      const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress);
-
-      return liquidityPoolContract;
+      const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress')
+      const liquidityPoolResponse = await fetch('{% static "abi/LiquidityPoolABI.json" %}')
+      const liquidityPoolAbi = await liquidityPoolResponse.json()
+      const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress)
+    
+      return liquidityPoolContract
     }
-
+    
     async function removeLiquidity() {
-      const liquidityPercent = document.getElementById('liquidityPercent').value;
-      const totalLiquidity = document.getElementById('userLiquidity').dataset.totalLiquidity;
-
-      if (!totalLiquidity) {
-        alert('Failed to get user liquidity.');
-        return;
-      }
-
-      if (!liquidityPercent) {
-        alert('Please select a percentage to remove.');
-        return;
-      }
-
-      const liquidityAmount = (BigInt(totalLiquidity) * BigInt(liquidityPercent)) / BigInt(100);
-
       if (!window.ethereum) {
-        alert('MetaMask is not installed!');
-        return;
+        alert('MetaMask is not installed!')
+        return
       }
-
-      const web3 = new Web3(window.ethereum);
-
+    
+      const web3 = new Web3(window.ethereum)
+    
+      const liquidityPercent = document.getElementById('liquidityPercent').value
+      const totalLiquidity = document.getElementById('userLiquidity').dataset.totalLiquidity
+    
+      if (!totalLiquidity) {
+        alert('Failed to get user liquidity.')
+        return
+      }
+    
+      if (!liquidityPercent) {
+        alert('Please select a percentage to remove.')
+        return
+      }
+    
+      const totalLiquidityInWei = web3.utils.toWei(totalLiquidity.toString(), 'ether')
+      const liquidityAmount = (BigInt(totalLiquidityInWei) * BigInt(liquidityPercent)) / BigInt(100)
+    
       try {
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const accounts = await web3.eth.getAccounts();
-        const userAccount = accounts[0];
-
+        await window.ethereum.request({ method: 'eth_requestAccounts' })
+        const accounts = await web3.eth.getAccounts()
+        const userAccount = accounts[0]
+    
         if (!localStorage.getItem('walletConnected')) {
-          alert('Please connect your wallet');
-          return;
+          alert('Please connect your wallet')
+          return
         }
-
-        const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress');
-        const response1 = await fetch('{% static "abi/LiquidityPoolABI.json" %}');
-        const liquidityPoolAbi = await response1.json();
-        const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress);
-
-        const liquidityAmountInWei = web3.utils.toWei(liquidityAmount.toString(), 'ether');
-
+    
+        const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress')
+        const response1 = await fetch('/static/abi/LiquidityPoolABI.json')
+        const liquidityPoolAbi = await response1.json()
+        const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress)
+    
         await liquidityPoolContract.methods
-        .removeLiquidity(liquidityAmountInWei)
-        .send({ from: userAccount })
-        .on('transactionHash', function (hash) {
-          transaction_processing(hash)
-        })
-
-        document.getElementById('transaction_processing').style.display = 'none';
-        alert('Liquidity removed successfully!');
+          .removeLiquidity(liquidityAmount.toString())
+          .send({ from: userAccount })
+          .on('transactionHash', function (hash) {
+            transaction_processing(hash)
+          })
+    
+        document.getElementById('transaction_processing').style.display = 'none'
+        alert('Liquidity removed successfully!')
         window.location.href = '/liquidity-reserves'
-        getUserLiquidity();
+        getUserLiquidity()
       } catch (error) {
-        console.error(error);
-        alert('An error occurred while removing liquidity.');
+        console.error(error)
+        alert('An error occurred while removing liquidity.')
       }
     }
-
+    
     async function getUserLiquidity() {
       if (!window.ethereum) {
-        alert('MetaMask is not installed!');
-        return;
+        alert('MetaMask is not installed!')
+        return
       }
-
-      const web3 = new Web3(window.ethereum);
-
+    
+      const web3 = new Web3(window.ethereum)
+    
       try {
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const accounts = await web3.eth.getAccounts();
-        const userAccount = accounts[0];
-
-        const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress');
-        const response1 = await fetch('{% static "abi/LiquidityPoolABI.json" %}');
-        const liquidityPoolAbi = await response1.json();
-        const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress);
-
-        const liquidity = await liquidityPoolContract.methods.getUserLiquidity().call({ from: userAccount });
-        document.getElementById('userLiquidity').innerText = 'Your Liquidity: ' + web3.utils.fromWei(liquidity, 'ether') + ' tokens';
-        document.getElementById('userLiquidity').dataset.totalLiquidity = web3.utils.fromWei(liquidity, 'ether');
+        await window.ethereum.request({ method: 'eth_requestAccounts' })
+        const accounts = await web3.eth.getAccounts()
+        const userAccount = accounts[0]
+    
+        const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress')
+        const response1 = await fetch('{% static "abi/LiquidityPoolABI.json" %}')
+        const liquidityPoolAbi = await response1.json()
+        const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress)
+    
+        const liquidity = await liquidityPoolContract.methods.getUserLiquidity().call({ from: userAccount })
+        document.getElementById('userLiquidity').innerText = 'Your Liquidity: ' + web3.utils.fromWei(liquidity, 'ether') + ' tokens'
+        document.getElementById('userLiquidity').dataset.totalLiquidity = web3.utils.fromWei(liquidity, 'ether')
       } catch (error) {
-        console.error(error);
-        alert('An error occurred while fetching user liquidity.');
+        console.error(error)
+        alert('An error occurred while fetching user liquidity.')
       }
     }
-
+    
     async function calculateReceiveAmounts() {
       if (!window.ethereum) {
-        alert('MetaMask is not installed!');
-        return;
+        alert('MetaMask is not installed!')
+        return
       }
-
-      const web3 = new Web3(window.ethereum);
-
+    
+      const web3 = new Web3(window.ethereum)
+    
       try {
-        await window.ethereum.request({ method: 'eth_requestAccounts' });
-        const accounts = await web3.eth.getAccounts();
-        const userAccount = accounts[0];
-
-        const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress');
-        const response1 = await fetch('{% static "abi/LiquidityPoolABI.json" %}');
-        const liquidityPoolAbi = await response1.json();
-        const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress);
-
-        const totalLiquidity = BigInt(document.getElementById('userLiquidity').dataset.totalLiquidity);
-        const liquidityPercent = document.getElementById('liquidityPercent').value;
-
+        await window.ethereum.request({ method: 'eth_requestAccounts' })
+        const accounts = await web3.eth.getAccounts()
+        const userAccount = accounts[0]
+    
+        const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress')
+        const response1 = await fetch('/static/abi/LiquidityPoolABI.json')
+        const liquidityPoolAbi = await response1.json()
+        const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress)
+    
+        const totalLiquidity = web3.utils.toWei(document.getElementById('userLiquidity').dataset.totalLiquidity, 'ether')
+        const liquidityPercent = document.getElementById('liquidityPercent').value
+    
         if (!liquidityPercent || !totalLiquidity) {
-          alert('Please select a percentage and ensure your liquidity is loaded.');
-          return;
+          alert('Please select a percentage and ensure your liquidity is loaded.')
+          return
         }
-
-        const liquidityAmount = (totalLiquidity * BigInt(liquidityPercent)) / BigInt(100);
-
-        const shareTokenReserve = BigInt(await liquidityPoolContract.methods.shareTokenReserve().call());
-        const usdtTokenReserve = BigInt(await liquidityPoolContract.methods.usdtTokenReserve().call());
-        const totalPoolLiquidity = BigInt(await liquidityPoolContract.methods.totalLiquidity().call());
-
-        const shareTokenAmount = (liquidityAmount * shareTokenReserve) / totalPoolLiquidity;
-        const usdtTokenAmount = (liquidityAmount * usdtTokenReserve) / totalPoolLiquidity;
-        document.getElementById('ste_receive_amount').innerText = `${shareTokenAmount}`;
-        document.getElementById('usdt_receive_amount').innerText = `${usdtTokenAmount}`;
+    
+        const liquidityAmount = (BigInt(totalLiquidity) * BigInt(liquidityPercent)) / BigInt(100)
+    
+        const shareTokenReserve = BigInt(await liquidityPoolContract.methods.shareTokenReserve().call())
+        const usdtTokenReserve = BigInt(await liquidityPoolContract.methods.usdtTokenReserve().call())
+        const totalPoolLiquidity = BigInt(await liquidityPoolContract.methods.totalLiquidity().call())
+    
+        const shareTokenAmount = (liquidityAmount * shareTokenReserve) / totalPoolLiquidity
+        const usdtTokenAmount = (liquidityAmount * usdtTokenReserve) / totalPoolLiquidity
+    
+        document.getElementById('ste_receive_amount').innerText = web3.utils.fromWei(shareTokenAmount.toString(), 'ether')
+        document.getElementById('usdt_receive_amount').innerText = web3.utils.fromWei(usdtTokenAmount.toString(), 'ether')
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
     }
-
+    
     document.addEventListener('DOMContentLoaded', function () {
-      getUserLiquidity();
-      document.getElementById('liquidityPercent').addEventListener('change', calculateReceiveAmounts);
-      document.getElementById('cancel-btn').addEventListener('click', function() {
-        window.history.back();
+      getUserLiquidity()
+      document.getElementById('liquidityPercent').addEventListener('change', calculateReceiveAmounts)
+      document.getElementById('cancel-btn').addEventListener('click', function () {
+        window.history.back()
       })
-    });
-
+    })
+    
     function transaction_processing(transactionHash) {
       var transaction_processing = document.getElementById('transaction_processing')
       document.getElementById('hashDisplay').innerText = transactionHash
@@ -178,7 +178,7 @@
       flex-direction: column;
       align-items: center;
     }
-
+    
     .remove-liquidity {
       background-color: #fff;
       border-radius: 8px;
@@ -189,23 +189,23 @@
       margin-top: 200px;
       justify-content: center;
     }
-
+    
     .remove-liquidity h2 {
       margin-top: 0;
       color: #30878a;
     }
-
+    
     #liquidityForm {
       margin-bottom: 10px;
       text-align: left;
     }
-
+    
     .remove-liquidity-container p {
       display: block;
       margin-bottom: 5px;
       color: #333;
     }
-
+    
     .remove-liquidity-container select {
       width: 100%;
       padding: 10px;
@@ -214,7 +214,7 @@
       box-sizing: border-box;
       margin-bottom: 20px;
     }
-
+    
     .remove_liquidity_btn {
       width: 100%;
       padding: 10px;
@@ -226,11 +226,11 @@
       cursor: pointer;
       font-size: 16px;
     }
-
+    
     .remove_liquidity_btn:hover {
       background-color: #1e5758;
     }
-
+    
     .receive-amount-info {
       display: flex;
       flex-direction: column;
@@ -238,28 +238,28 @@
       width: 100%;
       margin-bottom: 13px;
     }
-
+    
     .receive-token-info {
       display: flex;
       justify-content: space-between;
       width: 100%;
       margin: 5px 0;
     }
-
+    
     .receive-amount-info p {
       font-size: 18px;
     }
-
+    
     .token-name {
       font-size: 16px;
     }
-
+    
     .token-amount {
       font-size: 16px;
       font-weight: bold;
     }
-
-    #cancel-btn{
+    
+    #cancel-btn {
       width: 100%;
       padding: 10px;
       margin-top: 10px;
@@ -267,15 +267,15 @@
       border-radius: 4px;
       color: #30878a;
       border: solid 0.1px #30878a;
-      background-color:white;
+      background-color: white;
       cursor: pointer;
       font-size: 16px;
     }
-
+    
     #cancel-btn:hover {
       border-color: #1e5758;
     }
-
+    
     /*-------------------------------------*/
     .transaction_processing {
       display: none;
