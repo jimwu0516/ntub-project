@@ -67,8 +67,8 @@
         const liquidity = await liquidityPoolContract.methods.getUserLiquidity().call({ from: userAccount })
         const userLiquidityInEther = web3.utils.fromWei(liquidity, 'ether')
     
-        document.getElementById('userLiquidity').innerText = userLiquidityInEther + ' tokens'
-        document.getElementById('totalLiquidity').innerText = totalLiquidity + ' tokens'
+        document.getElementById('userLiquidity').innerText =  parseFloat(userLiquidityInEther).toFixed(3)+ ' tokens'
+        document.getElementById('totalLiquidity').innerText = parseFloat(totalLiquidity).toFixed(3)+ ' tokens'
     
         createUserLiquidityPieChart(userLiquidityInEther, totalLiquidity)
       } catch (error) {
