@@ -18,14 +18,42 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: templates/base.html:38
+#: templates/base.html-------------------------------------
 msgid "Borrow"
 msgstr "借用"
 
-
-#: templates/base.html:39
 msgid "Order"
 msgstr "訂單"
+
+msgid "Polling"
+msgstr "投票"
+
+msgid "Swap Token"
+msgstr "交換代幣"
+
+msgid "Connect Wallet"
+msgstr "連接錢包"
+
+msgid "Profile"
+msgstr "個人資料"
+
+msgid "My item"
+msgstr "我的物品"
+
+msgid "Contribute status"
+msgstr "貢獻狀態"
+
+msgid "Logout"
+msgstr "登出"
+
+msgid "Login"
+msgstr "登入"
+
+msgid "Add BSC Network"
+msgstr "新增 幣安智能鏈"
+
+msgid "Airdrop Amount:"
+msgstr "空投數量："
 
 
 
@@ -114,9 +142,6 @@ msgstr "編輯"
 
 
 #: governance/user_proposal_list.html-------------------------------------
-msgid "Polling"
-msgstr "投票"
-
 msgid "Active Proposals"
 msgstr "進行中的提案"
 
@@ -237,6 +262,8 @@ msgstr "交換"
 
 msgid "Swapping token..."
 msgstr "交換代幣中..."
+
+
 
 
 

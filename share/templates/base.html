@@ -41,19 +41,19 @@
 
               <a href="{% url 'available_borrow_items' %}" class="menu-item">{% trans "Borrow" %}</a>
               <a href="{% url 'latest_status_user_orders' %}" class="menu-item">{% trans "Order" %}</a>
-              <a href="{% url 'user_proposals_list' 'active' %}" class="menu-item">Polling</a>
+              <a href="{% url 'user_proposals_list' 'active' %}" class="menu-item">{% trans "Polling" %}</a>
               <div class="dropdown">
-                <a href="#" class="menu-item">Swap</a>
+                <a href="#" class="menu-item">{% trans "Swap" %}</a>
                   <div class="dropdown-content" style="top: 29px;">
-                    <a href="{% url 'swap_token'%}">Swap Token</a>
-                    <a href="{% url 'liquidity_reserves'%}">Liquidity Pool</a>
+                    <a href="{% url 'swap_token'%}">{% trans "Swap Token" %}</a>
+                    <a href="{% url 'liquidity_reserves'%}">{% trans "Liquidity Pool" %}</a>
                   </div>
               </div>
             </div>
             <div class="navbar-right">
             
               <div class="connect-wallet-btn">
-                <button id="connectWalletBtn" class="connectWalletBtn" style="background-color: green; color: white; border: 0px; padding: 10px; border-radius: 5px;">Connect Wallet</button>
+                <button id="connectWalletBtn" class="connectWalletBtn" style="background-color: green; color: white; border: 0px; padding: 10px; border-radius: 5px;">{% trans "Connect Wallet" %}</button>
                 <select id="disconnectSelect" class="disconnectSelect" style="display: none;"></select>
               </div>
             
@@ -98,10 +98,10 @@
                 <a href="#" class="dropbtn">Hi {{ request.user }}</a>
 
                 <div class="dropdown-content">
-                  <a href="{% url 'profile' %}" title="Update my profile">Profile</a>
-                  <a href="{% url 'items' %}">My item</a>
-                  <a href="{% url 'contributor_order_status' %}">Contribute status</a>
-                  <a href="{% url 'logout' %}" id="logoutBtn" style="color: red; font-weight: bold;">Logout</a>
+                  <a href="{% url 'profile' %}" title="Update my profile">{% trans "Profile" %}</a>
+                  <a href="{% url 'items' %}">{% trans "My item" %}</a>
+                  <a href="{% url 'contributor_order_status' %}">{% trans "Contribute status" %}</a>
+                  <a href="{% url 'logout' %}" id="logoutBtn" style="color: red; font-weight: bold;">{% trans "Logout" %}</a>
                 </div>
               </div>
             </div>
@@ -127,7 +127,7 @@
                   </form>
                 </div>
               </div>
-              <a href="{% url 'login' %}" class="login">Login</a>
+              <a href="{% url 'login' %}" class="login">{% trans "Login" %}</a>
             </div>
           </nav>
         {% endif %}
@@ -212,13 +212,13 @@
         <div class="left-content">
           <button id="addNetworkBtn" class="addNetworkBtn">
             <img src="{% static 'images/metamask-icon.svg' %}" alt="Metamask" style="width:20px; margin-right: 10px;" />
-            Add BSC Testnet Network
+            {% trans "Add BSC Network" %}
           </button>
         </div>
 
         {% if request.user.is_authenticated %}
           <div class="right-content">
-            <span style="margin-right: 0px; color: #45494d;">Airdrop Amount:<span style="font-weight: bold;">{{ airdrop_amount }}</span></span>
+            <span style="margin-right: 0px; color: #45494d;">{% trans "Airdrop Amount:" %}<span style="font-weight: bold;">{{ airdrop_amount }}</span></span>
             <div id="gauge-chart-container" style="height: 60px; width: 130px;">
               <canvas id="gauge-chart" style="height: 60px; width: 150px;"></canvas>
             </div>
