@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% load static %}
 
 {% block title %}
-  <title>Add Liquidity</title>
+  <title>{% trans "Add Liquidity" %}</title>
 {% endblock %}
 
 {% block content %}
@@ -351,7 +352,7 @@
 
   <div class="add-liquidity-container">
     <div class="add-liquidity">
-      <h2>Add liquidity</h2>
+      <h2>{% trans "Add Liquidity" %}</h2>
 
       <form id="liquidityForm">
         <div class="input-group">
@@ -364,17 +365,17 @@
           <input type="number" id="usdtTokenAmount" placeholder="USDT Amount" required />
         </div>
 
-        <button type="button" onclick="addLiquidity()" id="add_liquidity">Add Liquidity</button>
-        <button type="button" id="cancel-btn">Cancel</button>
+        <button type="button" onclick="addLiquidity()" id="add_liquidity">{% trans "Add Liquidity" %} </button>
+        <button type="button" id="cancel-btn">{% trans "Cancel" %}</button>
       </form>
 
-      <div id="userLiquidity" style="margin-top: 10px;">Your Liquidity: Loading...</div>
+      <div id="userLiquidity" style="margin-top: 10px;">{% trans "Your Liquidity: Loading..." %}</div>
     </div>
   </div>
 
   <div id="transaction_processing" class="transaction_processing">
     <div class="transaction_processing-content">
-      <p class="Transaction_processing_title" style="font-size: 50px;">Adding liquidity...</p>
+      <p class="Transaction_processing_title" style="font-size: 50px;">{% trans "Add Liquidity ..." %}</p>
       <img src="{% static 'images/exchange.png' %}" alt="exchange" />
       <p class="Transaction_hash_title">Hash:</p>
       <p id="hashDisplay"></p>

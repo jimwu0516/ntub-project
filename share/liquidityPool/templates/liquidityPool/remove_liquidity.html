@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load i18n %}
 
 {% block title %}
-  <title>Remove Liquidity</title>
+  <title>{% trans "Remove Liquidity" %}</title>
 {% endblock %}
 
 {% block content %}
@@ -356,19 +357,19 @@
 
   <div class="remove-liquidity-container">
     <div class="remove-liquidity">
-      <h2>Remove liquidity</h2>
+      <h2>{% trans "Remove Liquidity" %}</h2>
 
       <form id="liquidityForm">
-        <p>Remove Percentage</p>
+        <p>{% trans "Remove Percentage" %}</p>
         <select id="liquidityPercent" required>
-          <option value="" disabled selected>Select</option>
+          <option value="" disabled selected>{% trans "Select" %}</option>
           <option value="25">25%</option>
           <option value="50">50%</option>
           <option value="100">100%</option>
         </select>
 
         <div class="receive-amount-info">
-          <p style="margin-bottom: 5px;">You'll receive:</p>
+          <p style="margin-bottom: 5px;">{% trans "You'll receive:" %}</p>
           <div class="receive-token-info">
             <span class="token-name">STE</span>
             <span class="token-amount" id="ste_receive_amount">0</span>
@@ -379,17 +380,17 @@
           </div>
         </div>
 
-        <button type="button" onclick="removeLiquidity()" class="remove_liquidity_btn">Remove Liquidity</button>
-        <button type="button" id="cancel-btn">Cancel</button>
+        <button type="button" onclick="removeLiquidity()" class="remove_liquidity_btn">{% trans "Remove Liquidity" %}</button>
+        <button type="button" id="cancel-btn">{% trans "Cancel" %}</button>
 
-        <div id="userLiquidity" data-total-liquidity="0" style="text-align: center; margin-top: 10px;">Your Liquidity: Loading...</div>
+        <div id="userLiquidity" data-total-liquidity="0" style="text-align: center; margin-top: 10px;">{% trans "Your Liquidity: Loading..." %}</div>
       </form>
     </div>
   </div>
 
   <div id="transaction_processing" class="transaction_processing">
     <div class="transaction_processing-content">
-      <p class="Transaction_processing_title" style="font-size: 50px;">Removing liquidity...</p>
+      <p class="Transaction_processing_title" style="font-size: 50px;">{% trans "Remove Liquidity..." %}</p>
       <img src="{% static 'images/exchange.png' %}" alt="exchange" />
       <p class="Transaction_hash_title">Hash:</p>
       <p id="hashDisplay"></p>

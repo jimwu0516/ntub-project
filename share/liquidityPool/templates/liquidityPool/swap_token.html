@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load i18n %}
 
 {% block title %}
-  <title>Swap Tokens</title>
+  <title>{% trans "Swap Tokens" %}</title>
 {% endblock %}
 
 {% block content %}
@@ -334,7 +335,7 @@
 
   <div class="swap-token-container">
     <div class="swap-container">
-      <h2>Swap token</h2>
+      <h2>{% trans "Swap Tokens" %}</h2>
       <form id="swapForm">
         <div class="input-group">
           <p id="swapTokenName">STE</p>
@@ -348,14 +349,14 @@
           <input type="number" id="outputAmount" placeholder="" readonly />
         </div>
 
-        <button type="button" id="swapButton" onclick="swapTokens()">Swap</button>
+        <button type="button" id="swapButton" onclick="swapTokens()">{% trans "Swap" %}</button>
       </form>
     </div>
   </div>
 
   <div id="transaction_processing" class="transaction_processing">
     <div class="transaction_processing-content">
-      <p class="Transaction_processing_title" style="font-size: 50px;">Swapping token...</p>
+      <p class="Transaction_processing_title" style="font-size: 50px;">{% trans "Swapping token..." %}</p>
       <img src="{% static 'images/exchange.png' %}" alt="exchange" />
       <p class="Transaction_hash_title">Hash:</p>
       <p id="hashDisplay"></p>

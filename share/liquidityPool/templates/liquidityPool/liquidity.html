@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load i18n %}
 
 {% block title %}
-  <title>Liquidity Reserves</title>
+  <title>{% trans "Liquidity Reserves" %}</title>
 {% endblock %}
 
 {% block content %}
@@ -207,28 +208,28 @@
     }
   </style>
 
-  <h1 style="text-align: center; color: #30879A; margin-top: 45px;">Liquidity Pool</h1>
+  <h1 style="text-align: center; color: #30879A; margin-top: 45px;">{% trans "Liquidity Pool" %}</h1>
 
   <div class="liquidity-chart-container">
     <div class="chart-card">
-      <h3>Token Reserves</h3>
+      <h3>{% trans "Token Reserves" %}</h3>
       <p>
-        <label style="color: #ea7b94;">STE: <span id="shareTokenReserve">Loading...</span></label>
-        <label style="color: #3c9f80;">USDT: <span id="usdtTokenReserve">Loading...</span></label>
+        <label style="color: #ea7b94;">STE: <span id="shareTokenReserve">{% trans "Loading..." %}</span></label>
+        <label style="color: #3c9f80;">USDT: <span id="usdtTokenReserve">{% trans "Loading..." %}</span></label>
       </p>
       <canvas id="reservesChart" width="320" height="320"></canvas>
     </div>
     <div class="chart-card">
-      <h3>Total Liquidity</h3>
+      <h3>{% trans "Total Liquidity" %}</h3>
       <p>
-        <label style="color: #87c6cb">Total: <span id="totalLiquidity">Loading...</span></label> <label style="color: #e66a14 ;">Your: <span id="userLiquidity">Loading...</span></label>
+        <label style="color: #87c6cb">{% trans "Total:" %} <span id="totalLiquidity">{% trans "Loading..." %}</span></label> <label style="color: #e66a14 ;">{% trans "Your:" %}<span id="userLiquidity">{% trans "Loading..." %}</span></label>
       </p>
       <canvas id="userLiquidityChart" width="320" height="320"></canvas>
     </div>
   </div>
 
   <div class="liquidity-function-btn">
-    <a href="{% url 'add_liquidity' %}" class="add-liquidity-btn">+ Add Liquidity</a>
-    <a href="{% url 'remove_liquidity' %}" class="remove-liquidity-btn">- Remove Liquidity</a>
+    <a href="{% url 'add_liquidity' %}" class="add-liquidity-btn">{% trans "+ Add Liquidity" %}</a>
+    <a href="{% url 'remove_liquidity' %}" class="remove-liquidity-btn">{% trans "- Remove Liquidity" %}</a>
   </div>
 {% endblock %}

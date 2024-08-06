@@ -167,3 +167,76 @@ msgstr "選項"
 msgid "Voting power"
 msgstr "投票權"
 
+
+
+#: liquidityPool/add_liquidity.html-------------------------------------
+msgid "Add Liquidity"
+msgstr "增加流動性"
+
+msgid "Your Liquidity: Loading..."
+msgstr "正在載入你的流動性"
+
+msgid "Add Liquidity ..."
+msgstr "正在增加流動性 ..."
+
+
+
+#: liquidityPool/liquidity.html-------------------------------------
+msgid "Liquidity Reserves"
+msgstr "流動性儲備"
+
+msgid "Liquidity Pool"
+msgstr "流動池"
+
+msgid "Token Reserves"
+msgstr "代幣儲備"
+
+msgid "Loading... "
+msgstr "載入中... "
+
+msgid "Your:"
+msgstr "你提供了"
+
+msgid "Total Liquidity"
+msgstr "總流動性"
+
+msgid "Total:"
+msgstr "總計："
+
+msgid "+ Add Liquidity"
+msgstr "+ 增加流動性"
+
+msgid "- Remove Liquidity"
+msgstr "- 移除流動性"
+
+
+
+#: liquidityPool/remove_liquidity.html-------------------------------------
+msgid "Remove Liquidity"
+msgstr "移除流動性"
+
+msgid "Remove Percentage"
+msgstr "刪除百分比"
+
+msgid "Select"
+msgstr "選擇"
+
+msgid "You'll receive:"
+msgstr "您將收到："
+
+msgid "Removing Liquidity..."
+msgstr "移除流動性中..."
+
+
+#: liquidityPool/swap_token.html-------------------------------------
+msgid "Swap Tokens"
+msgstr "交換代幣"
+
+msgid "Swap"
+msgstr "交換"
+
+msgid "Swapping token..."
+msgstr "交換代幣中..."
+
+
+
