@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block title %}
-  <title>Polling</title>
+  <title>{% trans "Polling" %}</title>
 {% endblock %}
 
 {% block content %}
@@ -362,10 +363,10 @@
   <nav class="proposal-category-bar">
     <ul class="proposal-category-links">
       <li id="active-proposal">
-        <a href="{% url 'user_proposals_list' 'active' %}">Active Proposals</a>
+        <a href="{% url 'user_proposals_list' 'active' %}">{% trans "Active Proposals" %}</a>
       </li>
       <li id="ended-proposal">
-        <a href="{% url 'user_proposals_list' 'ended' %}">Ended Proposals</a>
+        <a href="{% url 'user_proposals_list' 'ended' %}">{% trans "Ended Proposals" %}</a>
       </li>
     </ul>
   </nav>
@@ -376,11 +377,11 @@
         <div class="voting-card active" data-total-yes="{{ proposal.totalYes }}" data-total-no="{{ proposal.totalNo }}">
           <h3>{{ proposal.title }}</h3>
           <p>{{ proposal.description }}</p>
-          <p>Remaining minutes: {{ proposal.remainingMinutes }}</p>
+          <p>{% trans "Remaining minutes: " %}{{ proposal.remainingMinutes }}</p>
 
           <div class="vote-buttons">
-            <button class="vote-button yes"onclick="vote({{ proposal.id }}, true)">Yes</button>
-            <button class="vote-button no" onclick="vote({{ proposal.id }}, false)">No</button>
+            <button class="vote-button yes"onclick="vote({{ proposal.id }}, true)">{% trans "Yes" %}</button>
+            <button class="vote-button no" onclick="vote({{ proposal.id }}, false)">{% trans "No" %}</button>
           </div>
 
           <div class="vote-percentage">
@@ -390,7 +391,7 @@
 
           <div class="result-bar">
             {% if proposal.totalYes == 0 and proposal.totalNo == 0 %}
-              <div style="text-align: center;">No Data</div>
+              <div style="text-align: center;">{% trans "No Data" %}</div>
             {% else %}
               <div class="result-yes" style="width: {{ proposal.totalYes }}%;"></div>
               <div class="result-no" style="width: {{ proposal.totalNo }}%;"></div>
@@ -406,7 +407,7 @@
             <p>{{ proposal.description }}</p>
 
             {% if proposal.totalYes == 0 and proposal.totalNo == 0 %}
-              <div style="text-align: center;">No Data</div>
+              <div style="text-align: center;">{% trans "No Data" %}</div>
             {% else %}
               <div class="vote-percentage">
                 <div class="yes-percentage"></div>
@@ -420,12 +421,12 @@
               </div>
 
               <div class="Winning-option">
-                Winning option:
+                {% trans "Winning option:" %}
                 <span>
                   {% if proposal.totalYes > proposal.totalNo %}
-                    <span style="color: #ff8c00;">Yes</span>, with {{ proposal.totalYes }} STE
+                    <span style="color: #ff8c00;">{% trans "Yes" %}</span>{% trans ", with" %} {{ proposal.totalYes }} STE
                   {% else %}
-                    <span style="color: #1F2CBB;">No</span>, with {{ proposal.totalNo }} STE
+                    <span style="color: #1F2CBB;">{% trans "No" %}</span>{% trans ", with" %} {{ proposal.totalNo }} STE
                   {% endif %}
                 </span>
               </div>
@@ -434,13 +435,13 @@
         </div>
       {% endfor %}
     {% else %}
-      <p>No proposals found.</p>
+      <p>{% trans "No proposals found." %}</p>
     {% endif %}
   </div>
 
   <div id="transaction_processing" class="transaction_processing">
     <div class="transaction_processing-content">
-      <p class="Transaction_processing_title" style="font-size: 50px;">Voting...</p>
+      <p class="Transaction_processing_title" style="font-size: 50px;">{% trans "Voting..." %}</p>
       <img src="{% static 'images/exchange.png' %}" alt="exchange" />
       <p class="Transaction_hash_title">Hash:</p>
       <p id="hashDisplay"></p>

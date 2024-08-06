@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block title %}
-  <title>Proposal Detail</title>
+  <title>{% trans "Proposal Detail" %}</title>
 {% endblock %}
 
 {% block content %}
@@ -115,7 +116,7 @@
         var noPercent = (totalNo / totalVotes) * 100;
 
         document.getElementById('bar-yes').style.width = yesPercent + '%';
-        document.getElementById('yes-percent').textContent = totalYes + " STE Voting " + yesPercent.toFixed(2) + '%';
+        document.getElementById('yes-percent').textContent = totalYes +  " STE Voting " + yesPercent.toFixed(2) + '%';
 
         document.getElementById('bar-no').style.width = noPercent + '%';
         document.getElementById('no-percent').textContent = totalNo + " STE Voting " + noPercent.toFixed(2) + '%';
@@ -123,35 +124,34 @@
 </script>
 
 <div class="voting-detail-wrapper">
-    <a href="javascript:history.back()" class="back-button"><img src="{% static 'images/back-arrow-icon.svg' %}" alt="back-arrow-icon" style="width:20px; margin-right: 10px;" />
-        Back</a>
+    <a href="javascript:history.back()" class="back-button"><img src="{% static 'images/back-arrow-icon.svg' %}" alt="back-arrow-icon" style="width:20px; margin-right: 10px;" />{% trans "Back" %}</a>
     <div class="voting-detail-container">
         <h2 class="title">{{ proposal_info.title }}</h2>
         <div class="description">{{ proposal_info.description }}</div>
         
         <div class="Winning-option">
-            Winning option:
+            {% trans "Winning option:" %}
             <span>
               {% if proposal_info.totalYes > proposal_info.totalNo %}
-                <span style="color: red;">Yes</span>, with {{ proposal_info.totalYes }} STE
+                <span style="color: red;">{% trans "Yes" %}</span>{% trans ", with" %} {{ proposal_info.totalYes }} STE
               {% else %}
-                <span style="color: red;">No</span>, with {{ proposal_info.totalNo }} STE
+                <span style="color: red;">{% trans "No" %}</span>{% trans ", with" %} {{ proposal_info.totalNo }} STE
               {% endif %}
             </span>
         </div>
 
-        <h3>Detail</h3>
+        <h3>{% trans "Detail" %}</h3>
        
         <div class="bar-container">
             <div class="bar-label">
-                <span>Yes</span>
+                <span>{% trans "Yes" %}</span>
                 <span id="yes-percent">0%</span>
             </div>
             <div class="bar">
                 <div class="bar-fill yes" id="bar-yes" style="width: 0%;"></div>
             </div>
             <div class="bar-label">
-                <span>No</span>
+                <span>{% trans "No" %}</span>
                 <span id="no-percent">0%</span>
             </div>
             <div class="bar">
@@ -162,9 +162,10 @@
         <table class="votes-table">
             <thead>
                 <tr>
-                    <th>Address</th>
-                    <th>Option</th>
-                    <th>Voting power</th>
+                    <th>{% trans "Address" %}</th>
+                    <th>{% trans "Option" %}</th>
+                    <th>{% trans "Voting power" %}
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -172,9 +173,9 @@
                     <tr>
                         <td>{{ voter }}</td>
                         {% if  vote %}
-                            <td  class="option-yes">Yes</td>
+                            <td  class="option-yes">{% trans "Yes" %}</td>
                         {% else %}
-                            <td class="option-no">No</td>
+                            <td class="option-no">{% trans "No" %}</td>
                         {% endif %}
                         <td>{{ power }} STE</td>
                     </tr>

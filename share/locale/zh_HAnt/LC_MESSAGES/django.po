@@ -113,5 +113,57 @@ msgid "Edit"
 msgstr "編輯"
 
 
+#: governance/user_proposal_list.html-------------------------------------
+msgid "Polling"
+msgstr "投票"
 
+msgid "Active Proposals"
+msgstr "進行中的提案"
+
+msgid "Ended Proposals"
+msgstr "已結束的提案"
+
+msgid "Remaining minutes: "
+msgstr "剩餘分鐘："
+
+msgid "Yes"
+msgstr "是"
+
+msgid "No"
+msgstr "否"
+
+msgid "No Data"
+msgstr "沒有資料"
+
+msgid "Winning option:"
+msgstr "獲勝選項："
+
+msgid ", with"
+msgstr ", 有"
+
+msgid "No proposals found."
+msgstr "沒有提案"
+
+msgid "Voting..."
+msgstr "投票中..."
+
+
+#: governance/user_proposal_detail.html-------------------------------------
+msgid "Proposal Detail"
+msgstr "提案詳情"
+
+msgid "Back"
+msgstr "返回"
+
+msgid "Detail"
+msgstr "詳情"
+
+msgid "Address"
+msgstr "地址"
+
+msgid "Option"
+msgstr "選項"
+
+msgid "Voting power"
+msgstr "投票權"
 
