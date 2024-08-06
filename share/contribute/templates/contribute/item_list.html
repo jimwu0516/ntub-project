@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block content %}
   <script>
     function checkItemAvailable(element) {
       const isAvailable = element.getAttribute('data-item-available') === 'True'
       if (!isAvailable) {
-        alert('This item is currently being borrowed')
+        alert({% trans "This item is currently being borrowed" %})
         return false
       }
       return true
@@ -13,31 +14,35 @@
   </script>
 
   <div class="contributor-item-list">
-    <h2 class="text-center">My Contribute item</h2>
+    <h2 class="text-center">{% trans "My Contribute item" %}</h2>
     {% if items %}
-      <a href="{% url 'item-create' %}" class="add-item-btn">＋ Add</a>
+      <a href="{% url 'item-create' %}" class="add-item-btn">{% trans "＋ Add" %} </a>
       <br />
       <br />
       {% for item in items %}
         <div class="item-list-card">
           <img class="item-list-image" src="{{ item.item_image.url }}" alt="{{ item.item_name }}" />
           <div class="item-details">
-            <p>item name: {{ item.item_name }}</p>
-            <p>item category : {{ item.item_category }}</p>
-            <p>item available: {{ item.item_available }}</p>
-            <p>item deposit require: {{ item.item_deposit_require }}</p>
+            <p>{% trans "item name:" %}
+              {{ item.item_name }}</p>
+            <p>{% trans "item category :" %}
+              {{ item.item_category }}</p>
+            <p>{% trans "item available:" %}
+              {{ item.item_available }}</p>
+            <p>{% trans "item deposit require:" %}
+              {{ item.item_deposit_require }}</p>
           </div>
           <div class="item-edit-delete-btn">
-            <a href="{% url 'item-update' item.item_id %}" class="item-edit-button" onclick="return checkItemAvailable(this);" data-item-available="{{ item.item_available }}">Edit</a>
-            <a href="{% url 'item-delete' item.item_id %}" class="item-delete-button">Delete</a>
+            <a href="{% url 'item-update' item.item_id %}" class="item-edit-button" onclick="return checkItemAvailable(this);" data-item-available="{{ item.item_available }}">{% trans "Edit" %}            </a>
+            <a href="{% url 'item-delete' item.item_id %}" class="item-delete-button">{% trans "Delete" %}            </a>
           </div>
         </div>
       {% endfor %}
     {% else %}
       <div class="no-contribute-item">
-        <p>no contribute item!</p>
+        <p>{% trans "no contribute item!" %}</p>
         <br />
-        <a href="{% url 'item-create' %}" class="contribute-my-item-btn">contribute my item</a>
+        <a href="{% url 'item-create' %}" class="contribute-my-item-btn">{% trans "contribute my item" %}</a>
       </div>
     {% endif %}
   </div>

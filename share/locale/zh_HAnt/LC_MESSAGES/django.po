@@ -27,3 +27,91 @@ msgstr "借用"
 msgid "Order"
 msgstr "訂單"
 
+
+
+#: contribute/item_confirm_delete.html------------------------------
+msgid "Delete item"
+msgstr "刪除物品"
+
+msgid "Are you sure that you want to delete"
+msgstr "您確定要刪除"
+
+msgid "Delete"
+msgstr "刪除"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Can not delete"
+msgstr "無法刪除"
+
+msgid "Item is currently lent out"
+msgstr "物品目前已出借"
+
+msgid "ok"
+msgstr "好的"
+
+
+
+
+
+#: contribute/item_detail.html-------------------------------------
+msgid "item name:"
+msgstr "物品名稱 ："
+
+msgid "item description:"
+msgstr "物品描述"
+
+msgid "item_address:"
+msgstr "物品地址："
+
+msgid "item_deposit_require:"
+msgstr "物品保證金："
+
+msgid "item_available:"
+msgstr "可用物品："
+
+
+
+#: contribute/item_form.html-------------------------------------
+msgid "Edit Item"
+msgstr "編輯物品"
+
+msgid "Save"
+msgstr "儲存"
+
+msgid "Add Item"
+msgstr "新增物品"
+
+
+#: contribute/item_list.html-------------------------------------
+msgid "My Contribute item"
+msgstr "我的貢獻物品"
+
+msgid "＋ Add"
+msgstr "＋ 新增"
+
+msgid "item category :"
+msgstr "物品類別："
+
+msgid "item available:"
+msgstr "可用物品："
+
+msgid "item deposit require:"
+msgstr "物品保證金："
+
+msgid "no contribute item!"
+msgstr "沒有貢獻物品！"
+
+msgid "contribute my item"
+msgstr "貢獻我的物品"
+
+msgid "This item is currently being borrowed"
+msgstr "這個物品正在被借用"
+
+msgid "Edit"
+msgstr "編輯"
+
+
+
+
