@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block content %}
   <div class="center">
@@ -9,13 +10,13 @@
         <h2 class="text-center">{{ user.username|title }}</h2>
       {% endcomment %}
 
-      <label for="username">Username:</label>
+      <label for="username">{% trans "Username:" %}</label>
       <input type="text" id="username" name="username" value="{{ user.username }}" />
       
-      <label for="email">Email Address:</label>
+      <label for="email">{% trans "Email Address:" %}</label>
       <input type="email" id="email" name="email" value="{{ user.email }}" />
       
-      <label for="user_place">User Place:</label>
+      <label for="user_place">{% trans "User Place:" %}</label>
       <select id="user_place" name="user_place">
         {% for place_value, place_label in profile_form.fields.user_place.choices %}
           <option value="{{ place_value }}" {% if place_value == profile_form.user_place.value %}selected{% endif %}>
@@ -24,11 +25,11 @@
         {% endfor %}
       </select>
       
-      <label for="airdrop_wallet_address">Airdrop wallet Address:</label>
+      <label for="airdrop_wallet_address">{% trans "Airdrop wallet Address:" %}</label>
       <input type="airdrop_wallet_address" id="airdrop_wallet_address" name="airdrop_wallet_address" value="{{ profile_form.airdrop_wallet_address.value }}" />
 
       <input type="submit" class="card-primary-btn" value="Update Profile">
-      <a href="{% url 'home' %}" class="card-outline-btn">Cancel</a> 
+      <a href="{% url 'home' %}" class="card-outline-btn">{% trans "Cancel" %}</a> 
 
     </form>
   </div>

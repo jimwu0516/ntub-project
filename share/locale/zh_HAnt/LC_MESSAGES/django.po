@@ -544,3 +544,68 @@ msgstr "支付保證金"
 
 msgid "More detail"
 msgstr "更多詳情"
+
+
+#: users/login.html-------------------------------------
+msgid "Log in to your account"
+msgstr "登入您的帳戶"
+
+msgid "Don't have a account?"
+msgstr "沒有帳戶嗎？"
+
+msgid "Register Now"
+msgstr "立馬註冊"
+
+msgid "Reset Password"
+msgstr "重設密碼"
+
+
+#: users/password_reset_complete.html-------------------------------------
+msgid "Successful"
+msgstr "成功"
+
+msgid "Your password has been changed successfully."
+msgstr "你已經成功更改密碼!"
+
+#: users/password_reset_confirm.html-------------------------------------
+msgid "Password Reset Confirm"
+msgstr "密碼重設確認"
+
+
+#: users/password_reset_done.html-------------------------------------
+msgid "Please check your inbox and follow the instruction to reset your password."
+msgstr "請檢查您的信箱並按照指示重設您的密碼。"
+
+
+
+#: users/password_reset.html-------------------------------------
+msgid "Send"
+msgstr "送出"
+
+#: users/profile.html-------------------------------------
+msgid "Username:"
+msgstr "使用者名稱:"
+
+msgid "Email Address:"
+msgstr "電子郵件："
+
+msgid "User Place:"
+msgstr "用戶地點："
+
+msgid "Airdrop wallet Address:"
+msgstr "空投錢包地址："
+
+
+#: users/register.html-------------------------------------
+msgid "Create your account"
+msgstr "建立您的帳戶"
+
+msgid "Register"
+msgstr "註冊"
+
+msgid "Already have an account?"
+msgstr "已經有帳戶？"
+
+
+
+
