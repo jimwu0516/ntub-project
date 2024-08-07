@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load i18n %}
 
 {% block title %}
-  <title>user orders</title>
+  <title>{% trans "Borrower review" %}</title>
 {% endblock %}
 
 {% block content %}
@@ -41,12 +42,12 @@
   <form method="post" action="#" class="contributor-review-container" id="reviewForm" onsubmit="borrowerSubmitReviewForm()">
     {% csrf_token %}
 
-    <h2>Borrower review</h2>
+    <h2>{% trans "Borrower review" %}</h2>
 
-    <label for="review_comment">Comment:</label>
+    <label for="review_comment">{% trans "Comment:" %}</label>
     <textarea name="review_comment" id="review_comment" placeholder="Give your contributor some comments" required></textarea>
 
-    <label>Feeling:</label>
+    <label>{% trans "Feeling:" %}</label>
     <div class="review-result">
       <input type="radio" name="review_result" id="like" value="like" required />
       <label for="like" class="button-like">😁</label>
@@ -59,7 +60,7 @@
 
   <div id="transaction_processing" class="transaction_processing">
     <div class="transaction_processing-content">
-      <p class="Transaction_processing_title"style="font-size: 50px;">Airdropping token and returning deposit...</p>
+      <p class="Transaction_processing_title"style="font-size: 50px;">{% trans "Airdropping token and returning deposit..." %}</p>
       <img src="{% static 'images/exchange.png' %}" alt="exchange"/>
       <p class="Transaction_hash_title">Transaction Hash</p>
       <p id="hashDisplay"></p>

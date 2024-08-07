@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
+{% load i18n %}
+
 
 {% block title %}
-  <title>borrower get item</title>
+  <title>{% trans "borrower get item" %}</title>
 {% endblock %}
 
 {% block content %}
@@ -142,18 +144,18 @@
   <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
 
   <div class="get-item-page-container" borrower-not-picked-up-url="{% url 'borrower_not_picked_up' order.order_id %}" data-start-time="{{ order.start_time|date:'Y-m-d H:i:s' }}">
-    <h2>Get item location</h2>
+    <h2>{% trans "Get item location" %}</h2>
 
     <div id="get-item-map"></div>
 
     <div class="get-item-info">
       <div class="get-item-info-left">
-        <p>Contributor:</p>
+        <p>{% trans "Contributor:" %}</p>
         <p style="font-weight: bold;">
           <a href="{% url 'contributor_history_dashboard' order.item.contributor.id %}" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">{{ order.item.contributor }}</a>
         </p>
 
-        <p>Item Address:</p>
+        <p>{% trans "Item Address:" %}</p>
         <p>{{ order.item.item_address }}</p>
       </div>
       <div class="get-item-info-right">
@@ -162,7 +164,7 @@
           {% csrf_token %}
           <input type="hidden" id="pinCode" name="pin_code" value="" />
           <input type="hidden" id="overdue_minutes" name="overdue_minutes" value="0" />
-          <button type="submit" class="get-item-btn">Get item</button>
+          <button type="submit" class="get-item-btn">{% trans "Get item" %}</button>
         </form>
       </div>
     </div>

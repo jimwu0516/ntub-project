@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block title %}
-  <title>available_borrow_items</title>
+  <title>{% trans "available_borrow_items" %}</title>
 {% endblock %}
 
 {% block content %}
@@ -47,25 +48,25 @@
   <nav class="item-category-bar">
     <ul class="item-category-links">
       <li id="fashion-item">
-        <a href="{% url 'available_fashion_items' %}">Fashion</a>
+        <a href="{% url 'available_fashion_items' %}">{% trans "Fashion" %}</a>
       </li>
       <li id="electronic-item">
-        <a href="{% url 'available_electronics_items' %}">Electronic</a>
+        <a href="{% url 'available_electronics_items' %}">{% trans "Electronic" %}</a>
       </li>
       <li id="sporting-item">
-        <a href="{% url 'available_sporting_items' %}">Sporting-Goods</a>
+        <a href="{% url 'available_sporting_items' %}">{% trans "Sporting-Goods" %}</a>
       </li>
       <li id="book-item">
-        <a href="{% url 'available_books_movie_and_music_items' %}">Books, Movies and Music</a>
+        <a href="{% url 'available_books_movie_and_music_items' %}">{% trans "Books, Movies and Music" %}</a>
       </li>
       <li id="home-item">
-        <a href="{% url 'available_home_and_garden_items' %}">Home and Garden</a>
+        <a href="{% url 'available_home_and_garden_items' %}">{% trans "Home and Garden" %}</a>
       </li>
       <li id="toy-item">
-        <a href="{% url 'available_toys_and_hobbies_items' %}">Toys and Hobbies</a>
+        <a href="{% url 'available_toys_and_hobbies_items' %}">{% trans "Toys and Hobbies" %}</a>
       </li>
       <li id="else-item">
-        <a href="{% url 'available_everything_else_items' %}">Everything Else</a>
+        <a href="{% url 'available_everything_else_items' %}">{% trans "Everything Else" %}</a>
       </li>
     </ul>
   </nav>
@@ -77,12 +78,12 @@
           <a href="{% url 'available_borrow_item' item.item_id %}">
             <img class="item-image" src="{{ item.item_image.url }}" alt="{{ item.item_name }}" />
             <p class="item-name">{{ item.item_name }}</p>
-            <p class="deposit-require">Deposit require{{ item.item_deposit_require }}</p>
+            <p class="deposit-require">{% trans "Deposit require" %}{{ item.item_deposit_require }}</p>
           </a>
         </div>
       {% endfor %}
     </div>
   {% else %}
-    <p style="text-align: center; margin-top: 25px;">There are no items available !!!!</p>
+    <p style="text-align: center; margin-top: 25px;">{% trans "There are no items available !!!!" %}</p>
   {% endif %}
 {% endblock %}

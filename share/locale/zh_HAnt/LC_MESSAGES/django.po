@@ -300,3 +300,247 @@ msgstr "交換"
 
 msgid "Swapping token..."
 msgstr "交換代幣中..."
+
+
+#:  borrow/available_item_detail.html-------------------------------------
+msgid " Detail"
+msgstr "詳情"
+
+msgid "Request Detail"
+msgstr "請求詳情"
+
+msgid "Deposit Required:"
+msgstr "所需保證金："
+
+msgid "Item Address: "
+msgstr "物品地址："
+
+msgid "Contributor:"
+msgstr "貢獻者："
+
+msgid "start:"
+msgstr "開始時間："
+
+msgid "end:"
+msgstr "結束時間："
+
+msgid "Transaction Processing..."
+msgstr "交易處理中..."
+
+
+
+#: borrow/borrower_get_item.html-------------------------------------
+msgid "borrower get item"
+msgstr "借用人取物"
+
+msgid "Get item location"
+msgstr "取物位置"
+
+msgid "Item Address:"
+msgstr "物品地址："
+
+msgid "Get item"
+msgstr "取物"
+
+
+
+
+#: borrow/available_borrow_items.html-------------------------------------
+msgid "available_borrow_items"
+msgstr "可借用物品"
+
+msgid "Fashion"
+msgstr "時尚"
+
+msgid "Electronic"
+msgstr "電子產品"
+
+msgid "Sporting-Goods"
+msgstr "體育用品"
+
+msgid "Books, Movies and Music"
+msgstr "書籍、電影和音樂"
+
+msgid "Home and Garden"
+msgstr "居家和花園"
+
+msgid "Toys and Hobbies"
+msgstr "玩具和嗜好"
+
+msgid "Everything Else"
+msgstr "其他"
+
+msgid "Deposit require"
+msgstr "保證金"
+
+msgid "There are no items available !!!!"
+msgstr "沒有可借的物品!!!!"
+
+
+
+#: borrow/borrower_history_dashboard.html-------------------------------------
+msgid "Borrower history dashboard"
+msgstr "借用人歷史儀表板"
+
+msgid "Borrower:"
+msgstr "借用人："
+
+msgid "Wallet Address:"
+msgstr "錢包地址："
+
+msgid "Not Picked Up Percentage"
+msgstr "未取貨百分比"
+
+msgid "Denial Percentage "
+msgstr "拒絕百分比"
+
+msgid "Average Overdue Pick-Up Time"
+msgstr "平均逾期取貨時間"
+
+msgid "Average Breakage"
+msgstr "平均損壞率"
+
+
+
+#: borrow/borrower_history_orders.html-------------------------------------
+msgid "user history orders"
+msgstr "用戶歷史訂單"
+
+msgid "User History Orders"
+msgstr "用戶歷史訂單"
+
+msgid "No history orders found !!!!!"
+msgstr "沒有歷史訂單 !!!!!"
+
+msgid "Item:"
+msgstr "物品:"
+
+msgid "Status:"
+msgstr "狀態:"
+
+
+
+
+
+
+#: borrow/borrower_submit_review.html-------------------------------------
+msgid "user orders"
+msgstr "用戶訂單"
+
+msgid "Borrower review"
+msgstr "借用人評論"
+
+msgid "Comment:"
+msgstr "評論："
+
+msgid "Feeling:"
+msgstr "感覺："
+
+msgid "Airdropping token and returning deposit..."
+msgstr "空投代幣及返還保證金中..."
+
+
+
+
+
+#: borrow/contributor_history_dashboard.html-------------------------------------
+msgid "contributor history dashboard"
+msgstr "貢獻者歷史儀表板"
+
+msgid "Deny Percentage"
+msgstr "拒絕百分比"
+
+msgid "Borrower Not Picked Up Percentage"
+msgstr "借用人未取物百分比"
+
+msgid "Average Decision Time"
+msgstr "平均決定時間"
+
+msgid "min"
+msgstr "分"
+
+
+#: borrow/contributor_order_status.html-------------------------------------
+msgid "contributor order status"
+msgstr "貢獻者訂單狀態"
+
+msgid "My Contribute status"
+msgstr "我的貢獻狀態"
+
+msgid "Borrower"
+msgstr "借用人"
+
+msgid "Item"
+msgstr "物品"
+
+msgid "Start Time"
+msgstr "開始時間"
+
+msgid "End Time"
+msgstr "結束時間"
+
+msgid "Status"
+msgstr "狀態"
+
+msgid "Action Button"
+msgstr "動作按鈕"
+
+msgid "Decide Within"
+msgstr "在...內決定"
+
+msgid "Pin Code"
+msgstr "PIN碼"
+
+msgid "Accept"
+msgstr "接受"
+
+msgid "Deny"
+msgstr "拒絕"
+
+msgid "Return item"
+msgstr "收回物品"
+
+msgid "Give Review"
+msgstr "給予評論"
+
+msgid "No orders found !!!!!"
+msgstr "沒有訂單 !!!!!"
+
+
+#: borrow/contributor_submit_review.html-------------------------------------
+msgid "Contributor review"
+msgstr "貢獻者評論"
+
+msgid "Breakage:"
+msgstr "損壞率："
+
+#: borrow/user_orders.html-------------------------------------
+msgid "Latest status"
+msgstr "最新狀態"
+
+msgid "Unpaid"
+msgstr "未支付"
+
+msgid "Cancel order"
+msgstr "取消訂單"
+
+msgid "History"
+msgstr "歷史訂單"
+
+msgid "Order ID"
+msgstr "訂單編號"
+
+msgid "Contributor"
+msgstr "貢獻者"
+
+msgid "Request Time"
+msgstr "請求時間"
+
+msgid "Action"
+msgstr "動作"
+
+msgid "Pay deposit"
+msgstr "支付保證金"
+
+msgid "More detail"
+msgstr "更多詳情"

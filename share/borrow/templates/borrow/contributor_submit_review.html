@@ -1,25 +1,26 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 {% block title %}
-  <title>user orders</title>
+  <title>{% trans "Contributor review" %}</title>
 {% endblock %}
 
 {% block content %}
   <form method="post" action="{% url 'contributor_submit_review' order_id %}" class="contributor-review-container">
     {% csrf_token %}
 
-    <h2>Contributor review</h2>
-    <label for="breakage">Breakage:</label>
+    <h2>{% trans "Contributor review" %}</h2>
+    <label for="breakage">{% trans "Breakage:" %}</label>
     <select name="breakage" id="breakage" required>
       {% for choice_value, choice_label in breakage_choices %}
         <option value="{{ choice_value }}">{{ choice_label }}</option>
       {% endfor %}
     </select>
 
-    <label for="review_comment">Comment:</label>
+    <label for="review_comment">{% trans "Comment:" %}</label>
     <textarea name="review_comment" id="review_comment" placeholder="Give your borrower some comments" required></textarea>
 
-    <label>Feeling:</label>
+    <label>{% trans "Feeling:" %}</label>
     <div class="review-result">
       <input type="radio" name="review_result" id="like" value="like" required />
       <label for="like" class="button-like">😁</label>

@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load i18n %}
 
 {% block title %}
-  <title>{{ item.item_name }} Detail</title>
+  <title>{{ item.item_name }} {% trans " Detail" %}</title>
 {% endblock %}
 
 {% block content %}
@@ -90,12 +91,12 @@
     <div class="borrow-request-card">
       <img src="{{ item.item_image.url }}" alt="{{ item.item_name }}" />
       <div class="details">
-        <h2>Request Detail</h2>
+        <h2>{% trans "Request Detail" %}</h2>
 
-        <p>Deposit Required: {{ item.item_deposit_require }}</p>
-        <p>Item Address: {{ item.item_address }}</p>
+        <p>{% trans "Deposit Required:" %}{{ item.item_deposit_require }}</p>
+        <p>{% trans "Item Address: " %} {{ item.item_address }}</p>
         <p>
-          Contributor:<a href="{% url 'contributor_history_dashboard' item.contributor.id %}" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">{{ item.contributor }}</a>
+          {% trans "Contributor:" %}<a href="{% url 'contributor_history_dashboard' item.contributor.id %}" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">{{ item.contributor }}</a>
         </p>
 
         <form id="borrowForm" action="{% url 'borrow_item' item.pk %}" method="post">
@@ -104,14 +105,14 @@
           <input type="hidden" id="transactionStatus" name="transaction_status" value="unpaid" />
           <input type="hidden" id="depositAmount" value="{{ item.item_deposit_require }}" />
 
-          <p>start:</p>
+          <p>{% trans "start:" %}</p>
           <input type="datetime-local" name="start_time" required />
           <br />
-          <p>end:</p>
+          <p>{% trans "end:" %}</p>
           <input type="datetime-local" name="end_time" required />
           <br />
           <div class="request-submit-btn">
-            <button type="submit">Borrow</button>
+            <button type="submit">{% trans "Borrow" %}</button>
           </div>
         </form>
       </div>
@@ -120,7 +121,7 @@
 
   <div id="transaction_processing" class="transaction_processing">
     <div class="transaction_processing-content">
-      <p class="Transaction_processing_title" style="font-size: 50px;">Transaction Processing...</p>
+      <p class="Transaction_processing_title" style="font-size: 50px;">{% trans "Transaction Processing..." %}</p>
       <img src="{% static 'images/exchange.png' %}" alt="exchange" />
       <p class="Transaction_hash_title">Transaction Hash</p>
       <p id="hashDisplay"></p>

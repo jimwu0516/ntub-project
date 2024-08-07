@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load i18n %}
 
 {% block title %}
-  <title>contributor history dashboard</title>
+  <title>{% trans "contributor history dashboard" %}</title>
 {% endblock %}
 
 {% block content %}
@@ -18,10 +19,10 @@
   </div>
 
   <div class="user-info-container">
-    <button class="action-button"  onclick="history.back()"><img src="{% static 'images/back-arrow-icon.svg' %}" alt="back-arrow-icon" style="width:15px; margin-right: 10px;" />Back</button>
+    <button class="action-button"  onclick="history.back()"><img src="{% static 'images/back-arrow-icon.svg' %}" alt="back-arrow-icon" style="width:15px; margin-right: 10px;" />{% trans "Back" %}</button>
     <div class="user-info-contributor">
-      <span>Contributor: {{ contributor.username }}</span>
-      <span>Wallet Address: {{ contributor_wallet_address }}</span>
+      <span>{% trans "Contributor:" %} {{ contributor.username }}</span>
+      <span>{% trans "Wallet Address:" %} {{ contributor_wallet_address }}</span>
     </div>
   </div>
 
@@ -38,20 +39,20 @@
 
     <div class="statistics">
       <div class="stat">
-        <p>Deny Percentage</p>
+        <p>{% trans "Deny Percentage" %}</p>
         <p>{{ deny_percentage }}%</p>
       </div>
       <div class="stat">
-        <p>Borrower Not Picked Up Percentage</p>
+        <p>{% trans "Borrower Not Picked Up Percentage" %}</p>
         <p>{{ not_picked_up_percentage }}%</p>
       </div>
       <div class="stat">
-        <p>Contribute Percentage</p>
+        <p>{% trans "Contribute Percentage" %}</p>
         <p>{{ finish_order_percentage }}%</p>
       </div>
       <div class="stat">
-        <p>Average Decision Time</p>
-        <p>{{ average_decision_making_minute }} min</p>
+        <p>{% trans "Average Decision Time" %}</p>
+        <p>{{ average_decision_making_minute }} {% trans "min" %}</p>
       </div>
     </div>
   </section>
