@@ -1,0 +1,27 @@
+#: borrow/borrower_get_item.html
+
+
+msgid "borrower get item
+msgstr "借用人獲得物品"
+{% trans "borrower get item" %}
+
+
+msgid "Get item location"
+msgstr "取得物品位置"
+{% trans "Get item location" %}
+
+
+
+msgid "Contributor:"
+msgstr "貢獻者："
+{% trans "Contributor:" %}
+
+
+
+msgid "Item Address:"
+msgstr "物品地址："
+{% trans "Item Address:" %}
+
+
+
+

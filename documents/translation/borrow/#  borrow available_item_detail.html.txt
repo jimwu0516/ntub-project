@@ -1,0 +1,55 @@
+#:  borrow/available_item_detail.html
+
+
+
+
+msgid " Detail"
+msgstr "詳情"
+{% trans " Detail" %}
+
+
+
+
+msgid "Request Detail"
+msgstr "請求詳情"
+{% trans "Request Detail" %}
+
+
+msgid "Deposit Required:"
+msgstr "所需保證金："
+{% trans "Deposit Required:" %}
+
+
+msgid "Item Address: "
+msgstr "物品地址："
+{% trans "Item Address: " %}
+
+
+msgid "Contributor:"
+msgstr "貢獻者："
+{% trans "Contributor:" %}
+
+
+msgid "start:"
+msgstr "開始："
+{% trans "start:" %}
+
+
+msgid "end:"
+msgstr "結束："
+{% trans "end:" %}
+
+
+msgid "Borrow"
+msgstr "借用"
+{% trans "Borrow" %}
+
+
+msgid "Transaction Processing..."
+msgstr "交易處理..."
+{% trans "Transaction Processing..." %}
+
+msgid "Transaction Hash"
+msgstr "交易哈希"
+{% trans "Transaction Hash" %}
+

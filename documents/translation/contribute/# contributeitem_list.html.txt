@@ -1,0 +1,52 @@
+#: contribute/item_list.html
+
+
+
+msgid "My Contribute item"
+msgstr "我的貢獻物品"
+{% trans "My Contribute item" %}
+
+
+msgid "＋ Add"
+msgstr "＋ 新增"
+{% trans "＋ Add" %}
+
+
+msgid "item name:"
+msgstr "物品名稱："
+{% trans "item name:" %}
+
+
+msgid "item category :"
+msgstr "物品類別："
+{% trans "item category :" %}
+
+
+msgid "item available:"
+msgstr "可用物品："
+{% trans "item available:" %}
+
+
+msgid "item deposit require:"
+msgstr "物品保證金要求："
+{% trans "item deposit require:" %}
+
+
+msgid "Edit"
+msgstr "編輯"
+{% trans "Edit" %}
+
+
+msgid "Delete"
+msgstr "刪除"
+{% trans "Delete" %}
+
+
+msgid "no contribute item!"
+msgstr "沒有貢獻物品！"
+{% trans "no contribute item!" %}
+
+
+msgid "contribute my item"
+msgstr "貢獻我的物品"
+{% trans "contribute my item" %}

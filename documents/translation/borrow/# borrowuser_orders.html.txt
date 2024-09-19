@@ -1,0 +1,160 @@
+#: borrow/user_orders.html
+
+
+
+msgid "user orders"
+msgstr "使用者訂單"
+{% trans "user orders" %}
+
+
+
+
+
+msgid "Latest status"
+msgstr "最新狀態"
+{% trans "Latest status" %}
+
+
+
+
+msgid "Unpaid"
+msgstr "未支付"
+{% trans "Unpaid" %}
+
+
+
+
+msgid "Cancel order"
+msgstr "取消訂單"
+{% trans "Cancel order" %}
+
+
+
+
+msgid "History"
+msgstr "歷史"
+{% trans "History" %}
+
+
+
+
+msgid "Order ID"
+msgstr "訂單編號"
+{% trans "Order ID" %}
+
+
+
+
+msgid "Contributor"
+msgstr "貢獻者"
+{% trans "Contributor" %}
+
+
+
+
+
+msgid "Item"
+msgstr "物品"
+{% trans "Item" %}
+
+
+
+
+
+msgid "Start Time"
+msgstr "開始時間"
+{% trans "Start Time" %}
+
+
+
+
+
+msgid "End Time"
+msgstr "結束時間"
+{% trans "End Time" %}
+
+
+
+
+
+msgid "Request Time"
+msgstr "請求時間"
+{% trans "Request Time" %}
+
+
+
+
+
+msgid "Status"
+msgstr "狀態"
+{% trans "Status" %}
+
+
+
+
+
+msgid "Pay deposit"
+msgstr "支付保證金"
+{% trans "Pay deposit" %}
+
+
+
+msgid "Cancel"
+msgstr "取消"
+{% trans "Cancel" %}
+
+
+
+
+
+msgid "Action"
+msgstr "動作"
+{% trans "Action" %}
+
+
+
+msgid "Pay deposit"
+msgstr "支付保證金"
+{% trans "Pay deposit" %}
+
+
+
+
+
+msgid "Cancel"
+msgstr "取消"
+{% trans "Cancel" %}
+
+
+
+msgid "More detail"
+msgstr "更多詳情"
+{% trans "More detail" %}
+
+
+
+msgid "Give review"
+msgstr "給予評論"
+{% trans "Give review" %}
+
+
+
+msgid "No orders found !!!!!"
+msgstr "沒有找到訂單!!!!!"
+{% trans "No orders found !!!!!" %}
+
+
+
+msgid "Transaction Processing..."
+msgstr "交易處理..."
+{% trans "Transaction Processing..." %}
+
+
+
+msgid "Transaction Hash"
+msgstr "交易哈希"
+{% trans "Transaction Hash" %}
+
+
+
+

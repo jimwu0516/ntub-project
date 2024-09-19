@@ -1,0 +1,50 @@
+#: borrow/borrower_history_dashboard.html
+
+
+
+msgid "Borrower history dashboard"
+msgstr "借用人歷史儀表板"
+{% trans "Borrower history dashboard" %}
+
+
+msgid "Back"
+msgstr "返回"
+{% trans "Back" %}
+
+
+msgid "Borrower:"
+msgstr "借用人："
+{% trans "Borrower:" %}
+
+
+
+msgid "Wallet Address:"
+msgstr "錢包地址："
+{% trans "Wallet Address:" %}
+
+
+
+
+msgid "Not Picked Up Percentage"
+msgstr "未取貨百分比"
+{% trans "Not Picked Up Percentage" %}
+
+
+
+msgid "Denial Percentage "
+msgstr "拒絕百分比"
+{% trans "Denial Percentage" %}
+
+
+
+msgid "Average Overdue Pick-Up Time"
+msgstr "平均逾期取貨時間"
+{% trans "Average Overdue Pick-Up Time " %}
+
+
+
+msgid "Average Breakage"
+msgstr "平均損壞率"
+{% trans "Average Breakage" %}
+
+
