@@ -1,0 +1,53 @@
+#: liquidityPool/liquidity.html
+
+
+
+
+msgid "Liquidity Reserves"
+msgstr "流動性儲備"
+{% trans "Liquidity Reserves" %}
+
+
+msgid "Liquidity Pool"
+msgstr "流動性池"
+{% trans "Liquidity Pool" %}
+
+
+msgid "Token Reserves"
+msgstr "代幣儲備"
+{% trans "Token Reserves" %}
+
+
+msgid "STE: Loading... "
+msgstr "STE: 載入中... "
+{% trans "STE: Loading... " %}
+
+
+msgid "USDT: Loading..."
+msgstr "泰達幣： 載入中... "
+{% trans "USDT: Loading..." %}
+
+
+msgid "Total Liquidity"
+msgstr "總流動性"
+{% trans "Total Liquidity" %}
+
+
+msgid "Total: Loading..."
+msgstr "總計： 加載中..."
+{% trans "Total: Loading..." %}
+
+
+msgid "Your: Loading..."
+msgstr "您的： 加載中..."
+{% trans "Your: Loading..." %}
+
+
+msgid "+ Add Liquidity"
+msgstr "+ 增加流動性"
+{% trans "+ Add Liquidity" %}
+
+
+msgid "- Remove Liquidity"
+msgstr "- 消除流動性"
+{% trans "- Remove Liquidity" %}

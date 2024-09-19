@@ -1,0 +1,53 @@
+#: borrow/contributor_history_dashboard.html
+
+
+
+
+
+msgid "contributor history dashboard"
+msgstr "貢獻者歷史儀表板"
+{% trans "contributor history dashboard" %}
+
+
+
+msgid "Back"
+msgstr "返回"
+{% trans "Back" %}
+
+
+
+msgid "Contributor:"
+msgstr "貢獻者:"
+{% trans "Contributor:" %}
+
+
+msgid "Wallet Address:"
+msgstr "錢包地址:"
+{% trans "Wallet Address:" %}
+
+
+
+msgid "Deny Percentage"
+msgstr "拒絕百分比"
+{% trans "Deny Percentage" %}
+
+
+msgid "Borrower Not Picked Up Percentage"
+msgstr "借用人未被取貨百分比"
+{% trans "Borrower Not Picked Up Percentage" %}
+
+
+msgid "Contribute Percentage"
+msgstr "貢獻百分比"
+{% trans "Contribute Percentage" %}
+
+
+msgid "Average Decision Time"
+msgstr "平均決定時間
+{% trans "Average Decision Time" %}
+
+
+msgid "Contribute Percentage"
+msgstr "貢獻百分比"
+{% trans "Contribute Percentage" %}
+

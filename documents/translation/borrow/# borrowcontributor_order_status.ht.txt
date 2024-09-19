@@ -1,0 +1,97 @@
+#: borrow/contributor_order_status.html
+
+
+
+
+msgid "contributor order status"
+msgstr "貢獻者訂單狀態"
+{% trans "contributor order status" %}
+
+
+
+msgid "My Contribute status"
+msgstr "我的貢獻狀態"
+{% trans "My Contribute status" %}
+
+
+
+
+
+msgid "Borrower"
+msgstr "借用人"
+{% trans "Borrower" %}
+
+
+
+msgid "Item"
+msgstr "物品"
+{% trans "Item" %}
+
+
+
+msgid "Start Time"
+msgstr "開始時間"
+{% trans "Start Time" %}
+
+
+
+msgid "End Time"
+msgstr "結束時間"
+{% trans "End Time" %}
+
+
+
+msgid "Status"
+msgstr "狀態"
+{% trans "Status" %}
+
+
+
+msgid "Action Button"
+msgstr "動作按鈕"
+{% trans "Action Button" %}
+
+
+
+
+msgid "Decide Within"
+msgstr "內部決定"
+{% trans "Decide Within" %}
+
+
+
+msgid "Pin Code"
+msgstr "PIN碼"
+{% trans "Pin Code" %}
+
+
+
+
+msgid "Accept"
+msgstr "接受"
+{% trans "Accept" %}
+
+
+
+
+msgid "Deny"
+msgstr "拒絕"
+{% trans "Deny" %}
+
+
+
+msgid "Return item"
+msgstr "歸還物品"
+{% trans "Return item" %}
+
+
+
+msgid "Give Review"
+msgstr "給予評論"
+{% trans "Give Review" %}
+
+
+
+msgid "No orders found !!!!!"
+msgstr "沒有找到訂單 !!!!!"
+{% trans "No orders found !!!!!" %}

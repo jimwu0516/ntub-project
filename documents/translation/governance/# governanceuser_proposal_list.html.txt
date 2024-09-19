@@ -1,0 +1,70 @@
+#: governance/user_proposal_list.html
+
+
+
+
+
+
+msgid "Polling"
+msgstr "投票"
+{% trans "Polling" %}
+
+
+msgid "Active Proposals"
+msgstr "有效提案"
+{% trans "Active Proposals" %}
+
+
+msgid "Ended Proposals"
+msgstr "已結束的提案"
+{% trans "Ended Proposals" %}
+
+
+msgid "Remaining minutes: "
+msgstr "剩餘分鐘數："
+{% trans "Remaining minutes: " %}
+
+
+msgid "Yes"
+msgstr "是的"
+{% trans "Yes" %}
+
+
+msgid "No"
+msgstr "否"
+{% trans "No" %}
+
+
+msgid "No Data"
+msgstr "沒有資料"
+{% trans "No Data" %}
+
+
+msgid "Winning option:"
+msgstr "獲勝選項："
+{% trans "Winning option:" %}
+
+
+msgid "Yes, with STE"
+msgstr "是的，和  顆STE"
+{% trans "Yes, with STE" %}
+
+
+msgid "No, with STE"
+msgstr "否，和  顆STE"
+{% trans "No, with STE" %}
+
+
+
+msgid "No proposals found."
+msgstr "沒有找到提案。"
+{% trans "No proposals found." %}
+
+
+msgid "Voting..."
+msgstr "表決..."
+{% trans "Voting..." %}
+
+msgid "Hash:"
+msgstr "哈希值："
+{% trans "Hash:" %}

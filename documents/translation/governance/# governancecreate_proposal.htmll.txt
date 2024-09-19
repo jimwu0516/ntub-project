@@ -1,0 +1,116 @@
+#: governance/create_proposal.htmll
+
+
+
+msgid "Create Proposal"
+msgstr "建立提案"
+{% trans "Create Proposal" %}
+
+
+
+msgid "Governance"
+msgstr "治理"
+{% trans "Governance" %}
+
+
+
+msgid "Connect Wallet"
+msgstr "連接錢包"
+{% trans "Connect Wallet" %}
+
+
+
+msgid "Create Proposal"
+msgstr "建立提案"
+{% trans "Create Proposal" %}
+
+
+
+msgid "Title :"
+msgstr "標題 ："
+{% trans "Title :" %}
+
+
+
+msgid "Description :"
+msgstr "描述 ："
+{% trans "Description :" %}
+
+
+
+msgid "Duration :"
+msgstr "期間 ："
+{% trans "Duration :" %}
+
+
+
+msgid "Select duration"
+msgstr "選擇持續時間"
+{% trans "Select duration" %}
+
+
+
+msgid "1 day"
+msgstr "1天"
+{% trans "1 day" %}
+
+
+
+msgid "2 days"
+msgstr "2天"
+{% trans "2 days" %}
+
+
+
+msgid "3 days"
+msgstr "3天"
+{% trans "3 days" %}
+
+
+
+msgid "1 week"
+msgstr "1週"
+{% trans "1 week" %}
+
+
+
+msgid "2 weeks"
+msgstr "2週"
+{% trans "2 weeks" %}
+
+
+
+msgid "1 month"
+msgstr "1個月"
+{% trans "1 month" %}
+
+
+
+msgid "Create"
+msgstr "創造"
+{% trans "Create" %}
+
+
+
+msgid "Proposal creating..."
+msgstr "提案創建..."
+{% trans "Proposal creating..." %}
+
+
+
+msgid "Hash:"
+msgstr "哈希值："
+{% trans "Hash:" %}
+
+
+
+msgid "Logout"
+msgstr "登出"
+{% trans "Logout" %}
+
+
+
+msgid "Logout"
+msgstr "登出"
+{% trans "Logout" %}
+

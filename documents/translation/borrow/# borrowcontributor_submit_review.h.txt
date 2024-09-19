@@ -1,0 +1,31 @@
+#: borrow/contributor_submit_review.html
+
+
+
+
+msgid "user orders"
+msgstr "使用者訂單"
+{% trans "user orders" %}
+
+
+msgid "Contributor review"
+msgstr "貢獻者評論"
+{% trans "Contributor review" %}
+
+
+
+msgid "Breakage:"
+msgstr "損壞率："
+{% trans "Breakage:" %}
+
+
+msgid "Comment:"
+msgstr "評論："
+{% trans "Comment:" %}
+
+
+msgid "Feeling:"
+msgstr "感覺："
+{% trans "Feeling:" %}
+
+

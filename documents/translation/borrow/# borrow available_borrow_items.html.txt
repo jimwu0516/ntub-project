@@ -1,0 +1,47 @@
+#: borrow/available_borrow_items.html
+
+
+
+
+
+msgid "available_borrow_items"
+msgstr "可借用物品"
+{% trans "available_borrow_items" %}
+
+msgid "Fashion"
+msgstr "時尚"
+{% trans "Fashion" %}
+
+
+msgid "Electronic"
+msgstr "電子產品"
+{% trans "Electronic" %}
+
+msgid "Sporting-Goods"
+msgstr "體育用品"
+{% trans "Sporting-Goods" %}
+
+msgid "Books, Movies and Music"
+msgstr "書籍、電影和音樂"
+{% trans "Books, Movies and Music" %}
+
+msgid "Home and Garden"
+msgstr "居家和花園"
+{% trans "Home and Garden" %}
+
+msgid "Toys and Hobbies"
+msgstr "玩具和嗜好"
+{% trans "Toys and Hobbies" %}
+
+msgid "Everything Else"
+msgstr "其他"
+{% trans "Everything Else" %}
+
+msgid "Deposit require"
+msgstr "需要保證金"
+{% trans "Deposit require" %}
+
+msgid "There are no items available !!!!"
+msgstr "沒有可用的商品!!!!"
+{% trans "There are no items available !!!!" %}
+

@@ -1,0 +1,48 @@
+#: contribute/item_confirm_delete.html
+
+
+
+msgid "Delete item"
+msgstr "刪除物品"
+{% trans "Delete item" %}
+
+
+
+
+msgid "Are you sure that you want to delete?"
+msgstr "您確定要刪除嗎？"
+{% trans "Are you sure that you want to delete?" %}
+
+
+
+
+msgid "Cancel"
+msgstr "取消"
+{% trans "Cancel" %}
+
+
+
+
+msgid "Can not delete"
+msgstr "無法刪除"
+{% trans "Can not delete" %}
+
+
+
+
+msgid "Item is currently lent out"
+msgstr "物品目前已出借"
+{% trans "Item is currently lent out" %}
+
+
+
+
+
+msgid "ok"
+msgstr "好的"
+{% trans "ok" %}
+
+
+
+
+

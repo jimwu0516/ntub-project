@@ -1,0 +1,69 @@
+#: governance/admin_proposal_list.html
+
+
+
+msgid "Create Proposal"
+msgstr "建立提案"
+{% trans "Create Proposal" %}
+
+
+msgid "Governance"
+msgstr "治理"
+{% trans "Governance" %}
+
+
+msgid "Connect Wallet"
+msgstr "連接錢包"
+{% trans "Connect Wallet" %}
+
+
+msgid "Logout"
+msgstr "登出"
+{% trans "Logout" %}
+
+
+msgid "Active Proposal"
+msgstr "有效提案"
+{% trans "Active Proposal" %}
+
+
+msgid "No Data"
+msgstr "沒有資料"
+{% trans "No Data" %}
+
+
+msgid "No Active proposal"
+msgstr "無有效提案"
+{% trans "No Active proposal" %}
+
+
+msgid "Ended Proposal"
+msgstr "結束提案"
+{% trans "Ended Proposal" %}
+
+
+msgid "No Data"
+msgstr "沒有資料"
+{% trans "No Data" %}
+
+
+msgid "Winning option:"
+msgstr "獲勝選項："
+{% trans "Winning option:" %}
+
+
+msgid "Yes, with STE"
+msgstr "是的，和  顆STE"
+{% trans "Yes, with STE" %}
+
+
+msgid "No, with STE"
+msgstr "否，和  顆STE"
+{% trans "No, with STE" %}
+
+
+msgid "No ended proposal"
+msgstr "沒有結束的提案"
+{% trans "No ended proposal" %}
+
+

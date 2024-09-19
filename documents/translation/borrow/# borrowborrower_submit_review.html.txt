@@ -1,0 +1,39 @@
+#: borrow/borrower_submit_review.html
+
+
+
+
+
+msgid "user orders"
+msgstr "用戶訂單"
+{% trans "user orders" %}
+
+
+msgid "Borrower review"
+msgstr "借用人評論"
+{% trans "Borrower review" %}
+
+
+msgid "Comment:"
+msgstr "評論："
+{% trans "Comment:" %}
+
+
+msgid "Feeling:"
+msgstr "感覺："
+{% trans "Feeling:" %}
+
+
+
+
+msgid "Airdropping token and returning deposit..."
+msgstr "空投代幣並返還保證金..."
+{% trans "Airdropping token and returning deposit..." %}
+
+
+msgid "Transaction Hash"
+msgstr "交易哈希值"
+{% trans "Transaction Hash" %}
+
+
+

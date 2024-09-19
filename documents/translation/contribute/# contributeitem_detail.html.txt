@@ -1,0 +1,42 @@
+#: contribute/item_detail.html
+
+
+
+
+msgid "item name :"
+msgstr "物品名稱 ："
+{% trans "item name :" %}
+
+
+
+
+msgid "item description: "
+msgstr "物品描述："
+{% trans "item description: " %}
+
+
+
+
+
+msgid "item_address: "
+msgstr "物品地址："
+{% trans "item_address: " %}
+
+
+
+
+
+
+msgid "item_deposit_require:"
+msgstr "物品保證金要求："
+{% trans "item_deposit_require:" %}
+
+
+
+
+
+
+msgid "item_available:"
+msgstr "可用物品："
+{% trans "item_available:" %}
+

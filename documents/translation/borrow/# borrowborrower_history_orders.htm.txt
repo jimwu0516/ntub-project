@@ -1,0 +1,20 @@
+#: borrow/borrower_history_orders.html
+
+
+
+msgid "user history orders"
+msgstr "用戶歷史訂單"
+{% trans "user history orders" %}
+
+
+msgid "User History Orders"
+msgstr "用戶歷史訂單"
+{% trans "User History Orders" %}
+
+
+
+msgid "No history orders found !!!!!"
+msgstr "沒有歷史訂單 !!!!!"
+{% trans "No history orders found !!!!!" %}
+
+

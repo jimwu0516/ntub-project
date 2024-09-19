@@ -1,0 +1,26 @@
+#: users/login.html
+
+
+msgid "login"
+msgstr "登入"
+{% trans "login" %}
+
+
+
+msgid "Log in to your account"
+msgstr "登入您的帳戶
+"
+{% trans "Log in to your account" %}
+
+
+msgid " Don't have a account?  Register Now"
+msgstr "沒有帳戶？ 立馬註冊"
+{% trans "Register Now" %}
+
+
+
+msgid "Forgot your password Reset Password"
+msgstr "忘記密碼了 重設密碼"
+{% trans "Forgot your password Reset Password" %}
+
+

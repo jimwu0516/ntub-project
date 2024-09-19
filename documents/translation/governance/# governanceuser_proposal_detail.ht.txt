@@ -1,0 +1,72 @@
+#: governance/user_proposal_detail.html
+
+
+
+
+
+msgid "Proposal Detail"
+msgstr "提案詳情"
+{% trans "Proposal Detail" %}
+
+
+msgid "Back"
+msgstr "返回"
+{% trans "Back" %}
+
+
+msgid "Winning option:"
+msgstr "獲勝選項："
+{% trans "Winning option:" %}
+
+
+msgid "Yes, with STE"
+msgstr "是的，和  顆STE"
+{% trans "Yes, with STE" %}
+
+
+msgid "No, with STE"
+msgstr "否，和  顆STE"
+{% trans "No, with STE" %}
+
+
+
+msgid "Detail"
+msgstr "詳情"
+{% trans "Detail" %}
+
+
+msgid "Yes"
+msgstr "是的"
+{% trans "Yes" %}
+
+
+msgid "No"
+msgstr "否"
+{% trans "No" %}
+
+
+msgid "Address"
+msgstr "地址"
+{% trans "Address" %}
+
+
+msgid "Option"
+msgstr "選項"
+{% trans "Option" %}
+
+
+msgid "Voting power"
+msgstr "投票權"
+{% trans "Voting power" %}
+
+
+msgid "Yes"
+msgstr "是的"
+{% trans "Yes" %}
+
+
+msgid "No"
+msgstr "否"
+{% trans "No" %}
+
+

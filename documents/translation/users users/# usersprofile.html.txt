@@ -1,0 +1,36 @@
+#: users/profile.html
+
+
+
+msgid "Username:"
+msgstr "使用者名稱:"
+{% trans "Username:" %}
+
+
+
+
+msgid "Email Address:"
+msgstr "電子郵件地址："
+{% trans "Email Address:" %}
+
+
+
+
+msgid "User Place:"
+msgstr "用戶地點："
+{% trans "User Place:" %}
+
+
+
+
+msgid "Airdrop wallet Address:"
+msgstr "空投錢包地址："
+{% trans "Airdrop wallet Address:" %}
+
+
+
+
+msgid "Cancel"
+msgstr "取消"
+{% trans "Cancel" %}
+

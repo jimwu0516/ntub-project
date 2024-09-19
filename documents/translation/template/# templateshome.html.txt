@@ -1,0 +1,101 @@
+#: templates/home.html
+
+
+
+msgid "Share the wealth, earn your worth"
+msgstr "分享財富，創造你的價值"
+{% trans "Share the wealth, earn your worth" %}
+
+
+
+
+msgid "Embrace sharing, abundant earning"
+msgstr "擁抱分享，收益豐厚"
+{% trans "Embrace sharing, abundant earning" %}
+
+
+
+
+msgid "Start share"
+msgstr "開始分享"
+{% trans "Start share" %}
+
+
+
+
+msgid "Sustainable development"
+msgstr "永續發展"
+{% trans "Sustainable development" %}
+
+
+
+
+msgid "Reducing resource consumption and environmental pressure, fostering community connections and mutual aid, has formed a sustainable way of life. On our platform, you can easily borrow items from others, collectively moving towards a better future"
+
+msgstr "減少資源消耗和環境壓力，促進社區聯繫和互助，形成了永續的生活方式。在我們的平台上，您可以輕鬆地向他人借用物品，共同走向美好的未來"
+
+{% trans "Reducing resource consumption and environmental pressure, fostering community connections and mutual aid, has formed a sustainable way of life. On our platform, you can easily borrow items from others, collectively moving towards a better future" %}
+
+
+
+
+msgid "Reduce waste"
+msgstr "減少浪費"
+{% trans "Reduce waste" %}
+
+
+
+
+msgid "Through resource sharing, idle items are reused, extending their lifespan and reducing waste generation. Meanwhile, borrowing instead of purchasing reduces the demand for new resources, thus minimizing waste"
+
+msgstr "透過資源共享，閒置物品得到重複利用，延長其使用壽命並減少廢物產生。同時，借債而不是購買減少了對新資源的需求，從而最大限度地減少浪費"
+
+{% trans "Through resource sharing, idle items are reused, extending their lifespan and reducing waste generation. Meanwhile, borrowing instead of purchasing reduces the demand for new resources, thus minimizing waste" %}
+
+
+
+
+msgid "Sharing economy"
+msgstr "共享經濟"
+{% trans "Sharing economy" %}
+
+
+
+
+
+msgid "Users can lend their idle items to others while also borrowing items from others to meet their needs, maximizing resource utilization and deriving benefits from it."
+
+msgstr "使用者可以將自己的閒置物品借給他人，同時也可以向他人借用物品來滿足自己的需要，最大限度地提高資源利用率並從中獲得收益"
+
+{% trans "Users can lend their idle items to others while also borrowing items from others to meet their needs, maximizing resource utilization and deriving benefits from it." %}
+
+
+
+
+
+
+msgid "Carbon footprint"
+msgstr "碳足跡"
+{% trans "Carbon footprint" %}
+
+
+
+
+
+msgid "Reusing items and reducing the demand for production to decrease the carbon footprint. This involves reducing the extraction and processing of raw resources, thereby lowering energy consumption and carbon emissions during the production process"
+
+msgstr "重複利用物品並減少生產需求，以減少碳足跡。這涉及減少原材料的開採和加工，從而降低生產過程中的能源消耗和碳排放"
+
+{% trans "Reusing items and reducing the demand for production to decrease the carbon footprint. This involves reducing the extraction and processing of raw resources, thereby lowering energy consumption and carbon emissions during the production process" %}
+
+
+
+
+
+
+
+msgid "Swap"
+msgstr "交換"
+{% trans "Swap" %}
+
+

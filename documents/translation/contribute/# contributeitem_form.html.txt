@@ -1,0 +1,24 @@
+#: contribute/item_form.html
+
+
+
+msgid "Edit Item"
+msgstr "編輯物品"
+{% trans "Edit Item" %}
+
+
+
+
+msgid "Add Item"
+msgstr "新增物品"
+{% trans "Add Item" %}
+
+
+
+
+msgid "Cancel"
+msgstr "取消"
+{% trans "Cancel" %}
+
+
+

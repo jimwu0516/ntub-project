@@ -1,0 +1,104 @@
+#: templates/base.html
+
+
+***
+msgid "share to earn"
+msgstr "share to earn"
+{% trans "share to earn" %}
+
+
+
+
+msgid "Polling"
+msgstr "投票"
+{% trans "Polling" %}
+
+
+
+
+
+msgid "Swap"
+msgstr "交換"
+{% trans "Swap" %}
+
+
+
+
+
+
+msgid "Swap Token"
+msgstr "交換代幣"
+{% trans "Swap Token" %}
+
+
+
+
+
+
+msgid "Liquidity Pool"
+msgstr "流動池"
+{% trans "Liquidity Pool" %}
+
+
+
+
+
+
+msgid "Connect Wallet"
+msgstr "連接錢包"
+{% trans "Connect Wallet" %}
+
+
+
+
+
+
+msgid "Profile"
+msgstr "個人資料"
+{% trans "Profile" %}
+
+
+
+
+msgid "My item"
+msgstr "我的物品"
+{% trans "My item" %}
+
+
+
+
+msgid "Contribute status"
+msgstr "貢獻狀態"
+{% trans "Contribute status" %}
+
+
+
+
+
+msgid "Logout"
+msgstr "登出"
+{% trans "Logout" %}
+
+
+
+
+msgid "Login"
+msgstr "登入"
+{% trans "Login" %}
+
+
+
+
+msgid " Add BSC Testnet Network"
+msgstr "新增 BSC 測試網網絡"
+{% trans " Add BSC Testnet Network" %}
+
+
+
+
+msgid "Airdrop Amount:"
+msgstr "空投數量："
+{% trans "Airdrop Amount:" %}
+
+
+
