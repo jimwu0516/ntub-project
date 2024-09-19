@@ -1,8 +1,5 @@
 #: borrow/contributor_submit_review.html
 
-
-
-
 msgid "user orders"
 msgstr "使用者訂單"
 {% trans "user orders" %}
@@ -11,8 +8,6 @@ msgstr "使用者訂單"
 msgid "Contributor review"
 msgstr "貢獻者評論"
 {% trans "Contributor review" %}
-
-
 
 msgid "Breakage:"
 msgstr "損壞率："
@@ -27,5 +22,3 @@ msgstr "評論："
 msgid "Feeling:"
 msgstr "感覺："
 {% trans "Feeling:" %}
-
-

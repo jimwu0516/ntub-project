@@ -14,28 +14,18 @@ msgid "Latest status"
 msgstr "最新狀態"
 {% trans "Latest status" %}
 
-
-
-
 msgid "Unpaid"
 msgstr "未支付"
 {% trans "Unpaid" %}
-
-
-
 
 msgid "Cancel order"
 msgstr "取消訂單"
 {% trans "Cancel order" %}
 
 
-
-
 msgid "History"
-msgstr "歷史"
+msgstr "歷史訂單"
 {% trans "History" %}
-
-
 
 
 msgid "Order ID"
