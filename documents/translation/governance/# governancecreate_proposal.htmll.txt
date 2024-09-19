@@ -13,35 +13,27 @@ msgstr "治理"
 {% trans "Governance" %}
 
 
-
 msgid "Connect Wallet"
 msgstr "連接錢包"
 {% trans "Connect Wallet" %}
-
 
 
 msgid "Create Proposal"
 msgstr "建立提案"
 {% trans "Create Proposal" %}
 
-
-
 msgid "Title :"
 msgstr "標題 ："
 {% trans "Title :" %}
 
-
-
 msgid "Description :"
-msgstr "描述 ："
+msgstr "提案描述 ："
 {% trans "Description :" %}
-
 
 
 msgid "Duration :"
 msgstr "期間 ："
 {% trans "Duration :" %}
-
 
 
 msgid "Select duration"
