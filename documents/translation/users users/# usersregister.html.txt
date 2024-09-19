@@ -1,0 +1,15 @@
+#: users/register.html
+
+
+
+msgid "Create your account"
+msgstr "建立您的帳戶"
+{% trans "Create your account" %}
+
+
+msgid " Already have an account?  Login Here"
+msgstr "已經有帳戶？ 在此登入"
+{% trans " Already have an account?  Login Here" %}
+
+
+

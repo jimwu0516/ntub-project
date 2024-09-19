@@ -1,0 +1,123 @@
+#: users/admin_dashboard.html
+
+
+
+msgid "Admin Dashboard"
+msgstr "管理儀表板"
+{% trans "Admin Dashboard" %}
+
+
+
+msgid "Governance"
+msgstr "治理"
+{% trans "Governance" %}
+
+
+
+msgid "Connect Wallet"
+msgstr "連接錢包"
+{% trans "Connect Wallet" %}
+
+
+msgid "Logout"
+msgstr "登出"
+{% trans "Logout" %}
+
+
+
+msgid "Overdue pick up time"
+msgstr "逾期取貨時間"
+{% trans "Overdue pick up time" %}
+
+
+
+msgid "Decision making minute"
+msgstr "決策分鐘"
+{% trans "Decision making minute" %}
+
+
+*******vscode檢查
+msgid "Average breakage"
+msgstr "平均損壞率"
+{% trans "Average breakage" %}
+
+
+
+msgid "Place distribution"
+msgstr "地點分佈"
+{% trans "Place distribution" %}
+
+
+
+msgid "Review"
+msgstr "評論"
+{% trans "Review" %}
+
+
+
+msgid "Item category"
+msgstr "物品類別"
+{% trans "Item category" %}
+
+
+
+msgid "Total user"
+msgstr "用戶總數"
+{% trans "Total user" %}
+
+
+
+msgid "weeklyOrderChart"
+msgstr "每週訂單圖"
+{% trans "weeklyOrderChart" %}
+
+
+
+msgid "Next Unlock"
+msgstr "下一步解鎖"
+{% trans "Next Unlock" %}
+
+
+
+msgid " days and hours."
+msgstr "天 和 小時。"
+{% trans " days and hours." %}
+
+
+
+msgid "Unlock Tokens"
+msgstr "解鎖代幣"
+{% trans "Unlock Tokens" %}
+
+
+
+msgid "Most token receiver"
+msgstr "大多數代幣接收者"
+{% trans "Most token receiver" %}
+
+
+
+msgid "Top 5 token holders"
+msgstr "前 5 名代幣持有者"
+{% trans "Top 5 token holders" %}
+
+
+
+msgid "Holder Address"
+msgstr "持有人地址"
+{% trans "Holder Address" %}
+
+
+
+msgid "Token Count"
+msgstr "代幣數"
+{% trans "Token Count" %}
+
+
+*******
+msgid "Airdrop Mint Remaining"
+msgstr "剩餘空投代幣"
+{% trans "Airdrop Mint Remaining" %}
+
+
+
