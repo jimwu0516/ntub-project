@@ -52,4 +52,3 @@ msgstr "交易處理..."
 msgid "Transaction Hash"
 msgstr "交易哈希"
 {% trans "Transaction Hash" %}
-

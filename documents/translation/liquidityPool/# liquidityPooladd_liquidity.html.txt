@@ -33,7 +33,7 @@ msgstr "取消"
 
 
 msgid "Your Liquidity: Loading..."
-msgstr "您的流動性：正在加載..."
+msgstr "您的流動性：正在載入..."
 {% trans "Your Liquidity: Loading..." %}
 
 
