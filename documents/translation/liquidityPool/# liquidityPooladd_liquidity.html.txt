@@ -1,0 +1,43 @@
+#: liquidityPool/add_liquidity.html
+
+
+
+msgid "Add Liquidity"
+msgstr "增加流動性"
+{% trans "Add Liquidity" %}
+
+
+msgid "Add Liquidity"
+msgstr "增加流動性"
+{% trans "Add Liquidity" %}
+
+
+msgid "STE"
+msgstr "STE"
+{% trans "STE" %}
+
+
+msgid "USDT"
+msgstr "泰達幣"
+{% trans "USDT" %}
+
+
+msgid "Add Liquidity"
+msgstr "增加流動性"
+{% trans "Add Liquidity" %}
+
+
+msgid "Cancel"
+msgstr "取消"
+{% trans "Cancel" %}
+
+
+msgid "Your Liquidity: Loading..."
+msgstr "您的流動性：正在加載..."
+{% trans "Your Liquidity: Loading..." %}
+
+
+msgid "Hash:"
+msgstr "哈希值："
+{% trans "Hash:" %}
+

@@ -1,0 +1,39 @@
+#: liquidityPool/swap_token.html
+
+
+
+msgid "Swap Tokens"
+msgstr "交換代幣"
+{% trans "Swap Tokens" %}
+
+
+msgid "Swap Tokens"
+msgstr "交換代幣"
+{% trans "Swap Tokens" %}
+
+
+msgid "STE"
+msgstr "STE"
+{% trans "STE" %}
+
+
+msgid "USDT"
+msgstr "泰達幣"
+{% trans "USDT" %}
+
+
+msgid "Swap"
+msgstr "交換"
+{% trans "Swap" %}
+
+
+msgid "Swapping token..."
+msgstr "交換代幣..."
+{% trans "Swapping token..." %}
+
+
+msgid "Hash:"
+msgstr "哈希值："
+{% trans "Hash:" %}
+
+

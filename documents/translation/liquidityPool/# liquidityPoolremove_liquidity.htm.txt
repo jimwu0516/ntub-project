@@ -1,0 +1,62 @@
+#: liquidityPool/remove_liquidity.html
+
+
+
+msgid "Remove Liquidity"
+msgstr "消除流動性"
+{% trans "Remove Liquidity" %}
+
+
+msgid "Remove Liquidity"
+msgstr "消除流動性"
+{% trans "Remove Liquidity" %}
+
+
+msgid "Remove Percentage"
+msgstr "刪除百分比"
+{% trans "Remove Percentage" %}
+
+
+msgid "Select"
+msgstr "選擇"
+{% trans "Select" %}
+
+
+msgid "You'll receive:"
+msgstr "您將收到："
+{% trans "You'll receive:" %}
+
+
+msgid "STE"
+msgstr "STE"
+{% trans "STE" %}
+
+
+msgid "USDT"
+msgstr "泰達幣"
+{% trans "USDT" %}
+
+
+msgid "Remove Liquidity"
+msgstr "消除流動性"
+{% trans "Remove Liquidity" %}
+
+
+msgid "Cancel"
+msgstr "取消"
+{% trans "Cancel" %}
+
+
+msgid "Your Liquidity: Loading..."
+msgstr "您的流動性：加載中..."
+{% trans "Your Liquidity: Loading..." %}
+
+
+msgid "Removing liquidity..."
+msgstr "消除流動性..."
+{% trans "Removing liquidity..." %}
+
+
+msgid "Hash:"
+msgstr "哈希值："
+{% trans "Hash:" %}
