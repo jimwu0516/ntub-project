@@ -95,8 +95,13 @@ def get_top_token_holders():
 
     for profile in profiles:
         address = profile.airdrop_wallet_address
-        balance = contract.functions.balanceOf(address).call() / 10**18
-        balances[address] = balance
+
+        if Web3.is_address(address):
+            balance = contract.functions.balanceOf(address).call() / 10**18
+            balances[address] = balance
+        else:
+            print(f"Invalid address found: {address}")
+            continue
 
     sorted_balances = sorted(balances.items(), key=lambda item: item[1], reverse=True)
 
