@@ -37,7 +37,7 @@
         {% if request.user.is_authenticated %}
           <nav class="login-nav">
             <div class="navbar-left">
-              <a href="{% url 'home' %}" class="navbar-logo"><img src="{% static 'images/logo.PNG' %}" alt="Logo" style="width:auto; max-width: 250px;" /></a>
+              <a href="{% url 'home' %}" class="navbar-logo"><img src="{% static 'images/logo.PNG' %}" alt="Logo" style="width:auto; max-width: 150px;" /></a>
 
               <a href="{% url 'available_borrow_items' %}" class="menu-item">{% trans "Borrow" %}</a>
               <a href="{% url 'latest_status_user_orders' %}" class="menu-item">{% trans "Order" %}</a>
@@ -107,7 +107,7 @@
           </nav>
         {% else %}
           <nav class="logout-nav">
-            <a href="{% url 'home' %}" class="navbar-logo"><img src="{% static 'images/logo.PNG' %}" alt="Logo" style="width:auto; max-width: 250px;" /></a>
+            <a href="{% url 'home' %}" class="navbar-logo"><img src="{% static 'images/logo.PNG' %}" alt="Logo" style="width:auto; max-width: 150px;" /></a>
 
             <div class="navbar-right">
               <div class="language-dropdown">

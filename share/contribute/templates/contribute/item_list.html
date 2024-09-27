@@ -6,43 +6,197 @@
     function checkItemAvailable(element) {
       const isAvailable = element.getAttribute('data-item-available') === 'True'
       if (!isAvailable) {
-        alert({% trans "This item is currently being borrowed" %})
+        alert('This item is currently being borrowed')
         return false
       }
       return true
     }
   </script>
 
+  <style>
+    .contributor-item-list {
+      margin: 50px auto;
+      padding: 0 15px;
+    }
+    
+    .add-item-btn {
+      float: right;
+      margin-right: 125px;
+      font-size: 20px;
+      border-radius: 5px;
+      padding: 8px 8px;
+      font-weight: bold;
+    }
+    
+    .add-item-btn:hover {
+      color: white;
+      background-color: #30878a;
+    }
+    
+    .item-list-card {
+      background: #fff;
+      border: 1px solid #ccc;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      margin: 15px auto;
+      max-width: 100%;
+      flex-wrap: wrap;
+    }
+    
+    .item-list-image {
+      max-width: 180px;
+      width: 100%;
+      height: auto;
+      margin-right: 20px;
+    }
+    
+    .item-details {
+      margin-left: 20px;
+      flex-grow: 1;
+    }
+    
+    .item-details p {
+      margin: 8px;
+    }
+    
+    .item-edit-delete-btn {
+      margin-left: auto;
+    }
+    
+    .item-edit-button,
+    .item-delete-button {
+      padding: 10px 15px;
+      margin: 0 5px;
+      cursor: pointer;
+      border: none;
+      color: white;
+      border-radius: 5px;
+    }
+    
+    .item-edit-button {
+      background-color: #02a9f7;
+    }
+    
+    .item-delete-button {
+      background-color: #dc3545;
+    }
+    
+    .item-edit-button:hover,
+    .item-delete-button:hover {
+      opacity: 0.8;
+    }
+    
+    .no-contribute-item {
+      text-align: center;
+      margin: 20px;
+    }
+    
+    .no-contribute-item p {
+      font-size: 18px;
+      color: #333;
+    }
+    
+    .contribute-my-item-btn {
+      display: inline-block;
+      padding: 10px 20px;
+      background-color: #30878a;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+    
+    .contribute-my-item-btn:hover {
+      opacity: 0.8;
+    }
+    
+    /* Media Queries for Responsive Design */
+    @media (max-width: 768px) {
+      .item-list-card {
+        flex-direction: column;
+        text-align: center;
+      }
+    
+      .item-list-image {
+        margin: 0 auto 10px;
+        max-width: 100%;
+      }
+    
+      .item-details {
+        margin-left: 0;
+      }
+    
+      .add-item-btn {
+        margin-right: 15px;
+        font-size: 18px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .add-item-btn {
+        float: none;
+        display: block;
+        margin: 10px auto;
+        font-size: 16px;
+      }
+    
+      .item-list-card {
+        padding: 15px;
+      }
+    
+      .item-details p {
+        font-size: 14px;
+      }
+    
+      .item-edit-button,
+      .item-delete-button {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+    }
+  </style>
+
   <div class="contributor-item-list">
-    <h2 class="text-center">{% trans "My Contribute item" %}</h2>
+    <h2 class="text-center">{% trans 'My Contribute item' %}</h2>
     {% if items %}
-      <a href="{% url 'item-create' %}" class="add-item-btn">{% trans "＋ Add" %} </a>
+      <a href="{% url 'item-create' %}" class="add-item-btn">{% trans '＋ Add' %}</a>
       <br />
       <br />
       {% for item in items %}
         <div class="item-list-card">
           <img class="item-list-image" src="{{ item.item_image.url }}" alt="{{ item.item_name }}" />
           <div class="item-details">
-            <p>{% trans "item name:" %}
-              {{ item.item_name }}</p>
-            <p>{% trans "item category :" %}
-              {{ item.item_category }}</p>
-            <p>{% trans "item available:" %}
-              {{ item.item_available }}</p>
-            <p>{% trans "item deposit require:" %}
-              {{ item.item_deposit_require }}</p>
+            <p>
+              {% trans 'item name:' %}
+              {{ item.item_name }}
+            </p>
+            <p>
+              {% trans 'item category :' %}
+              {{ item.item_category }}
+            </p>
+            <p>
+              {% trans 'item available:' %}
+              {{ item.item_available }}
+            </p>
+            <p>
+              {% trans 'item deposit require:' %}
+              {{ item.item_deposit_require }}
+            </p>
           </div>
           <div class="item-edit-delete-btn">
-            <a href="{% url 'item-update' item.item_id %}" class="item-edit-button" onclick="return checkItemAvailable(this);" data-item-available="{{ item.item_available }}">{% trans "Edit" %}            </a>
-            <a href="{% url 'item-delete' item.item_id %}" class="item-delete-button">{% trans "Delete" %}            </a>
+            <a href="{% url 'item-update' item.item_id %}" class="item-edit-button" onclick="return checkItemAvailable(this);" data-item-available="{{ item.item_available }}">{% trans 'Edit' %}</a>
+            <a href="{% url 'item-delete' item.item_id %}" class="item-delete-button">{% trans 'Delete' %}</a>
           </div>
         </div>
       {% endfor %}
     {% else %}
       <div class="no-contribute-item">
-        <p>{% trans "no contribute item!" %}</p>
+        <p>
+          {% trans 'no contribute item!' %}
+        </p>
         <br />
-        <a href="{% url 'item-create' %}" class="contribute-my-item-btn">{% trans "contribute my item" %}</a>
+        <a href="{% url 'item-create' %}" class="contribute-my-item-btn">{% trans 'contribute my item' %}</a>
       </div>
     {% endif %}
   </div>
