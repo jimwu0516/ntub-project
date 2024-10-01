@@ -40,8 +40,8 @@ msgstr "個人資料"
 msgid "My item"
 msgstr "我的物品"
 
-msgid "Contribute status"
-msgstr "貢獻狀態"
+msgid "Status"
+msgstr "狀態"
 
 msgid "Logout"
 msgstr "登出"
@@ -415,9 +415,6 @@ msgstr "沒有歷史訂單 !!!!!"
 msgid "Item:"
 msgstr "物品:"
 
-msgid "Status:"
-msgstr "狀態:"
-
 
 
 
@@ -478,9 +475,6 @@ msgstr "開始時間"
 
 msgid "End Time"
 msgstr "結束時間"
-
-msgid "Status"
-msgstr "狀態"
 
 msgid "Action Button"
 msgstr "動作按鈕"
