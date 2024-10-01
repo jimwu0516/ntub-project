@@ -98,7 +98,7 @@ a {
 }
 
 .language-dropbtn{
-  padding: 10px;
+  padding: 5px;
   margin-right: 20px;
   font-size: 20px;
   border-width: 0;
@@ -154,11 +154,12 @@ a {
   display: none;
   position: absolute;
   background-color: #ffffff;
-  min-width: 160px;
+  min-width: 80px;
   z-index: 1;
   box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5);
   padding-top: 2px;
-  top: 20px;
+  top: 22px;
+  left: -10px;
 }
 
 .dropdown-content a {
