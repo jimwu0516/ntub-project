@@ -21,14 +21,17 @@
     <script src="https://unpkg.com/chart.js@2.8.0/dist/Chart.bundle.js"></script>
     <script src="https://unpkg.com/chartjs-gauge@0.3.0/dist/chartjs-gauge.js"></script>
     <script>
-      function changeLanguage(languageCode, event) {
-        event.preventDefault();  
+      function changeLanguage(languageCode, event = null) {
+        if (event) {
+          event.preventDefault();
+        }
         var form = document.getElementById('languageForm');
         var input = document.getElementById('languageInput');
         input.value = languageCode; 
         form.submit(); 
-    }
+      }
     </script>
+    
   </head>
 
   <body>
