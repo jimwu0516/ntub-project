@@ -68,7 +68,7 @@
         }
     
         const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress')
-        const response1 = await fetch('/static/abi/LiquidityPoolABI.json')
+        const response1 =  await fetch('{% static "abi/LiquidityPoolABI.json" %}')
         const liquidityPoolAbi = await response1.json()
         const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress)
     
@@ -130,7 +130,7 @@
         const userAccount = accounts[0]
     
         const liquidityPoolAddress = localStorage.getItem('liquidityPoolAddress')
-        const response1 = await fetch('/static/abi/LiquidityPoolABI.json')
+        const response1 =  await fetch('{% static "abi/LiquidityPoolABI.json" %}')
         const liquidityPoolAbi = await response1.json()
         const liquidityPoolContract = new web3.eth.Contract(liquidityPoolAbi, liquidityPoolAddress)
     
