@@ -141,7 +141,36 @@
     }
   </script>
 
+  <script>
+    function notifyContributor() {
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST', '{% url "notify_contributor_arrival" order.order_id %}', true);
+      xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          alert('Notify contributor successfully');
+        } else if (xhr.readyState === 4) {
+          alert('An error occurred while sending the notification.');
+        }
+      };
+      xhr.send();
+    }
+  </script>
+  
+
   <script src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api_key }}&callback=initMap" async defer></script>
+
+  <style>
+    .notify-contributor-btn {
+      background-color: white;
+      border-radius: 10px;
+      padding: 10px 25px;
+      font-size: 1.5rem;
+      color: #30878a;
+      border: 2px solid #30878a;
+      cursor: pointer;
+    }
+  </style>
 
   <div class="get-item-page-container" borrower-not-picked-up-url="{% url 'borrower_not_picked_up' order.order_id %}" data-start-time="{{ order.start_time|date:'Y-m-d H:i:s' }}">
     <h2>{% trans "Get item location" %}</h2>
@@ -167,6 +196,7 @@
           <button type="submit" class="get-item-btn">{% trans "Get item" %}</button>
         </form>
       </div>
+      <button type="button" class="notify-contributor-btn" onclick="notifyContributor()">{% trans "I have arrived" %}</button>
     </div>
   </div>
 {% endblock %}

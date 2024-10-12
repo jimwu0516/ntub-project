@@ -342,6 +342,9 @@ msgstr "物品地址："
 msgid "Get item"
 msgstr "取物"
 
+msgid "I have arrived"
+msgstr "我已經到了"
+
 
 
 

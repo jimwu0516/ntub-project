@@ -41,6 +41,7 @@ urlpatterns = [
     path('contributor-history-dashboard/<int:contributor_id>/', views.contributor_history_dashboard, name='contributor_history_dashboard'),
     
     path('verify-pin-code/', views.verify_pin_code, name='verify_pin_code'),
+    path('notify-contributor-arrival/<int:order_id>/', views.notify_contributor_arrival, name='notify_contributor_arrival'),
 
 ]
 

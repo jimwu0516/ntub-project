@@ -404,7 +404,22 @@ def verify_pin_code(request):
     if order.pin_code == pin_code:
         return JsonResponse({'valid': True})
     else:
-        return JsonResponse({'valid': False})   
+        return JsonResponse({'valid': False})  
+    
+@login_required
+def notify_contributor_arrival(request, order_id):
+    if request.method == 'POST':
+        order = Order.objects.get(order_id=order_id)
+        contributor_email = order.item.contributor.email
+        borrower = order.borrower.username
+
+        send_confirm_email(
+            contributor_email,
+            'Borrower has arrived',
+            f'Hello, the borrower {borrower} has arrived to pick up the item.'
+            )
+        return JsonResponse({'success': True, 'message': 'Email sent to contributor.'})
+    return JsonResponse({'success': False, 'message': 'Invalid request method.'}, status=400) 
 
 
 #---------------contributor gets the item back-------------------------------------------------------------
