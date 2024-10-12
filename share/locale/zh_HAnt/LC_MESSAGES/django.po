@@ -391,6 +391,9 @@ msgstr "借用人："
 msgid "Wallet Address:"
 msgstr "錢包地址："
 
+msgid "Email:"
+msgstr "電郵："
+
 msgid "Not Picked Up Percentage"
 msgstr "未取貨百分比"
 
