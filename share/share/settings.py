@@ -50,6 +50,16 @@ PRODUCTION = True
 
 ALLOWED_HOSTS = ['*']
 
+
+if PRODUCTION :
+    CSRF_TRUSTED_ORIGINS = [
+        'https://sharetoearn.com.tw',
+        'https://www.sharetoearn.com.tw'
+    ]
+
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+
 # Application definition
 
 INSTALLED_APPS = [

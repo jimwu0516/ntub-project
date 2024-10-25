@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: share-ingress
+  annotations:
+      nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+      nginx.ingress.kubernetes.io/proxy-buffering: "off"
+      nginx.ingress.kubernetes.io/proxy-set-headers: |
+        Host $host
+        X-Forwarded-Proto $scheme
+        X-Real-IP $remote_addr
+        X-Forwarded-For $proxy_add_x_forwarded_for
+      nginx.ingress.kubernetes.io/ssl-redirect: "true"
+      nginx.ingress.kubernetes.io/x-forwarded-proto: "https"
+spec:
+  tls:
+  - hosts:
+    - sharetoearn.com.tw  
+    secretName: my-tls-secret  
+  rules:
+  - host: sharetoearn.com.tw 
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: share-service 
+            port:
+              number: 80 
